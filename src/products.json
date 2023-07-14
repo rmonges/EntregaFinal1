@@ -1,0 +1,79 @@
+[
+	{
+		"tittle": "cambio exitoso",
+		"description": "canguro",
+		"code": "28",
+		"price": "25000",
+		"status": "Boolean",
+		"stock": "26",
+		"category": "F",
+		"thumbnail": "[]",
+		"id": 6
+	},
+	{
+		"tittle": "cambio exitoso",
+		"description": "canguro",
+		"code": "28",
+		"price": "25000",
+		"status": "Boolean",
+		"stock": "26",
+		"category": "F",
+		"thumbnail": "[]",
+		"id": 4
+	},
+	{
+		"id": 1,
+		"tittle": "zazaza",
+		"description": "futbol",
+		"code": "4",
+		"price": "25000",
+		"status": "Boolean",
+		"stock": "26",
+		"category": "F",
+		"thumbnail": "[]"
+	},
+	{
+		"id": 2,
+		"tittle": "zazaza",
+		"description": "futbol",
+		"code": "4",
+		"price": "25000",
+		"status": "Boolean",
+		"stock": "26",
+		"category": "F",
+		"thumbnail": "[]"
+	},
+	{
+		"id": 3,
+		"tittle": "zazaza",
+		"description": "futbol",
+		"code": "4",
+		"price": "25000",
+		"status": "Boolean",
+		"stock": "26",
+		"category": "F",
+		"thumbnail": "[]"
+	},
+	{
+		"id": 4,
+		"tittle": "zazaza",
+		"description": "futbol",
+		"code": "4",
+		"price": "25000",
+		"status": "Boolean",
+		"stock": "26",
+		"category": "F",
+		"thumbnail": "[]"
+	},
+	{
+		"id": 5,
+		"tittle": "zazaza",
+		"description": "futbol",
+		"code": "4",
+		"price": "25000",
+		"status": "Boolean",
+		"stock": "26",
+		"category": "F",
+		"thumbnail": "[]"
+	}
+]
