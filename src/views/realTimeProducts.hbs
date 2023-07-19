@@ -1,0 +1,39 @@
+<h1 class="body">Lista de Productos Actualizados</h1>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/home.js"></script>
+
+
+{{#if isProduct}}
+     {{#each productList}}
+       <ul>tittle:{{this.tittle}},<br>
+       description :{{this.description}},<br>
+       code: {{this.code}},<br>
+       price: {{this.price}},<br>
+       status: {{this.status}},<br>
+       stock: {{this.stock}},<br>
+       category: {{this.category}},<br>
+       thumbnail: {{this.thumbnail}},<br>
+       id: {{this.id}} </ul>
+     {{/each}}
+       {{else}}
+          <p>Producto no existe</p>
+     {{/if}}
+
+     {{#if isProduct}}
+     {{#each productList}}
+     
+     <form action="/realTimeProducts" class="col-sm-3 method="post">
+  //tittle:{{this.tittle}}
+  <li class="list-group-item">description :{{this.description}}</li>
+  <li class="list-group-item">code: {{this.code}}</li>
+  <li class="list-group-item">price: {{this.price}}</li>
+  <li class="list-group-item">status: {{this.status}}</li>
+   <li class="list-group-item">stock: {{this.stock}}</li>
+    <li class="list-group-item">category: {{this.category}}</li>
+     <li class="list-group-item">thumbnail: {{this.thumbnail}}</li>
+      <li class="list-group-item"> id: {{this.id}} </li>
+</form>
+{{/each}}
+       {{else}}
+          <p>Producto no existe</p>
+     {{/if}}
