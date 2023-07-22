@@ -101,7 +101,7 @@ async addCart(){
   async getById(id){
     try {
        
-        if(this.fileExist){
+        if(this.fileExist()){
             const carts = await this.getAll()
             const cartIds = carts.find(p => p.id === id)
             console.log("cartsbyid",cartIds)
@@ -120,7 +120,7 @@ async addCart(){
 async deleteCars(id){
   try {
       const carts = await this.getAll();
-      let existenProducts = carts.some(id)  
+   let existenProducts = carts.some(cart => cart.id === id);
  }catch (error) {
       console.error(error.message);
      }

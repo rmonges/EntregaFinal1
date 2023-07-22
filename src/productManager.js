@@ -108,7 +108,7 @@ import fs from "fs";
 
     async getproductById(id){
         try {
-            if(this.fileExist){
+            if(this.fileExist()){
             
                 const productById = await this.exist();
                 console.log(productById)

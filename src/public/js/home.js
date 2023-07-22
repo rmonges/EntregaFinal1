@@ -18,3 +18,8 @@ socketClient.on("eventoParaTodos", (data)=>{
     console.log(data);
    })
    
+   Swal.fire(
+  'Good job!',
+  'You clicked the button!',
+  'success'
+)

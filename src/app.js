@@ -32,12 +32,13 @@ app.set('views', path.join(__dirname, './views'));
 const socketServer = new Server(httpServer);//vinculamos el serv de webs al de http
 
 //creamos canal de comunicacion entre el servidor y el cliente
-socketServer.on("connection", (socketConnected)=>{
+socketServer.on("connection", async (socketConnected)=>{
+    
     console.log(`nuevo cliente conectado ${socketConnected.id}`)
-
+     const productList = await productService.getProduct();
     //RECIBIR EVENTO/DATOS DEL CLIENTE
-socketConnected.on("messageEvent", (data)=>{
-    console.log(`datos recibidos del cliente realtimeProducts ${data}`);
+socketConnected.emit("productList", (data)=>{
+    console.log(`datos recibidos del cliente realtimeProducts ${productList}`);
 });
 
 //ENVIAR DATOS DEL SERVIDOR AL CLIENTE  ENVIAMOS
@@ -61,7 +62,6 @@ setTimeout(() => {
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/products/:prodid", productsRouter);
-
 app.use(viewsRouter);
 
 

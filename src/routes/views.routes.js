@@ -4,6 +4,8 @@ import { __dirname } from "../utils.js";
 import path from "path";
 const productsService = new ProductManager ('../src/products.json')
 const router = Router();
+//const socketClient = io();
+//socketClient.emit("messageEvent", `lista de Productos:`);
 
 const food = [
   {name: "Hamburguesa", price:200},
@@ -33,16 +35,15 @@ router.get("/realTimeProducts", async (req, res)=>{
          await productsService.upDateProduct();
          productList.push(newProduct);
        }
-  style:"home.css",
+  
   res.render("realTimeProducts",{
      isProduct: productList ? true : false,
      productList,
      
-
-
-  });
+     });
+     socketClient.emit("messageEvent", `lissssssssta de Productos:${productList}`);
   } catch (error) {
-     res.render("error");
+     //res.render("error");
   }
 
 })
@@ -106,23 +107,6 @@ router.get("/comida", (req, res)=>{
   } )
 })
 
-
-
-  
-
-// router.get("/:realTimeProducts",async (req, res)=>{
-//   try {
-//     const productsList = await productsService.getProduct();
-//     res.render("realTimeProducts",{
-//       isProduct: productsList ? true : false,
-//       productsList,
-      
-//     } );
-//   } catch (error) {
-//     res.render("error")
-//   }
-  
-//   })    
 
 
 
