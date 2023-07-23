@@ -35,12 +35,17 @@ const socketServer = new Server(httpServer);//vinculamos el serv de webs al de h
 socketServer.on("connection", async (socketConnected)=>{
     
     console.log(`nuevo cliente conectado ${socketConnected.id}`)
-     const productList = await productService.getProduct();
+     const productList = await productService.getProduct({});
     //RECIBIR EVENTO/DATOS DEL CLIENTE
-socketConnected.emit("productList", (data)=>{
-    console.log(`datos recibidos del cliente realtimeProducts ${productList}`);
-});
+socketServer.emit("productList", productList);
+socketConnected.on("addProduct", async (obj)=>{
 
+ await productService.addProduct({})
+ const productList = await productService.getProduct({})
+ 
+ socketServer.emit("enviodeproductos", productList)
+
+})
 //ENVIAR DATOS DEL SERVIDOR AL CLIENTE  ENVIAMOS
 //SIN QUE EL CLIENTE NO LA SOLICITE
 

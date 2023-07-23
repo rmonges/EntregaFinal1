@@ -14,39 +14,54 @@ const food = [
   {name: "Sosa", price:120},
 ];
 
-
-
-router.get("/realTimeProducts", async (req, res)=>{
+//router.get("/realTimeProducts", async (req, res)=>{
   try {
-      const productList = await productsService.getProduct();
-      const newInfo = {
-        tittle:"campera",
-        description :"verano",
-         code: "34",
-         price: "23000",
-         status: "true",
-         stock: "56",
-         category: "deportiva",
-         thumbnail: "thumbnail",
-         
-       }
-       if(!productList){
-         await productsService.addProduct (newInfo);
-         await productsService.upDateProduct();
-         productList.push(newProduct);
-       }
-  
-  res.render("realTimeProducts",{
-     isProduct: productList ? true : false,
-     productList,
+      const productList = await productsService.getProduct({});
      
-     });
-     socketClient.emit("messageEvent", `lissssssssta de Productos:${productList}`);
+     res.render("realTimeProducts",productList );
+  console.log("productlistttt", productList)
+     socketClient.emit("messageEvent", `lista de Productos:${productList}`);
   } catch (error) {
      //res.render("error");
   }
 
+//})
+
+router.get("/realTimeProducts", (req, res)=>{
+  res.render("realTimeProducts")
 })
+
+// router.get("/realTimeProducts", async (req, res)=>{
+//   try {
+//       const productList = await productsService.getProduct();
+//       const newInfo = {
+//         tittle:"campera",
+//         description :"verano",
+//          code: "34",
+//          price: "23000",
+//          status: "true",
+//          stock: "56",
+//          category: "deportiva",
+//          thumbnail: "thumbnail",
+         
+//        }
+//        if(!productList){
+//          await productsService.addProduct (newInfo);
+//          await productsService.upDateProduct();
+//          productList.push(newProduct);
+//        }
+  
+//   res.render("realTimeProducts",{
+//      isProduct: productList ? true : false,
+//      productList,
+     
+//      });
+//      socketClient.emit("messageEvent", `lista de Productos:${productList}`);
+//   } catch (error) {
+//      //res.render("error");
+//   }
+
+// })
   
 router.post("/product", async (req, res)=>{
   try {
