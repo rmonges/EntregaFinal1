@@ -31,37 +31,6 @@ router.get("/realTimeProducts", (req, res)=>{
   res.render("realTimeProducts")
 })
 
-// router.get("/realTimeProducts", async (req, res)=>{
-//   try {
-//       const productList = await productsService.getProduct();
-//       const newInfo = {
-//         tittle:"campera",
-//         description :"verano",
-//          code: "34",
-//          price: "23000",
-//          status: "true",
-//          stock: "56",
-//          category: "deportiva",
-//          thumbnail: "thumbnail",
-         
-//        }
-//        if(!productList){
-//          await productsService.addProduct (newInfo);
-//          await productsService.upDateProduct();
-//          productList.push(newProduct);
-//        }
-  
-//   res.render("realTimeProducts",{
-//      isProduct: productList ? true : false,
-//      productList,
-     
-//      });
-//      socketClient.emit("messageEvent", `lista de Productos:${productList}`);
-//   } catch (error) {
-//      //res.render("error");
-//   }
-
-// })
   
 router.post("/product", async (req, res)=>{
   try {
@@ -83,7 +52,7 @@ router.post("/product", async (req, res)=>{
 router.get("/home", async (req, res)=>{
   try {
       const productList = await productsService.getProduct();
-      console.log("productlist", productList);
+      console.log("productlisthome", productList);
   style:"home.css",
   res.render("home",{
      isProduct: productList ? true : false,

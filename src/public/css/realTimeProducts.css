@@ -1,5 +1,5 @@
 body{
-    background-color: gray;
+    background-color: rgb(214, 208, 208);
 }
 
 * {
@@ -8,8 +8,9 @@ body{
     
     
     
-    body {
-        margin: 0;
+   .h2 {
+       margin-top: 3rem;
+        text-align: center;
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
     
@@ -99,6 +100,28 @@ body{
         word-spacing: 1rem;
       
     }
+    .cargarProd {
+        font-size: 2rem ;
+           font-family: italic;
+           padding: 10px 0;
+           color: rgb(35, 26, 26);
+           position: relative;
+           word-spacing: 20px;
+           letter-spacing: 5px;
+           text-align: left;
+    }
+    .h2del{
+        margin-top: 2rem;
+        font-size: 2rem ;
+           font-family: italic;
+           padding: 10px 0;
+           color: rgb(35, 26, 26);
+           position: relative;
+           word-spacing: 20px;
+           letter-spacing: 5px;
+           text-align: left;
+
+    }
     .main__contenedor {
         width: 100%;
         display: grid;
@@ -107,7 +130,9 @@ body{
         padding: 20px;
         gap: 1em;
         margin-top: 3rem;
-        box-sizing: border-box;}
+        box-sizing:border-box;
+        border-radius: 1%;
+        }
      .main__price {
          display: flex;
          flex-direction: row;

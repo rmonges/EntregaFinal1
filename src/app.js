@@ -37,21 +37,28 @@ socketServer.on("connection", async (socketConnected)=>{
     console.log(`nuevo cliente conectado ${socketConnected.id}`)
      const productList = await productService.getProduct({});
     //RECIBIR EVENTO/DATOS DEL CLIENTE
-socketServer.emit("productList", productList);
-socketConnected.on("addProduct", async (obj)=>{
 
- await productService.addProduct({})
- const productList = await productService.getProduct({})
- 
- socketServer.emit("enviodeproductos", productList)
+socketServer.emit("productList", productList);
+
+socketConnected.on("addProduct", async (obj)=>{
+    console.log("addProd", obj)
+ await productService.addProduct(obj)
+ console.log("addProd", obj)
+  const productList = await productService.getProduct({})
+
+  socketServer.emit("productList", productList)
 
 })
 //ENVIAR DATOS DEL SERVIDOR AL CLIENTE  ENVIAMOS
 //SIN QUE EL CLIENTE NO LA SOLICITE
 
-setTimeout(() => {
+socketConnected.on("deleteProduct", async (id)=>{
+    console.log("id:", id)
+    await productService.deleteProduct(id);
+    const productList = await productService.getProduct({});
+    socketConnected.emit("productList", productList);
 
-    socketConnected.emit("eventoIndividual", "solo para el clinte conectado");
+})
 
 //enviar evento a todos menos al que esta connectado
 //     socketConnected.broadcast.emit("eventoTodosMenosElActual",
@@ -59,7 +66,7 @@ setTimeout(() => {
 // //enia a todos los clientes
 //      socketServer.emit("eventoParaTodos ","nueva promosion");
 
-   }, 4000);
+
 });
 
 

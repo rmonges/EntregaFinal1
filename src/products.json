@@ -1,68 +1,52 @@
 [
 	{
-		"id": 1,
-		"tittle": "zazaza",
-		"description": "futbol",
-		"code": "4",
-		"price": "25000",
-		"status": "Boolean",
-		"stock": "26",
-		"category": "F",
-		"thumbnail": "[]"
+		"id": 2,
+		"tittle": "zapatilla",
+		"description": "traking",
+		"stock": "3",
+		"thumbnail": "ASDds",
+		"category": "A",
+		"price": "45000",
+		"code": "2"
 	},
 	{
 		"id": 3,
-		"tittle": "zazaza",
-		"description": "futbol",
-		"code": "4",
-		"price": "25000",
-		"status": "Boolean",
-		"stock": "26",
-		"category": "F",
-		"thumbnail": "[]"
+		"tittle": "ojotas",
+		"description": "clasicas",
+		"stock": "12",
+		"thumbnail": "22",
+		"category": "B",
+		"price": "7000",
+		"code": "4"
 	},
 	{
 		"id": 4,
-		"tittle": "zazaza",
-		"description": "futbol",
-		"code": "4",
-		"price": "25000",
-		"status": "Boolean",
-		"stock": "26",
-		"category": "F",
-		"thumbnail": "[]"
+		"tittle": "zapatillas",
+		"description": "deportivas",
+		"stock": "12",
+		"thumbnail": "asdaslkj",
+		"category": "A",
+		"price": "23000",
+		"code": "1"
 	},
 	{
 		"id": 5,
-		"tittle": "zazaza",
-		"description": "futbol",
-		"code": "4",
-		"price": "25000",
-		"status": "Boolean",
-		"stock": "26",
-		"category": "F",
-		"thumbnail": "[]"
+		"tittle": "buzo",
+		"description": "canguro",
+		"stock": "1",
+		"thumbnail": "asd",
+		"category": "c",
+		"price": "19000",
+		"code": "5"
 	},
 	{
 		"id": 6,
-		"tittle": "zazaza",
-		"description": "futbol",
-		"code": "4",
-		"price": "25000",
-		"status": "Boolean",
-		"stock": "26",
-		"category": "F",
-		"thumbnail": "[]"
-	},
-	{
-		"id": 7,
-		"tittle": "zazaza",
-		"description": "futbol",
-		"code": "4",
-		"price": "25000",
-		"status": "Boolean",
-		"stock": "26",
-		"category": "F",
-		"thumbnail": "[]"
+		"tittle": "botines",
+		"description": "zapatillas de futbol",
+		"stock": "5",
+		"thumbnail": "asdad",
+		"category": "D",
+		"price": "23000",
+		"code": "E"
 	}
 ]
