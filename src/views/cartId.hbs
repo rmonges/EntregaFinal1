@@ -1,8 +1,6 @@
-
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/realTimeProducts.js"></script>
-
-
+<script src="/js/cartId.js"></script>
+<link rel="stylesheet" href="css/estiles.css">
 
 <form   id="form-Product">
     <h2 class="cargarProd">Cargar Producto</h2>
@@ -18,6 +16,7 @@
     <input  type="number" name="id-prod" id="id-prod" placeholder="Ingrese ID" ><br/><br/>
    <button  type="button" id="delete-btn">
     Eliminar</button>
+
     
 
   </form>
@@ -25,4 +24,23 @@
 <article class="main__contenedor"  id="list-products">
 </article>
 
+
+
+<article class="main__contenedor"  id="list-carts">
+
+</article>
+<div>  
+      <h3 class ="carrito">Carrito de compras</h3>
+      <table id= "lista-carrito" class="table">
+        <thead>
+          <tr>
+             <th>Imagen</th>
+             <th>Nombre</th>
+             <th>Precio</th>
+             <th>Cantidad</th>
+          </tr>
+        </thead>
+     </table>
+      
+</div>
 

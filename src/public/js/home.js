@@ -9,7 +9,9 @@ socketClient.emit("messageEvent", `lista de Productos:`);
 
  socketClient.on("home", (dataSever)=>{
      console.log(`datos recibidos del servidor ${dataSever}`);
+     
     }) 
+    
 socketClient.on("eventoTodosMenosElActual", (data)=>{
     console.log(`datos para todos ${data}`);
    })
@@ -18,8 +20,4 @@ socketClient.on("eventoParaTodos", (data)=>{
     console.log(data);
    })
    
-   Swal.fire(
-  'Good job!',
-  'You clicked the button!',
-  'success'
-)
+   

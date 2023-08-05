@@ -1,10 +1,14 @@
 import { Router } from "express";
-import { ProductManager } from "../productManager.js";
+import { ProductManager } from "../dao/manager/productManager.js";
 import { __dirname } from "../utils.js";
 import path from "path";
+import { productsModel } from "../dao/models/products.model.js";
+import { ProductsMongo } from "../dao/manager/mongo/productsMongo.js";
 
-const productService = new ProductManager('products.json')
+//const productService = new ProductManager('products.json')
 const router = Router();
+
+const productService = new ProductsMongo();
 
 const validation = (req, res, next)=>{
     const productInfo= req.body;
@@ -13,7 +17,27 @@ const validation = (req, res, next)=>{
 }else{
     next();
    };  
-}   
+};
+//MONGO
+// router.get("/", async (req, res)=>{
+//     try {
+//         const products = await productsModel.find();
+//         res.json({status:"success", data:products});
+//     } catch (error) {
+//         console.log(error.menssage)
+//         res.json({status:"error", message:"hubo un error al obtener los productos"})
+//     }
+// })
+// router.post("/", async (req, res)=>{
+//     try {
+//         const productCreated = await productsModel.create(req.body);
+//         console.log("productCreated", productCreated)
+//         res.json({status:"success", data:productCreated});
+//     } catch (error) {
+//         console.log(error.menssage)
+//         res.json({status:"error", message:"hubo un error al obtener los productos"})
+//     }
+// })
 
 
 router.get("/", async(req, res)=>{
@@ -61,7 +85,7 @@ router.post("/", async (req, res)=>{
         const productInfo = req.body;
         console.log("producInfo",productInfo);
         const products = await productService.addProduct(productInfo);
-        res.json({status:"success post", data:products})
+        res.json({status:"success post", data:products, message:"producto creado"})
        
    }catch (error) {
         res.json({status:"error", message:error.message})
@@ -69,9 +93,9 @@ router.post("/", async (req, res)=>{
 })
 
 
-router.put("/:pid",validation, async (req, res)=>{
+router.put("/:pid", async (req, res)=>{
     try {
-        let pid = parseInt(req.params.pid);
+        let pid = (req.params.pid);
         let upDateProduct = req.body;
         console.log("pid",pid," product", upDateProduct)
         res.send ( await productService.upDateProduct(pid, upDateProduct))     
@@ -82,12 +106,14 @@ router.put("/:pid",validation, async (req, res)=>{
 
 router.delete("/:pid", async (req, res)=>{
     try {
-        const id =parseInt(req.params.pid);
-        res.send( await productService.deleteProduct(id))
+        const idDel= req.params.pid;
+        await productsModel.deleteOne({_id:idDel})
+        res.json( {status:"succes", message:"producto eliminado correctamente "})
     
     }catch (error) {
         res.json({status:"error", message:"error"})
     };
     
 });
+
 export {router as productsRouter};

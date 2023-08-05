@@ -7,26 +7,35 @@ import handlebars, { engine } from "express-handlebars";
 import { viewsRouter } from "./routes/views.routes.js";
 import { Server } from "socket.io";
 import { setTimeout } from "timers";
-import { ProductManager } from "./productManager.js";
+import { ProductManager } from "./dao/manager/productManager.js";
+import mongoose from "mongoose";
+import { messagesRouter } from "./routes/messages.routes.js";
+import { CartsManager } from "./dao/manager/fileSystem/cartsFiles.js";
+import { config }  from "./config/config.js"
+import { connectDB } from "./config/dbConnection.js";
+import { messagesModel } from "./dao/models/messages.model.js";
 
-const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
+//const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
 //creamos la aplicacion del servidor
 const app = express();
+const port = config.server.port;
 
-app.use(express.json())
+app.use(express.json())//middleware para recibir jsons
 app.use(express.static(path.join(__dirname,"/public")));//path es una libreria que me permite unir rutas, entro la ruta dirname "src"=>public
 app.use(express.urlencoded({extended:true}));
 //levantar el servidor, l aplicacion va a estar pendiente de recibir peticiones,le indicamos el puerto por donde va a recibir la info
 const productService = new ProductManager('products.json');
+const cartsService = new CartsManager('carts.json')
 
 //WEBSOCKET GUARDAMOS EL SERVIDOR HTTP EN UNA VARIABLE
 const httpServer = app.listen(port,()=>console.log(`El servidor esta escuchando en el puerto ${port}`));
 
-
+connectDB();
 //RUTAS DE HANDLERBARS
 app.engine('.hbs', handlebars.engine({extname: '.hbs'}));//inicia motor plantilla handlerbars
 app.set('view engine', '.hbs');//motor a utilizar
 app.set('views', path.join(__dirname, './views'));
+
 
 //CREAMOS SERVIDO R DE WEB SOCKET
 const socketServer = new Server(httpServer);//vinculamos el serv de webs al de http
@@ -36,17 +45,43 @@ socketServer.on("connection", async (socketConnected)=>{
     
     console.log(`nuevo cliente conectado ${socketConnected.id}`)
      const productList = await productService.getProduct({});
+     const cartList = await cartsService.getAll({});
+    // console.log("cartList", cartList)
+
     //RECIBIR EVENTO/DATOS DEL CLIENTE
+    socketServer.emit("cartList", cartList);
+    socketServer.emit("productList", productList);
 
-socketServer.emit("productList", productList);
-
-socketConnected.on("addProduct", async (obj)=>{
-    console.log("addProd", obj)
+ socketConnected.on("addProduct", async (obj)=>{
+    //console.log("addProd", obj)
  await productService.addProduct(obj)
- console.log("addProd", obj)
+ //console.log("addProd", obj)
   const productList = await productService.getProduct({})
 
   socketServer.emit("productList", productList)
+
+  let messages=[];
+  //socket server
+  
+  
+    //   socket.on("authenticated",async (msg)=>{
+    //       //const message = await messagesModel.find();
+    //       socket.emit("messageHistory", messages);
+    //       socket.broadcast.emit("newUser",msg);
+    //   });
+  
+    //   //recibir el mensaje del cliente
+    //   socket.on("message",async (data)=>{
+    //       console.log("data", data);
+    //      const messagesCreated = await messagesModel.create(data);
+    //      const messages = await messagesModel.find();
+  
+    //       //cada vez que recibamos este mensaje, enviamos todos los mensajes actualizados a todos los clientes conectados
+    //       socketServer.emit("messageHistory", messages);
+    //   })
+  
+ 
+
 
 })
 //ENVIAR DATOS DEL SERVIDOR AL CLIENTE  ENVIAMOS
@@ -60,21 +95,15 @@ socketConnected.on("deleteProduct", async (id)=>{
 
 })
 
-//enviar evento a todos menos al que esta connectado
-//     socketConnected.broadcast.emit("eventoTodosMenosElActual",
-//     "todos menos el actual");
-// //enia a todos los clientes
-//      socketServer.emit("eventoParaTodos ","nueva promosion");
-
-
 });
 
 
 //routes
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
-app.use("/api/products/:prodid", productsRouter);
+app.use("/api/messages", messagesRouter);
 app.use(viewsRouter);
+
 
 
 

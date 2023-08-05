@@ -1,5 +1,16 @@
 [
 	{
+		"tittle": "cambio exitoso",
+		"description": "canguro",
+		"code": "28",
+		"price": "25000",
+		"status": "Boolean",
+		"stock": "26",
+		"category": "F",
+		"thumbnail": "[]",
+		"id": 6
+	},
+	{
 		"id": 2,
 		"tittle": "zapatilla",
 		"description": "traking",
@@ -40,13 +51,25 @@
 		"code": "5"
 	},
 	{
-		"id": 6,
-		"tittle": "botines",
-		"description": "zapatillas de futbol",
-		"stock": "5",
-		"thumbnail": "asdad",
-		"category": "D",
-		"price": "23000",
-		"code": "E"
+		"id": 7,
+		"tittle": "zapatilla",
+		"description": "deportiva",
+		"code": "code",
+		"price": "price",
+		"status": "status",
+		"stock": "stock",
+		"category": "category",
+		"thumbnails": "thumbnails"
+	},
+	{
+		"id": 8,
+		"tittle": "zapatilla",
+		"description": "deportiva",
+		"code": "A",
+		"price": 23000,
+		"status": "new",
+		"stock": 10,
+		"category": "15",
+		"thumbnails": "thumbnails"
 	}
 ]
