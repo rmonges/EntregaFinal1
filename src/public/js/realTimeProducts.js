@@ -22,7 +22,7 @@ socketClient.on("productList", (obj)=>{
           Stock: ${product.stock}<br>
           Category: ${product.category}<br>
           Thumbnail: ${product.thumbnail}<br>
-          Id: ${product.id} <button  type="button" id=".btncomp">
+          Id: ${product.id} <button  type="submit" id=".btncomp">
           Agregar al Carrito</button></ul> 
           
         `
@@ -80,3 +80,29 @@ socketClient.on("productosupdated", (obj) => {
 
 })
 
+
+const sumarBotonCompra = document.querySelectorAll('.btncomp');
+
+console.log("sumarbtn", sumarBotonCompra)
+const tarjetaContenedor = $('.conteinerProducto');
+sumarBotonCompra.forEach(sumarboton => {
+  sumarboton.addEventListener('click', sumarClick);
+console.log(sumarBotonCompra)
+});
+
+function sumarClick (event) {
+
+  const button = event.target;
+  const item = button.closest('.item-shop');
+  
+  const itemTitle = item.querySelector('.item-card-title').textContent;
+
+  const itemPrecio = item.querySelector('.item-card-text').textContent;
+ 
+  const itemImagen = item.querySelector('.item-card-img-top').src;
+
+
+
+  sumarItem(itemTitle, itemPrecio, itemImagen);
+ 
+} 

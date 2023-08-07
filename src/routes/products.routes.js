@@ -19,25 +19,40 @@ const validation = (req, res, next)=>{
    };  
 };
 //MONGO
-// router.get("/", async (req, res)=>{
-//     try {
-//         const products = await productsModel.find();
-//         res.json({status:"success", data:products});
-//     } catch (error) {
-//         console.log(error.menssage)
-//         res.json({status:"error", message:"hubo un error al obtener los productos"})
-//     }
-// })
-// router.post("/", async (req, res)=>{
-//     try {
-//         const productCreated = await productsModel.create(req.body);
-//         console.log("productCreated", productCreated)
-//         res.json({status:"success", data:productCreated});
-//     } catch (error) {
-//         console.log(error.menssage)
-//         res.json({status:"error", message:"hubo un error al obtener los productos"})
-//     }
-// })
+router.get("/", async (req, res)=>{
+    try {
+        const products = await productService.find();
+        res.json({status:"success", data:products});
+    } catch (error) {
+        console.log(error.menssage)
+        res.json({status:"error", message:"hubo un error al obtener los productos"})
+    }
+})
+router.post("/", async (req, res)=>{
+    try {
+        const productInfo = (req.body);
+        const productCreated = await productService.saveProduct(productInfo); 
+        res.json({status:"success", data:productCreated});
+    } catch (error) {   
+        console.log(error.menssage)
+        res.json({status:"error", message:"hubo un error al obtener los productos"})
+    }
+})
+
+router.get("/:pid", async (req, res)=>{
+    try {
+        const pid = (req.params.pid);
+        const product = await productService.getById(pid)
+        res.json ( {status:"success", data:product})     
+    }catch (error) {
+        res.status(404).json({status:"error", message:"El producto con el id no existe"})       
+    };
+});
+
+
+
+
+
 
 
 router.get("/", async(req, res)=>{
@@ -61,7 +76,7 @@ router.get("/", async(req, res)=>{
 })
 
 
-router.get("/:prodid",validation,async (req, res)=>{
+router.get("/:prodid",async (req, res)=>{
     try {
         const id = Number(req.params.prodid);
 

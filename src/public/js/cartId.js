@@ -5,24 +5,6 @@ socketClient.on("cartList", (obj)=>{
   
  }) 
 
-// socketClient.on("cartList", (data)=>{
-//   console.log("cartlist cliente", data);
-//  })
-
-
-
-
-// const sumarBotonCompra = document.querySelectorAll('.btncomp');
-// const tarjetaContenedor = $('.conteinerProducto');
-// sumarBotonCompra.forEach(sumarboton => {
-//     sumarboton.addEventListener('click', sumarClick);
-
-//   });
-    
-//     const botonFinCompra = document.querySelector('.botonFinCompra');
-    
-//     botonFinCompra.addEventListener('click', comprarBotonClicked);
-  
    
 
  function upDateCart(carts){
@@ -82,18 +64,5 @@ socketClient.emit("addProduct", {
 
 form.reset();
 });
-
-// //selecciono boton delet, cuando click capturo y envio el id, actualizo .
-
-// document.getElementById("delete-btn").addEventListener("click", function () {
-//   const deleteidinput = document.getElementById("id-prod");
-//   const deleteid = parseInt(deleteidinput.value);
-//   console.log("delete", deleteid)
-//   socketClient.emit("deleteProduct", deleteid);
-//   deleteidinput.value = "";
-// });
-// socketClient.on("productosupdated", (obj) => {
-// updateProducts(obj);
-// });
 
  })

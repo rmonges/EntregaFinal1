@@ -1,5 +1,6 @@
 
 <script src="/socket.io/socket.io.js"></script>
+<script src="/js/carts.js"></script>
 <script src="/js/realTimeProducts.js"></script>
 
 
@@ -24,5 +25,35 @@
 <h2 class="h2">Lista de Productos Actualizados</h2>
 <article class="main__contenedor"  id="list-products">
 </article>
+
+<div>  
+      <h3 class ="carrito">Carrito de compras</h3>
+      <table id= "lista-carrito" class="table">
+        <thead>
+          <tr>
+             <th>Imagen</th>
+             <th>Nombre</th>
+             <th>Precio</th>
+             <th>Cantidad</th>
+          </tr>
+        </thead>
+     </table>
+      
+</div>
+
+    
+
+<div class="py-lg-4 py-3 mt-4 conteinerProducto"></div>
+
+    <article class="row py-lg-4 py-3 tarj_tot">
+      <div class="div_tot">
+          <p class= "item-total mb-0 "  >TOTAL</p>
+          <div class="tarjTotal"></div>
+          <button class="item btn btn-light botonFinCompra"  type="button">COMPRAR</button>
+      </div>
+    </article>
+    <article class="conteinershow"></article>
+     <br>
+  
 
 

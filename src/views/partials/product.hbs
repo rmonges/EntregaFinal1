@@ -1,10 +1,13 @@
 <h1 class="body">Lista de Productos Actualizados</h1>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/product.js"></script>
+<script src="/tienda_online/src/public/css/estiles.css"></script>
+
 
 
 
 {{#each productList}}
+<div class="main__contenedor" >
        <ul>tittle:{{this.tittle}},<br>
        description :{{this.description}},<br>
        code: {{this.code}},<br>
@@ -14,4 +17,6 @@
        category: {{this.category}},<br>
        thumbnail: {{this.thumbnail}},<br>
        id: {{this.id}} </ul>
+       </div>
      {{/each}}
+

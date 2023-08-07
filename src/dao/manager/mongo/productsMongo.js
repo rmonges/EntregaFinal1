@@ -4,6 +4,15 @@ export class ProductsMongo{
     constructor(){
         this.model = productsModel;
     };
+    async saveProduct(productInfo){
+        try {
+            const productCreated = await this.model.create(productInfo);
+            return productCreated; 
+        } catch (error) {
+            throw error;
+        }
+          
+    }
 
     //get products
     async getProduct(){
@@ -34,6 +43,9 @@ async getById(id){
     //devuelve el producto que cumple con el id recibido
     try{
         const product = await this.model.findById(id);
+        if(!product){
+            throw new Error ("el producto no existe")
+        }
         return product;
     }catch(error){
         console.log(error.message);
@@ -42,36 +54,34 @@ async getById(id){
     }
 };
 
-async deleteProduct(id) {
-    try {
-        const product = await this.model.find();
-     return await this.model.findOneAndDelete({id});
-   
-    
-    } catch (err) {
-        console.error("Error al eliminar el producto:", err);
-    }
-}
+
 async upDateProduct  (id, updatedProd) {
     try {
-        const productById = await this.model.findByIdAndUpdate(id, {$set: updatedProd});
+        const productById = await this.model.findByIdAndUpdate(id, updatedProd,{new: true});
+        if(!productById){
+            throw new Error ("el producto no existe") 
+        }
             return "producto actualizado"
        } catch (error) {
         console.error(error.message);
         return undefined
     }
+  }  
 
-   }
 
-        // if(existProd){
-        // const newProduct = product.filter(prod =>prod.id !== id);
-        //     await fs.promises.writeFile(this.path, JSON.stringify(newProduct, null,'\t'))
-        //     return "Producto Eliminado";
-        // }else{
-        //     return "Producto no encontrado"
-        // };
-    
+   async deleteProduct(id) {
+    try {
+        const product = await this.model.find(id);
+        if(pet){
+           await this.model.findOneAndDelete({id});
+        }
+         return "mascota eliminada"; 
+   } catch (err) {
+        console.error("Error al eliminar el producto:", err);
+    }
+}
 
+        
     
 };  
 

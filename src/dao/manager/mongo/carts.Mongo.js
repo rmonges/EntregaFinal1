@@ -4,7 +4,8 @@ import path from "path";
 import fs from "fs";  
 import { ProductManager } from "../productManager.js";  
 import { cartsModel } from "../../models/carts.model.js";
-import {productsModel} from "../../models/products.model.js";
+//import {productsModel} from "../../models/products.model.js";
+import { throws } from "assert";
 
 export class productsModel{
     constructor(){
@@ -20,31 +21,17 @@ export class CartsMongo {
 
 
 
-async saveCart() {
+async saveCart(cart) {
      try {
-          await fs.promises.writeFile(this.path, JSON.stringify(this.carts, null, 2));
-     }catch (error) {
-             console.error('Error saving products:', error);
-          };
-      };  
-      
-      
-async loadCarts() {
-        try{
-            const data = await fs.promises.readFile(this.path, 'utf8');
-            if (data) {
-                this.carts = JSON.parse(data);
-            } else {
-                throw new Error("No es posible obtener los productos!");
-            }
-          
-            return this.carts;
-        }catch (error) {
-            console.error('Error loading products:', error);
-            return [];
+          const cartCreated = await this.model.find(cart)
+    
+          return cartCreated;
+          }
+          catch (error) {
+            throw error;
         };
-     };
-         
+      };  
+               
         
 async getAll(){
     try{
@@ -52,7 +39,6 @@ async getAll(){
         return carts;
     }catch(error){
         console.log(error.message);
-        // throw error
         throw new Error("Hubo un error al obtener los ");
     }
       };    
@@ -65,35 +51,11 @@ async getAll(){
 
 async addCart(products){
   try {
-    //    if(this.fileExist()){
-    //       const info = await fs.promises.readFile(this.path, "utf-8")
-    //       const carts =  JSON.parse(info);
-    //       console.log("productJSON", carts);
-    //       let newId;
-    //     if(carts.length===0){
-    //           newId=1;
-    //           console.log("primer carrito !!!!!!!!!!");
-
-    //   }else{
-    //         newId=carts[carts.length -1].id+1;
-    //         carts.id= newId;
-    //         };
-      
-    //         const newCart ={
-    //           id:newId,
-    //           products:[]
-    //      };
-    //       carts.push(newCart);
-      
-    //        await fs.promises.writeFile(this.path, JSON.stringify(carts, null,'\t'));//lo primero es lo que quiero convertir a json
-    //        return newCart;
-    // }
     let cartData = {};
     if(products && products.lenght > 0){
         cartData.products =products;
     }
-
-    const cart = await this.model.create(cartData);
+     const cart = await this.model.create(cartData);
     return cart;
 
   } 
@@ -105,12 +67,12 @@ async addCart(products){
 
   async getById(id){
     try {
-       
-             const carts = await this.model.findById(id)
-            
-            //console.log("cartsbyid",carts)
+            const carts = await this.model.findById(id).populate({path:"products",select:"tittle description price code", 
+        });
+            if(!carts){
+                throw new Error ("el carrito no esta registrado");     
+            }
              return carts;     
-        
         }
     catch (error) {
         console.error(error.message);
@@ -119,14 +81,17 @@ async addCart(products){
 };
 
 
-async deleteCars(id){
-  try {
-      const carts = await this.getAll();
-   let existenProducts = carts.some(cart => cart.id === id);
- }catch (error) {
-      console.error(error.message);
-     }
-};
+async deleteCart(id) {
+    try {
+        const cart = await this.model.find(id);
+        if(cart){
+           await this.model.findOneAndDelete({id});
+        }
+         return "carrito eliminado"; 
+   } catch (err) {
+        console.error("Error al eliminar el producto:", err);
+    }
+}
 
 
   async addProductInCart (cid, obj) {
@@ -152,6 +117,19 @@ async deleteCars(id){
         return err;
     }
 };
+
+   async upDateCart (cartId, cartInfo){
+    try {
+        const cartUpDate = await this.model.findByIdAndUpdate(cartId, cartInfo , 
+        {new:true} ); 
+        if(!cartUpDate){
+            throw new Error ("carrito no encontrado");
+          } 
+        return cartUpDate;
+    } catch (error) {
+        throw error; 
+    }
+   }
 
 };
 

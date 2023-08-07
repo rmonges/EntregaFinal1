@@ -13,7 +13,7 @@ router.get("/", async (req, res)=>{
         res.json({status:"success", data:messagesAll});
     } catch (error) {
         console.log(error.menssage)
-        res.json({status:"error", message:"hubo un error al obtener los productos"})
+        res.json({status:"error", message:"hubo un error al obtener los mensages"})
     }
 })
 router.post("/", async (req, res)=>{
@@ -23,7 +23,7 @@ router.post("/", async (req, res)=>{
         res.json({status:"success", data:messagesCreated});
     } catch (error) {
         console.log(error.menssage)
-        res.json({status:"error", message:"hubo un error al obtener los productos"})
+        res.json({status:"error", message:"hubo un error al obtener los messages"})
     }
 })
 router.get("/:mid", async (req, res)=>{

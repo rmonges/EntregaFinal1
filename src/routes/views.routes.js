@@ -3,7 +3,13 @@ import { ProductManager } from "../dao/manager/productManager.js";
 import { __dirname } from "../utils.js";
 import path from "path";
 import { productsModel } from "../dao/models/products.model.js";
+import { cartsModel } from "../dao/models/carts.model.js";
+import { CartsManager } from "../dao/manager/fileSystem/cartsFiles.js";
+
+
+const cartsService = new CartsManager('../src/carts.json')
 const productsService = new ProductManager ('../src/products.json')
+
 const router = Router();
 
   try {
@@ -18,34 +24,20 @@ const router = Router();
 
 //})
 
+
 router.get("/realTimeProducts", (req, res)=>{
-   res.render("realTimeProducts")
+   res.render("realTimeProducts");
  })
-router.get("/",(req, res)=>{
+router.get("/messages",(req, res)=>{
   res.render("messages")
 } )
-  
-router.post("/product", async (req, res)=>{
-  try {
-    
-    
-      const newProduct = {
-        name:"pepe",
-        lastname:"perez",
-        age:"20",
-      }
-      res.render("/newProduct",newProduct )
-  
-  } catch (error) {
-    
-  }
-    
+router.get("/carts", (req, res)=>{
+  res.render("carts")
 })
-
+  
 router.get("/home", async (req, res)=>{
   try {
       const productList = await productsService.getProduct();
-      console.log("productlisthome", productList);
   style:"home.css",
   res.render("home",{
      isProduct: productList ? true : false,

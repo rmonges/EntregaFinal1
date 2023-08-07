@@ -3,21 +3,22 @@ import { CartsManager } from "../dao/manager/fileSystem/cartsFiles.js";
 import { ProductManager} from "../dao/manager/productManager.js";
 import { cartsModel } from "../dao/models/carts.model.js";
 import { productsModel } from "../dao/models/products.model.js";
+import { CartsMongo } from "../dao/manager/mongo/carts.Mongo.js";
 
-const cartsService = new CartsManager ("carts.json");
+const cartsService = new CartsMongo ("carts.json");
 const productsService = new ProductManager ('../src/products.json') 
 const router = Router();
 
 //mogoose
-router.get("/", async (req, res)=>{
-try {
-    const cart = await cartsModel.find();
-        res.json({status:"successcart", data:cart});
-} catch (error) {
-    console.log(error.menssage)
-    res.json({status:"error", message:"hubo un error al obtener los carts"})
-}
-});
+// router.get("/", async (req, res)=>{
+// try {
+//     const cart = await cartsService.find();
+//         res.json({status:"successcart", data:cart});
+// } catch (error) {
+//     console.log(error.menssage)
+//     res.json({status:"error", message:"hubo un error al obtener los carts"})
+// }
+// });
 
 router.post("/cartCreated", async (req, res)=>{
     try {
@@ -29,6 +30,7 @@ router.post("/cartCreated", async (req, res)=>{
         res.json({status:"error", message:"hubo un error al obtener los carritos"})
     }
 })
+
 
 router.post("/", async (req, res)=>{
      try {
@@ -79,7 +81,7 @@ router.post("/:cid/product/:pid", async (req, res)=>{
 router.put("/addproductCart", async(req, res)=>{
     try {
         const {productId, cartId }= req.body;//
-        const cart = await cartsModel.findById(cartId);//me devuelve un json 
+        const cart = await cartsModel.findById(cartId).populate("products");//me devuelve un json 
         if(!cartId){
              return res.send("este carrito no existe ")
         };
@@ -91,8 +93,10 @@ router.put("/addproductCart", async(req, res)=>{
         cart.products.push(productId);
         
         console.log("producto encontado del carrito", product)
-        await cart.save();
-        console.log("cart", cart)
+        await cart.save();console.log("Producto encontrado del carrito:", product);
+        console.log("Cart actualizado:", cart);
+
+       
         res.send(cart);
 
 
@@ -114,5 +118,16 @@ router.delete("/:cid", async (req, res)=>{
     };
     
 });
+router.put("/:cid", async (req, res)=>{
+    try {
+        const cartId = req.params.cid;
+        const cartInfo = req.body;
+        const cartUpdate = await cartsService.upDateCart(cartId, cartInfo);
+        res.json({status:"succes", data : cartUpdate})
+    } catch (error) {
+        res.json({status:"error", message:"error"})
+    }
+    
+})
 
 export {router as cartsRouter};
