@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { productsCollection } from "../../constants/index.js";
-
+import mogoosePaginate from "mongoose-paginate-v2"
 
 const productsSchema = new mongoose.Schema({
        tittle:{
@@ -26,10 +26,11 @@ const productsSchema = new mongoose.Schema({
       },
       stock:{
         type:Number,
-       required:true,
+      default:0,
       },
       category:{
         type:String,
+        enum:["sandwitch,papas, empanadas, pizza, mediana, grande, chica"],
        required:true,
       
       },
@@ -37,7 +38,9 @@ const productsSchema = new mongoose.Schema({
         type:String,
       required:true
       },
-})
+      
+});
+productsSchema.plugin(mogoosePaginate)
 
 export const productsModel = mongoose.model(productsCollection, productsSchema);
 

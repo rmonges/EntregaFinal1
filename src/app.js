@@ -15,6 +15,7 @@ import { config }  from "./config/config.js"
 import { connectDB } from "./config/dbConnection.js";
 import { messagesModel } from "./dao/models/messages.model.js";
 
+
 //const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
 //creamos la aplicacion del servidor
 const app = express();

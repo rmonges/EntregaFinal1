@@ -18,6 +18,7 @@ export class ProductsMongo{
     async getProduct(){
         try{
             const products = await this.model.find().lean();
+            console.log("prrrrroducts",products )
             return products;
         }catch(error){
             console.log(error.message);
@@ -25,6 +26,16 @@ export class ProductsMongo{
             throw new Error("Hubo un error al obtener los productos");
         }
     };
+
+    //get paginate
+    async getWithPaginate(query, options){
+        try {
+            const result = await this.model.paginate(query, options);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    } 
 
     //save product
     async addProduct(productInfo){

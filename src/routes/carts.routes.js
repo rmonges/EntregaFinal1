@@ -4,25 +4,16 @@ import { ProductManager} from "../dao/manager/productManager.js";
 import { cartsModel } from "../dao/models/carts.model.js";
 import { productsModel } from "../dao/models/products.model.js";
 import { CartsMongo } from "../dao/manager/mongo/carts.Mongo.js";
-
+import { productsCollection } from "../constants/index.js";
 const cartsService = new CartsMongo ("carts.json");
 const productsService = new ProductManager ('../src/products.json') 
 const router = Router();
 
-//mogoose
-// router.get("/", async (req, res)=>{
-// try {
-//     const cart = await cartsService.find();
-//         res.json({status:"successcart", data:cart});
-// } catch (error) {
-//     console.log(error.menssage)
-//     res.json({status:"error", message:"hubo un error al obtener los carts"})
-// }
-// });
 
 router.post("/cartCreated", async (req, res)=>{
     try {
-        const cartCreated = await cartsModel.create(req.body);
+        const newCart = req.body;
+        const cartCreated = await cartsService.addCart(newCart);
         console.log("cartCreated", cartCreated)
         res.json({status:"success", data:cartCreated});
     } catch (error) {
@@ -41,6 +32,18 @@ router.post("/", async (req, res)=>{
         res.json({status:"error", message:error.message});
      };
 });
+//POST ADD PRODUCT CART
+router.post("/", async (req, res)=>{
+    try {
+        const productDetails = req.body;
+        const cartCreated = await cartsService.addCart(productDetails);
+        console.log("cartCreated", cartCreated)
+        res.json({status: "succes", data:cartCreated}); 
+       
+    } catch (error) {
+       res.json({status:"error", message:error.message});
+    };
+});
 
 router.get("/", async(req,res)=>{
    try {
@@ -49,6 +52,24 @@ router.get("/", async(req,res)=>{
        res.json({status:"error", message:error.message});
    };
 });
+
+//obtener ruta con populacion
+router.get("/prodpopulate/:cid", async (req, res)=>{
+    try {
+        const cartId =(req.params.cid);
+        const cart = await cartsModel.findById(cartId).populate("products");
+        if(!cart){
+            return res.send("este curso no existe")
+        }
+        console.log("CARRRT", cart);
+        res.send(cart);
+       
+   }catch (error) {
+        res.json({status:"error", message:error.message});
+    };
+});
+
+
 
 
 router.get("/:cid", async (req, res)=>{
@@ -81,22 +102,20 @@ router.post("/:cid/product/:pid", async (req, res)=>{
 router.put("/addproductCart", async(req, res)=>{
     try {
         const {productId, cartId }= req.body;//
-        const cart = await cartsModel.findById(cartId).populate("products");//me devuelve un json 
+        const cart = await cartsModel.findById(cartId);//me devuelve un json 
         if(!cartId){
-             return res.send("este carrito no existe ")
+            return res.status(404).json({ error: "Eeeeeeeeste carrito no existe" });
         };
         const product = await productsModel.findById(productId);
         
         if(!productId){
-            return res.send("este producto no existe");
+            return res.status(404).json({ error: "Este producto no existe" });
         };
         cart.products.push(productId);
         
         console.log("producto encontado del carrito", product)
-        await cart.save();console.log("Producto encontrado del carrito:", product);
+         cart.save();console.log("Producto encontrado del carrito:", product);
         console.log("Cart actualizado:", cart);
-
-       
         res.send(cart);
 
 
@@ -129,5 +148,115 @@ router.put("/:cid", async (req, res)=>{
     }
     
 })
+
+router.delete("/:cid/product/:pid", async (req, res)=>{
+    try {
+        const cartId= req.params.cid;//
+        const productId= req.params.pid;//
+
+        const cart = await cartsModel.findById(cartId);//me devuelve un json 
+        console.log("id carrito", cartId)
+        if(!cartId){
+             return res.send("este carrito no existe ")
+        };
+        console.log("id carrito", cartId)
+        const product = await productsModel.findById(productId);
+        console.log("id productoId", product)
+        if(!productId){
+            return res.send("este producto no existe");
+            
+        };
+        cart.products.pull({_id:productId});
+        
+         cart.save();console.log("Producto eliminado del carrito:", cart);
+        console.log("Cart eliminado:", cart);
+        res.send(cart);
+
+    }catch (error) {
+        console.error(error);
+        res.json({status:"error", message:"error"})
+    };
+ });  
+ router.put("/:cid/product/:pid", async (req, res)=>{
+    try {
+        const cartId= req.params.cid;//
+        const productId= req.params.pid;//
+
+        const cart = await cartsModel.findById(cartId);//me devuelve un json 
+        console.log("id carrito", cartId)
+        if(!cartId){
+             return res.send("este carrito no existe ")
+        };
+        console.log("id carrito", cartId)
+        const product = await productsModel.findById(productId);
+        console.log("id productoId", product)
+        if(!productId){
+            return res.send("este producto no existe");
+            
+        };
+        cart.products.pull({_id:productId});
+        
+        console.log("producto encontado del carrito", product)
+         cart.save();console.log("Producto eliminado del carrito:", cart);
+        console.log("Cart eliminado:", cart);
+        res.send(cart);
+
+    }catch (error) {
+        console.error(error);
+        res.json({status:"error", message:"error"})
+    };
+});  
+
+router.delete("/:cid", async (req, res)=>{
+    try {
+        const cartId= req.params.cid;//
+
+        const cart = await cartsModel.findById(cartId);//me devuelve un json 
+        console.log("id carrito", cartId)
+        if(!cartId){
+             return res.send("este carrito no existe ")
+        };
+        console.log("id carrito", cartId)
+        const deletedProducts = cart.filter(product=>product.cartId !== cartId)
+    
+        res.json({ message: `Se han eliminado ${deletedProducts.length} productos del carrito ${cartId}.` });
+        console.log("id productoId", product)
+        
+       
+        
+        console.log("producto encontado del carrito", product)
+         cart.save();console.log("Producto eliminado del carrito:", cart);
+        console.log("Cart eliminado:", cart);
+        res.send(cart);
+
+    }catch (error) {
+        console.error(error);
+        res.json({status:"error", message:"error"})
+    };
+
+});
+
+
+router.delete("/:cid/products", async (req, res) => {
+    try {
+        const cartId = req.params.cid;
+
+        const cart = await cartsModel.findById(cartId);
+        console.log("id carrito", cartId);
+        if (!cart) {
+            return res.send("Este carrito no existe");
+        }
+
+        cart.products = []; 
+
+        cart.save();
+        console.log("Todos los productos eliminados del carrito:", cart);
+        res.send(cart);
+    } catch (error) {
+        console.error(error);
+        res.json({ status: "error", message: "error" });
+    }
+});
+
 
 export {router as cartsRouter};

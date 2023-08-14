@@ -1,0 +1,68 @@
+<p><strong>{{error}}</strong></p>
+
+
+{{#if payload}}
+   <h1>Vista de productos</h1>
+   <ul>
+   {{#each payload}}
+     <li>Tittle:{{this.tittle}}</li>
+     <li>Price:{{this.price}}</li>
+     <li>Description:{{this.description}}</li>
+     <li>Code:{{this.code}}</li>
+     <li>Thumbnails:{{this.thumbnails}}</li>
+     <li>Category:{{this.category}}</li>
+     <button onclick="addCart('{{this.id}}, {{this.stock}}, {{this.description}}, {{this.code}}, {{this.category}}, {{this.thumbnails}}')">addCart</button>
+   {{/each}}
+   </ul>
+   {{#if hasPrevPage}}
+      <a href={{prevLink}}>Anterior</a> 
+   {{/if}}  
+
+   {{page}}
+
+   {{#if hasNextPage}}
+      <a href={{nextLink}}>Siguiente</a>
+   {{/if}}
+
+  
+{{else}} 
+
+<h2>no hay productos</h2>  
+{{/if}}
+
+<script>
+const addCart = (productId, stock,description, code, thumbnails, category  )=>{
+    
+
+    const baseUrl = 'http://localhost:8080/api/carts';
+   
+    const datosProducto = {
+      id:productId,
+      stock, 
+      description, 
+      code, 
+      category, 
+      thumbnails,  
+    };
+     fetch(`${baseUrl}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(datosProducto),
+ 
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("data", data)
+      const rutaLlamada = data.baseUrl;
+
+      console.log('Ruta para agregar al carrito:', rutaLlamada);
+      
+    })
+    .catch(error => {
+      console.error('Error al obtener la ruta:', error);
+    });
+};
+
+</script>

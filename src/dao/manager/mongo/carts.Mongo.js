@@ -67,8 +67,7 @@ async addCart(products){
 
   async getById(id){
     try {
-            const carts = await this.model.findById(id).populate({path:"products",select:"tittle description price code", 
-        });
+            const carts = await this.model.findById(id).populate("products");
             if(!carts){
                 throw new Error ("el carrito no esta registrado");     
             }

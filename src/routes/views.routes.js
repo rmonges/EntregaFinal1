@@ -5,8 +5,9 @@ import path from "path";
 import { productsModel } from "../dao/models/products.model.js";
 import { cartsModel } from "../dao/models/carts.model.js";
 import { CartsManager } from "../dao/manager/fileSystem/cartsFiles.js";
+import { ProductsMongo } from "../dao/manager/mongo/productsMongo.js";
 
-
+const productsServiceMongo = new ProductsMongo("carts.json")
 const cartsService = new CartsManager('../src/carts.json')
 const productsService = new ProductManager ('../src/products.json')
 
@@ -24,7 +25,47 @@ const router = Router();
 
 //})
 
+router.get("/products", async(req, res)=>{
+  try {
+    const {limit=10, page=1, stock, sort="asc"} = req.query;//defino datos por defecto (no le envio nada)
+    const stockValue=  stock === 0 ? undefined : parseInt(stock);//cuando llega el valor es como un string debo convertirlo 
+    if(!["asc", "desc"].includes(sort)){
+      return res.render("products", {error:"Orden no valido"})
+    };
+    const sortValue = sort === "asc" ? 1 : -1;
+    let query = {};
+    if(stockValue){
+      query = {stock:{$gte:stockValue}}  
+    };
+    const result = await productsServiceMongo.getWithPaginate(query,{
+      page,
+      limit,
+      sort:{price:sortValue},
+      lean:true
+    })
+    //console.log(result);
+                    //http:localhost:8080//products      
+    const baseUrl = `${req.protocol}://${req.get("host")}${req.get("host")}${req.originalUrl}`;
+    const resultProductView = {
+    status:"success",
+payload:result.docs,
+totalPages:result.totalPages ,
+prevPage:result.prevPage,  
+nextPage:result.nextPage,
+page: result.page,  
+hasPrevPage: result.hasPrevPage,
+hasNextPage: result.hasNextPage, 
+prevLink: result.hasPrevPage ?  `${baseUrl.replace(`page=${result.page}`,`page=${result.prevPage}`)}`  : null,
+nextLink: result.hasNextPage ?  `${baseUrl.replace(`page=${result.page}`,`page=${result.nextPage}`)}`  : null,
 
+}
+console.log(resultProductView);
+    res.render("products", resultProductView)
+  } catch (error) {
+    console.log(error.message);
+    res.render("products",{ error: "no es posible visualizar los datos gatos"});
+  }
+})
 router.get("/realTimeProducts", (req, res)=>{
    res.render("realTimeProducts");
  })
@@ -75,21 +116,6 @@ router.get("/consultaNormal", async(req,res)=>{
       res.json({status:"error", message:'Hubo un error en la consulta'});
   }
 });
-
-//router.get("/comida", (req, res)=>{
-  // const testUser = {
-  //        name:"pepe",
-  //        role:"admin"
-  // }
-  // res.render("foodView",{
-  //     name: testUser.name,
-  //     isAdmin: testUser.role === "admin" ? true : false ,  //if(testUser.role === "admin"){isadmin == true}else{isadmin == false}
-  //     food//food:food //si el la propiedad del objeto es igual al nombre del valor ded la vaialbe que le vamos asignar pordemos dejar solo un nombre
-  // } )  
-//})
-
-
-
 
 export {router as viewsRouter};
 

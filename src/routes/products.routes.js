@@ -21,7 +21,8 @@ const validation = (req, res, next)=>{
 //MONGO
 router.get("/", async (req, res)=>{
     try {
-        const products = await productService.find();
+        const products = await productService.getProduct();
+        console.log("productssss", products)
         res.json({status:"success", data:products});
     } catch (error) {
         console.log(error.menssage)
@@ -130,5 +131,23 @@ router.delete("/:pid", async (req, res)=>{
     };
     
 });
+
+//AGREGATTION
+
+
+
+// const operation = async ()=>{
+
+//     const result = await productsModel.aggregate( [
+        
+//        {
+//          $match:{category:"mediana"}
+//        }
+      
+//     ])
+//     console.log("result", result);
+// }
+
+// operation();
 
 export {router as productsRouter};

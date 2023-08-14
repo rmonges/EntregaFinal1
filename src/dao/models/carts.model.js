@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { cartsCollection, productsCollection } from "../../constants/index.js";
 
 
+
 const cartsSchema = new mongoose.Schema({
 
     name:{
