@@ -30,7 +30,7 @@ const productsSchema = new mongoose.Schema({
       },
       category:{
         type:String,
-        enum:["sandwitch,papas, empanadas, pizza, mediana, grande, chica"],
+        enum:["sandwitch","papas", "empanadas", "pizza", "mediana", "grande", "chica"],
        required:true,
       
       },

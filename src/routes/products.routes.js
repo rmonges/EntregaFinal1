@@ -29,16 +29,6 @@ router.get("/", async (req, res)=>{
         res.json({status:"error", message:"hubo un error al obtener los productos"})
     }
 })
-router.post("/", async (req, res)=>{
-    try {
-        const productInfo = (req.body);
-        const productCreated = await productService.saveProduct(productInfo); 
-        res.json({status:"success", data:productCreated});
-    } catch (error) {   
-        console.log(error.menssage)
-        res.json({status:"error", message:"hubo un error al obtener los productos"})
-    }
-})
 
 router.get("/:pid", async (req, res)=>{
     try {

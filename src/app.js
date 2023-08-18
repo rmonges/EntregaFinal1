@@ -14,6 +14,10 @@ import { CartsManager } from "./dao/manager/fileSystem/cartsFiles.js";
 import { config }  from "./config/config.js"
 import { connectDB } from "./config/dbConnection.js";
 import { messagesModel } from "./dao/models/messages.model.js";
+import { cookiesRouter } from "./routes/cookie.routes.js";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import { sessionsRouter } from "./routes/session.routes.js";
 
 
 //const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
@@ -24,6 +28,12 @@ const port = config.server.port;
 app.use(express.json())//middleware para recibir jsons
 app.use(express.static(path.join(__dirname,"/public")));//path es una libreria que me permite unir rutas, entro la ruta dirname "src"=>public
 app.use(express.urlencoded({extended:true}));
+app.use(cookieParser("securitykey"));
+app.use(session({ 
+    secret:"sessionSecretKey", //cifra el id de a session dentro  del coockie
+    resave:true,
+    saveUninitialized:true    
+}))
 //levantar el servidor, l aplicacion va a estar pendiente de recibir peticiones,le indicamos el puerto por donde va a recibir la info
 const productService = new ProductManager('products.json');
 const cartsService = new CartsManager('carts.json')
@@ -104,6 +114,8 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/messages", messagesRouter);
 app.use(viewsRouter);
+app.use("/", cookiesRouter);
+app.use("/", sessionsRouter)
 
 
 

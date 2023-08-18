@@ -116,6 +116,11 @@ router.get("/consultaNormal", async(req,res)=>{
       res.json({status:"error", message:'Hubo un error en la consulta'});
   }
 });
+router.get("/", (req, res)=>{
+  
+  res.render("formcookie");
+
+})
 
 export {router as viewsRouter};
 
