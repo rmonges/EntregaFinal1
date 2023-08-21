@@ -18,6 +18,8 @@ import { cookiesRouter } from "./routes/cookie.routes.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import { sessionsRouter } from "./routes/session.routes.js";
+import FileStore from "session-file-store";
+import MongoStore from "connect-mongo";
 
 
 //const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
@@ -25,13 +27,21 @@ import { sessionsRouter } from "./routes/session.routes.js";
 const app = express();
 const port = config.server.port;
 
+
 app.use(express.json())//middleware para recibir jsons
 app.use(express.static(path.join(__dirname,"/public")));//path es una libreria que me permite unir rutas, entro la ruta dirname "src"=>public
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser("securitykey"));
+// const fileStorage = FileStore(session);
 app.use(session({ 
-    secret:"sessionSecretKey", //cifra el id de a session dentro  del coockie
-    resave:true,
+    store: MongoStore.create ({//defimos en la conf de la sesiones donde el sitio donde vamos a manejar el almacenamiento de las sesiones 
+        //ttl:40,
+        // retries:0,
+        // path:path.join(__dirname, "/session")
+        mongoUrl:config.mongo.url,
+    }),
+    secret:config.server.secretSessions, //cifra el id de a session dentro  del coockie
+    resave:true,//permite saber si el usuario tiene una sesion comenzada y lo archiva en algun lado
     saveUninitialized:true    
 }))
 //levantar el servidor, l aplicacion va a estar pendiente de recibir peticiones,le indicamos el puerto por donde va a recibir la info
@@ -41,7 +51,7 @@ const cartsService = new CartsManager('carts.json')
 //WEBSOCKET GUARDAMOS EL SERVIDOR HTTP EN UNA VARIABLE
 const httpServer = app.listen(port,()=>console.log(`El servidor esta escuchando en el puerto ${port}`));
 
-connectDB();
+//connectDB();
 //RUTAS DE HANDLERBARS
 app.engine('.hbs', handlebars.engine({extname: '.hbs'}));//inicia motor plantilla handlerbars
 app.set('view engine', '.hbs');//motor a utilizar
@@ -57,7 +67,6 @@ socketServer.on("connection", async (socketConnected)=>{
     console.log(`nuevo cliente conectado ${socketConnected.id}`)
      const productList = await productService.getProduct({});
      const cartList = await cartsService.getAll({});
-    // console.log("cartList", cartList)
 
     //RECIBIR EVENTO/DATOS DEL CLIENTE
     socketServer.emit("cartList", cartList);
@@ -70,29 +79,6 @@ socketServer.on("connection", async (socketConnected)=>{
   const productList = await productService.getProduct({})
 
   socketServer.emit("productList", productList)
-
-  let messages=[];
-  //socket server
-  
-  
-    //   socket.on("authenticated",async (msg)=>{
-    //       //const message = await messagesModel.find();
-    //       socket.emit("messageHistory", messages);
-    //       socket.broadcast.emit("newUser",msg);
-    //   });
-  
-    //   //recibir el mensaje del cliente
-    //   socket.on("message",async (data)=>{
-    //       console.log("data", data);
-    //      const messagesCreated = await messagesModel.create(data);
-    //      const messages = await messagesModel.find();
-  
-    //       //cada vez que recibamos este mensaje, enviamos todos los mensajes actualizados a todos los clientes conectados
-    //       socketServer.emit("messageHistory", messages);
-    //   })
-  
- 
-
 
 })
 //ENVIAR DATOS DEL SERVIDOR AL CLIENTE  ENVIAMOS
@@ -115,7 +101,7 @@ app.use("/api/carts", cartsRouter);
 app.use("/api/messages", messagesRouter);
 app.use(viewsRouter);
 app.use("/", cookiesRouter);
-app.use("/", sessionsRouter)
+app.use("/api/sessions", sessionsRouter);
 
 
 

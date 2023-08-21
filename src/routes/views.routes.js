@@ -92,18 +92,18 @@ router.get("/home", async (req, res)=>{
 })
 
 
-router.get("/perfil", (req, res)=>{
+// router.get("/perfil", (req, res)=>{
 
-  const user1 = {
-  name:"pepe",
-  lastname:"perez",
-  age:"20",
-  location:{
-      city:"Buenos Aires"
-  }
- }
- res.render("profile", user1)
-})
+//   const user1 = {
+//   name:"pepe",
+//   lastname:"perez",
+//   age:"20",
+//   location:{
+//       city:"Buenos Aires"
+//   }
+//  }
+//  res.render("profile", user1)
+// })
 
 //clase 16 aplicar un indice para aumentar la velocidad de busqueda, se aplica em el modelo index
 
@@ -117,8 +117,24 @@ router.get("/consultaNormal", async(req,res)=>{
   }
 });
 router.get("/", (req, res)=>{
-  
   res.render("formcookie");
+
+//Rutas sessions
+router.get("/login", (req, res)=>{
+  res.render("login");
+}); 
+
+router.get("/registro", (req, res)=>{
+  res.render("signup");
+}); 
+
+router.get("/perfil", (req, res)=>{
+  console.log(req.session)
+  res.render("profile", {user:req.session.userInfo});
+}); 
+
+
+
 
 })
 
