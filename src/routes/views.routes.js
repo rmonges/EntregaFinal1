@@ -6,6 +6,8 @@ import { productsModel } from "../dao/models/products.model.js";
 import { cartsModel } from "../dao/models/carts.model.js";
 import { CartsManager } from "../dao/manager/fileSystem/cartsFiles.js";
 import { ProductsMongo } from "../dao/manager/mongo/productsMongo.js";
+import { checkUserAutentificated, showLoginView } from "../middlerwares/auth.js";
+
 
 const productsServiceMongo = new ProductsMongo("carts.json")
 const cartsService = new CartsManager('../src/carts.json')
@@ -59,8 +61,8 @@ prevLink: result.hasPrevPage ?  `${baseUrl.replace(`page=${result.page}`,`page=$
 nextLink: result.hasNextPage ?  `${baseUrl.replace(`page=${result.page}`,`page=${result.nextPage}`)}`  : null,
 
 }
-console.log(resultProductView);
-    res.render("products", resultProductView)
+
+    res.render("products",resultProductView)//al medioresultProductView,
   } catch (error) {
     console.log(error.message);
     res.render("products",{ error: "no es posible visualizar los datos gatos"});
@@ -116,27 +118,30 @@ router.get("/consultaNormal", async(req,res)=>{
       res.json({status:"error", message:'Hubo un error en la consulta'});
   }
 });
-router.get("/", (req, res)=>{
-  res.render("formcookie");
+// router.get("/", (req, res)=>{
+//   res.render("formcookie");
 
 //Rutas sessions
-router.get("/login", (req, res)=>{
+router.get("/login", showLoginView,  (req, res)=>{
   res.render("login");
 }); 
 
-router.get("/registro", (req, res)=>{
+router.get("/registro", showLoginView, (req, res)=>{
   res.render("signup");
 }); 
 
-router.get("/perfil", (req, res)=>{
+router.get("/perfil", checkUserAutentificated,  (req, res)=>{
   console.log(req.session)
   res.render("profile", {user:req.session.userInfo});
 }); 
 
+// router.get("/products", checkUserAutentificated,  (req, res)=>{
+//   console.log("req.session", req.session)
+//   res.render("products" );
+// }); 
 
 
 
-})
 
 export {router as viewsRouter};
 

@@ -1,19 +1,29 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <p><strong>{{error}}</strong></p>
+<p>{{error}}</p>
+Bienvenido: {{ user.first_name }}<br/>
+Correo: {{ user.email }}<br/><br/>
 
+<a href="/api/sessions/logout">
+  Cerrar Sesion
+</a>
+<h1 class = "h2del">Lista de Productos</h1>
+<div class="main__contenedorProd">
 
 {{#if payload}}
-   <h1>Vista de productos</h1>
+
    <ul>
-   {{#each payload}}
-     <li>Tittle:{{this.tittle}}</li>
-     <li>Price:{{this.price}}</li>
-     <li>Description:{{this.description}}</li>
-     <li>Code:{{this.code}}</li>
-     <li>Thumbnails:{{this.thumbnails}}</li>
-     <li>Category:{{this.category}}</li>
-     <button onclick="addCart('{{this.id}}, {{this.stock}}, {{this.description}}, {{this.code}}, {{this.category}}, {{this.thumbnails}}')">addCart</button>
+   <p class="card-body">{{#each payload }}
+     Tittle:{{this.tittle}}<br>
+     Price:{{this.price}}<br>
+     Description:{{this.description}}<br>
+     Code:{{this.code}}<br>
+     Thumbnails:{{this.thumbnails}}<br>
+     Category:{{this.category}}<br>
+     <button class = "button_addCart" onclick="addCart('{{this.id}}, {{this.stock}}, {{this.description}}, {{this.code}}, {{this.category}}, {{this.thumbnails}}')">addCart</button></p>
    {{/each}}
    </ul>
+   </div>
    {{#if hasPrevPage}}
       <a href={{prevLink}}>Anterior</a> 
    {{/if}}  

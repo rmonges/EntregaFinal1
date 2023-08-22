@@ -6,9 +6,7 @@ const router =Router();
 router.post("/signup", async (req, res)=>{
     try {
        const signupForm = req.body;
-       console.log(req.body)
        const usersign = await userService.getByEmail(signupForm.email);
-       console.log("userrr",usersign);
        if(usersign){
            return res.render("signup", {error:"el usuario ya esta registrado"});
        }
@@ -19,14 +17,13 @@ router.post("/signup", async (req, res)=>{
 
     } catch (error) {
         res.render("signup", {error:error.message});
-       //res.send({status:error}).send(body)
     }
 })
 
 router.post("/login", async (req, res)=>{
     try {
         const loginForm = req.body;
-        console.log(loginForm)
+        console.log("loginForm",loginForm)
         const user = await userService.getByEmail(loginForm.email)
         console.log("userlog", user)
         if(!user){
@@ -37,7 +34,7 @@ router.post("/login", async (req, res)=>{
                 first_name:user.first_name,
                 email:user.email
             };
-            res.redirect("/perfil");
+            res.redirect("/products");
         }else{
             return res.render("login", {error:"credenciales invalidas"})
         }       
@@ -46,18 +43,14 @@ router.post("/login", async (req, res)=>{
     }
 })
 
-// router.post("/logout", async (req, res)=>{
-//     try {
-//         // const singupForm = req.body;
+router.get("/logout", async (req, res)=>{
 
-//         // const user = await userService.getByEmail()
-//         // const result = await userService.save (singupForm);
-//         res.render("endpoint para desloguear usuarios " );
-        
-//     } catch (error) {
-//         res.render("signup", {error:error.message});
-//     }
-// })
+        req.session.destroy(error=>{
+            if( error ) return res.render("profile", {user:req.session.userInfo, error:"No se pudo cerrar la sesion"})
+  
+         res.redirect("/home");
+        })
+    })
 
 //rutas para generar la session del usuario
 // router.get("/login", (req, res)=>{

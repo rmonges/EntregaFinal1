@@ -4,6 +4,16 @@ export class UsersMongo{
     constructor(){
         this.model = userModel;
     }
+    async get(user){
+        try {
+            const userGet =  await this.model.find(user);
+            console.log("userCreated", userGet)
+            return userGet;
+            
+        } catch (error) {
+            throw error;
+        }
+    }
 
     async save(user){
         try {
@@ -30,7 +40,7 @@ export class UsersMongo{
      };
      async getByEmail(userEmail){
         try {
-            const user =  await this.model.findOne({userEmail});
+            const user =  await this.model.findOne({email:userEmail});
             if(user){
                 return user;
             }else{

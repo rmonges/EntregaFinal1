@@ -23,8 +23,12 @@
            position: relative;
            word-spacing: 20px;
            letter-spacing: 5px;
-           text-align: left;
+           text-align: center;
 
+    }
+    .button_addCart{
+         width: 100px;
+         height: 25px;
     }
     .main__contenedor {
         width: 100%;
@@ -37,7 +41,22 @@
         box-sizing:border-box;
         border-radius: 1%;
         background-color:rgb(235, 226, 226) ;
+       
         }
+        .main__contenedorProd {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-auto-rows: minmax(200px, auto);
+            padding: 20px;
+            gap: 1em;
+            margin-top: 3rem;
+            box-sizing:border-box;
+            border-radius: 1%;
+            background-color:rgb(235, 226, 226) ;
+           
+            }
      .main__price {
          display: flex;
          flex-direction: row;
