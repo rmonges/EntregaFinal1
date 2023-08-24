@@ -59,24 +59,23 @@ hasPrevPage: result.hasPrevPage,
 hasNextPage: result.hasNextPage, 
 prevLink: result.hasPrevPage ?  `${baseUrl.replace(`page=${result.page}`,`page=${result.prevPage}`)}`  : null,
 nextLink: result.hasNextPage ?  `${baseUrl.replace(`page=${result.page}`,`page=${result.nextPage}`)}`  : null,
-
-}
+  }
 
     res.render("products",resultProductView)//al medioresultProductView,
-  } catch (error) {
+   } catch (error) {
     console.log(error.message);
-    res.render("products",{ error: "no es posible visualizar los datos gatos"});
-  }
-})
-router.get("/realTimeProducts", (req, res)=>{
-   res.render("realTimeProducts");
+    res.render("products",{ error: "no es posible visualizar los datos"});
+   }
  })
-router.get("/messages",(req, res)=>{
+ router.get("/realTimeProducts", (req, res)=>{
+   res.render("realTimeProducts");
+  })
+ router.get("/messages",(req, res)=>{
   res.render("messages")
-} )
-router.get("/carts", (req, res)=>{
+  })
+ router.get("/carts", (req, res)=>{
   res.render("carts")
-})
+  })
   
 router.get("/home", async (req, res)=>{
   try {
@@ -85,27 +84,12 @@ router.get("/home", async (req, res)=>{
   res.render("home",{
      isProduct: productList ? true : false,
      productList,
-     
-  });
+     });
   } catch (error) {
      res.render("error");
-  }
+   }
+  })
 
-})
-
-
-// router.get("/perfil", (req, res)=>{
-
-//   const user1 = {
-//   name:"pepe",
-//   lastname:"perez",
-//   age:"20",
-//   location:{
-//       city:"Buenos Aires"
-//   }
-//  }
-//  res.render("profile", user1)
-// })
 
 //clase 16 aplicar un indice para aumentar la velocidad de busqueda, se aplica em el modelo index
 
@@ -137,10 +121,12 @@ router.get("/perfil", checkUserAutentificated,  (req, res)=>{
 
 // router.get("/products", checkUserAutentificated,  (req, res)=>{
 //   console.log("req.session", req.session)
-//   res.render("products" );
+//   res.render("products", {user:req.session.userInfo} );
 // }); 
 
-
+router.get("/cambio-password", (req, res)=>{
+  res.render("changePassword");
+});
 
 
 export {router as viewsRouter};

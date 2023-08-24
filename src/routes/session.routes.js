@@ -1,5 +1,6 @@
 import {Router} from "express";
 import { userService } from "../dao/index.js"
+import { createHash, isValidPassword } from "../utils.js";
 
 const router =Router();
 
@@ -10,7 +11,12 @@ router.post("/signup", async (req, res)=>{
        if(usersign){
            return res.render("signup", {error:"el usuario ya esta registrado"});
        }
-       const result = await userService.save(signupForm);
+    const newUser = {
+        first_name: signupForm.first_name,
+        email: signupForm.email,  
+        password:createHash(signupForm.password)
+       }
+       const result = await userService.save(newUser);
       // res.redirect("/login"), //redirijo a la ruta de loging
          res.render("login", {message:"usuario registrado"})
          console.log("usuario nuevo");
@@ -29,7 +35,7 @@ router.post("/login", async (req, res)=>{
         if(!user){
             return res.render("login", {error:"el usuario no se a registrado"});
         }
-        if(user.password === loginForm.password){
+       if(isValidPassword(user, loginForm.password)){
             req.session.userInfo = {
                 first_name:user.first_name,
                 email:user.email
@@ -67,6 +73,22 @@ router.get("/visitas",(req, res)=>{
         res.send(`ya estas logueado y visitaste la pagina ${req.session.user.visitas}`)
     }else{
         res.send("necesitas estar logueado")
+    }
+})
+
+router.post("/changePass", async (req, res)=>{
+    try {
+        const form = req.body;
+        const user = await userService.getByEmail(form.email);
+        if(!user){
+            res.render("changePassword", {error:"no es posible cambiar contraseña"});
+        }else{
+          user.password = createHash(form.newPassword);
+          await userService.upDate(user._id, user);
+          return res.render("login", {message:"Contraseña restaurada"})
+        }
+    } catch (error) {
+        res.render("changePassword", {error:error.message});
     }
 })
 

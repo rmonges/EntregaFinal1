@@ -52,4 +52,15 @@ export class UsersMongo{
         }
      };  
      
+
+
+async upDate (userId,newUserInfo){
+    try {
+        const userUpDate = await this.model.findByIdAndUpdate(userId, newUserInfo, {new:true});
+         return userUpDate;
+       } catch (error) {
+        return error;
+     }
+    
+  } 
 };
