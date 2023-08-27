@@ -1,0 +1,105 @@
+import passport from "passport";
+import LocalStrategy from "passport-local"; 
+import { createHash, isValidPassword } from "../utils.js";
+import {userService} from "../dao/index.js";
+import githubStrategy from "passport-github2"
+import { config } from "./config.js";
+
+
+export const initializaPassport = ()=>{//creamos estrategias
+    passport.use("signupStrategy", new LocalStrategy(
+    {
+        usernameField:"email",//le pasao el valor del campo que tiene username,
+        passReqToCallback:true, //le pasamos todos los otros valores que tiene el formulario atravex de req.
+    },
+    //creo una funcion para chequear los datos recibidos
+   async (req,username, password, done)=>{//done: funcion que genera el resultado final del registro si esta bien o no
+       try {
+          const {first_name} = req.body;
+          //vericar si existe usuraio
+          const user = await userService.getByEmail(username)
+          console.log("userinitializado",user)
+          if(user){
+            return done(null, false);//existe usuario
+          }
+          const newUser = {
+            first_name: first_name,
+            email: username,  
+            password:createHash(password)
+           }
+           const userCreated = await userService.save(newUser);
+           return done (null,userCreated);//passport completa proceso de  la session del usuario satisfactoriamente
+       } catch (error) {
+            return done(error)
+       }
+    }
+    ));
+
+    passport.use("loginStrategy", new LocalStrategy(
+        {
+        usernameField:"email"
+        
+        },
+   
+        async(username, password, done)=>{
+           try {
+                const user = await userService.getByEmail(username)
+                 console.log("user loginstrategy",user)
+              if(!user){
+                return done(null, false);
+              }
+              if(isValidPassword(user, password)){
+               return done(null,user);
+              }else{
+                return done(null, false)
+            }
+          }catch (error) {
+            return done(error)
+            }
+        }
+    ));
+    passport.use("githubLoginStrategy", new githubStrategy(
+      {
+        clientID:config.github.clientId,
+        clientSecret:config.github.clientSecret,
+        callbackUrl:config.github.callbackUrl
+      },
+      async(accesstoken, refreshToken, profile, done)=>{
+        try {
+         console.log("profile", profile); 
+         const user = await userService.getByEmail(profile.username)
+         if(!user){
+           const newUser= {
+             first_name: ' ',
+             email: profile.username,  
+             password:createHash(profile.id)
+           }
+           const userCreated = await userService.save(newUser);
+            return done (null,userCreated);//passport completa p
+        }else{
+           return done(null, user)
+      }
+        }catch (error) {
+          return done(error);
+        }
+      }
+    ))
+        
+
+
+    //serializacion y deserealizacion : sirve para crear una session para cada usuario para mejor identificacion al trabajar con muchos usuarios 
+    passport.serializeUser((user, done)=>{
+        done(null, user._id);
+    })
+    passport.deserializeUser((async(id, done)=>{
+      try {
+        const user = await userService.getById(id);
+        done(null, user)//req.user.---->session  req.session.user..maneja informacion de todos los datos del usuario
+
+      } catch (error) {
+        done(error, null);
+      }
+        
+    }))
+}
+

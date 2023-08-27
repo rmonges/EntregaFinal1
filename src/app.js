@@ -20,6 +20,8 @@ import session from "express-session";
 import { sessionsRouter } from "./routes/session.routes.js";
 import FileStore from "session-file-store";
 import MongoStore from "connect-mongo";
+import { initializaPassport } from "./config/passportConfig.js";
+import passport from "passport";
 
 
 //const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
@@ -35,15 +37,18 @@ app.use(cookieParser("securitykey"));
 // const fileStorage = FileStore(session);
 app.use(session({ 
     store: MongoStore.create ({//defimos en la conf de la sesiones donde el sitio donde vamos a manejar el almacenamiento de las sesiones 
-        //ttl:40,
-        // retries:0,
-        // path:path.join(__dirname, "/session")
         mongoUrl:config.mongo.url,
     }),
     secret:config.server.secretSessions, //cifra el id de a session dentro  del coockie
     resave:true,//permite saber si el usuario tiene una sesion comenzada y lo archiva en algun lado
     saveUninitialized:true    
-}))
+}));
+
+//configuracion de passport 
+initializaPassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 //levantar el servidor, l aplicacion va a estar pendiente de recibir peticiones,le indicamos el puerto por donde va a recibir la info
 const productService = new ProductManager('products.json');
 const cartsService = new CartsManager('carts.json')

@@ -30,8 +30,8 @@ export class UsersMongo{
             const user =  await this.model.findById(userId);
             if(user){
                 return user;
-            }else{
-                throw new Error ("el usuario no existe");
+            }else{ 
+                throw new Error ("el usuario no existe" + error.message);
             }
             
         } catch (error) {

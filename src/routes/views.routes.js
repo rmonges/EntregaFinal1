@@ -60,7 +60,7 @@ hasNextPage: result.hasNextPage,
 prevLink: result.hasPrevPage ?  `${baseUrl.replace(`page=${result.page}`,`page=${result.prevPage}`)}`  : null,
 nextLink: result.hasNextPage ?  `${baseUrl.replace(`page=${result.page}`,`page=${result.nextPage}`)}`  : null,
   }
-
+    console.log({user:req.session.userInfo})
     res.render("products",resultProductView)//al medioresultProductView,
    } catch (error) {
     console.log(error.message);
@@ -89,6 +89,9 @@ router.get("/home", async (req, res)=>{
      res.render("error");
    }
   })
+  router.get("", (req, res)=>{
+    res.redirect("/login");
+})
 
 
 //clase 16 aplicar un indice para aumentar la velocidad de busqueda, se aplica em el modelo index
@@ -115,8 +118,8 @@ router.get("/registro", showLoginView, (req, res)=>{
 }); 
 
 router.get("/perfil", checkUserAutentificated,  (req, res)=>{
-  console.log(req.session)
-  res.render("profile", {user:req.session.userInfo});
+  console.log(req.user)
+  res.render("profile", {user:JSON.parse(JSON.stringify(req.user))});
 }); 
 
 // router.get("/products", checkUserAutentificated,  (req, res)=>{

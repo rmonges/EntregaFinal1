@@ -1,62 +1,50 @@
 import {Router} from "express";
 import { userService } from "../dao/index.js"
 import { createHash, isValidPassword } from "../utils.js";
+import passport from "passport";
 
 const router =Router();
 
-router.post("/signup", async (req, res)=>{
-    try {
-       const signupForm = req.body;
-       const usersign = await userService.getByEmail(signupForm.email);
-       if(usersign){
-           return res.render("signup", {error:"el usuario ya esta registrado"});
-       }
-    const newUser = {
-        first_name: signupForm.first_name,
-        email: signupForm.email,  
-        password:createHash(signupForm.password)
-       }
-       const result = await userService.save(newUser);
-      // res.redirect("/login"), //redirijo a la ruta de loging
-         res.render("login", {message:"usuario registrado"})
-         console.log("usuario nuevo");
+    
+router.get("/loginGithub", passport.authenticate("githubLoginStrategy"));
+router.get("/github-callback",passport.authenticate("githubLoginStrategy", {
+    failureRedirect:"/api/sessions/fail-signup"
+}), (req, res)=>{
+    res.redirect("/perfil");
+}
+);
+router.post("/signup", passport.authenticate("signupStrategy", {
+    failureRedirect:"/api/sessions/fail-signup"// en caso de falla de registro redireccionamos a esta ruta 
+}), (req, res)=>{
+    res.render("login", {message:"usuario registrado"});
+});
+router.get("/fail-signup", (req, res)=>{
+    res.render("signup", {error:"No se pudo registrar el usuario"});
+});
 
-    } catch (error) {
-        res.render("signup", {error:error.message});
-    }
+router.post("/login", passport.authenticate("loginStrategy", {
+    failureRedirect:"/api/sessions/fail-login",
+}),(req, res)=>{
+    res.redirect("/perfil");
+});
+
+router.get("/fail-login", (req, res)=>{
+     res.render("login", {error:"credenciales invalidas"})
 })
 
-router.post("/login", async (req, res)=>{
-    try {
-        const loginForm = req.body;
-        console.log("loginForm",loginForm)
-        const user = await userService.getByEmail(loginForm.email)
-        console.log("userlog", user)
-        if(!user){
-            return res.render("login", {error:"el usuario no se a registrado"});
-        }
-       if(isValidPassword(user, loginForm.password)){
-            req.session.userInfo = {
-                first_name:user.first_name,
-                email:user.email
-            };
-            res.redirect("/products");
-        }else{
-            return res.render("login", {error:"credenciales invalidas"})
-        }       
-    } catch (error) {
-        res.render("signup", {error:error.message});
-    }
-})
 
 router.get("/logout", async (req, res)=>{
-
-        req.session.destroy(error=>{
-            if( error ) return res.render("profile", {user:req.session.userInfo, error:"No se pudo cerrar la sesion"})
-  
-         res.redirect("/home");
+        req.logOut(error=>{
+            if(error){
+                return res.render("profile", {user:req.user, error:"No se pudo cerrar la sesion"});
+            } else{
+                req.session.destroy(error=>{//elimina la sesion de la base de datos
+                    if( error ) return res.render("profile", {user:req.user, error:"No se pudo cerrar la sesion"})
+                    res.redirect("/registro");
+                })
+            }
         })
-    })
+     })
 
 //rutas para generar la session del usuario
 // router.get("/login", (req, res)=>{
