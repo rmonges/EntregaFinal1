@@ -1,17 +1,37 @@
-<h1>Formulario de registro</h1>
+
 <p style="color:red">{{error}}</p>
-<form  method="post" action="/api/sessions/signup">
-    <input type="text" placeholder="nombre" name="first_name"><br/><br/>
-    <input type="email" placeholder="correo" name="email"><br/><br/>
-    <input type="password" placeholder="contraseña" name="password"><br/><br/>
-    <button>Registrarse</button>
-</form>
 
+<section class="container">
+  <div class="row my-5"> 
+    <div class="col-sm-12 col-md-12 col-log-12">
+     <form  method="post" action="/api/sessions/signup" class="formulario1">
+     <h1 class="display-5 text center" style="color:rgb(244, 234, 234)">Formulario de registro</h1>
+     <div class="form-group">
+        <label style="color:rgb(244, 234, 234)">Nombre:</label> 
+        <input type="text" placeholder="Intro su nombre"  maxlength="20" id="nombre"  name="first_name" class="form-control">
+    </div>
+    <div class="form-group">
+        <label style="color:rgb(244, 234, 234)">Apellido:</label> 
+        <input type="text" placeholder="Intro su apellido"  maxlength="20" id="apellido"  name="last_name" class="form-control">
+    </div>
+    <div class="form-group">
+         <label style="color:rgb(244, 234, 234)">Correo:</label> 
+       <input type="email" placeholder="Intro correo" maxlength="20" id="email" name="email" class="form-control">
+    </div>
+    <div class="form-group">
+        <label style="color:rgb(244, 234, 234)">Password:</label> 
+       <input type="password" placeholder="Intro su contraseña" maxlength="20" id="password" name="password" class="form-control">
+    </div class="form-group">
+       <button class="form-control"> Registrarse</button>
 <hr>
-<a href="/cambio-password">Restaurar contraseña</a>
+</div>
+  <a href="/cambio-password" class="form-group" class="h3signup">Restaurar contraseña</a>
 
-<a href="/api/sessions/loginGithub">
-    <button>
+  <a href="/api/sessions/loginGithub" class="form-control" >
+    <button class="form-group" class= "btn btn-success">
         Iniciar session con GitHub
     </button>
-</a>
+  </a>
+ </section>
+ </form>
+</div>

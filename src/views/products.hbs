@@ -1,28 +1,29 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <p><strong>{{error}}</strong></p>
 <p>{{error}}</p>
-console.log( {{ first_name }})<br/>
-console.log ({{ email }})<br/><br/>
+Bienvenido:  {{ username.first_name }}<br/>
+Correo: {{ username.email }}<br/><br/>
 
 <a href="/api/sessions/logout">
   Cerrar Sesion
 </a>
 <h1 class = "h2del">Lista de Productos</h1>
-<div class="main__contenedorProd">
+<div class="main__contenedor">
 
 {{#if payload}}
 
-   <ul>
-   <p class="card-body">{{#each payload }}
+
+   
+   <ul class="card-body">{{#each payload }}
      Tittle:{{this.tittle}}<br>
      Price:{{this.price}}<br>
      Description:{{this.description}}<br>
      Code:{{this.code}}<br>
      Thumbnails:{{this.thumbnails}}<br>
      Category:{{this.category}}<br>
-     <button class = "button_addCart" onclick="addCart('{{this.id}}, {{this.stock}}, {{this.description}}, {{this.code}}, {{this.category}}, {{this.thumbnails}}')">addCart</button></p>
+     <button class = "button_addCart" onclick="addCart('{{this.id}}, {{this.stock}}, {{this.description}}, {{this.code}}, {{this.category}}, {{this.thumbnails}}')">addCart</button> </ul>
    {{/each}}
-   </ul>
+  
    </div>
    {{#if hasPrevPage}}
       <a href={{prevLink}}>Anterior</a> 

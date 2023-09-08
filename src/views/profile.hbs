@@ -1,8 +1,18 @@
-<h1>Pagina de Perfil</h1>
-<p>{{error}}</p>
-Bienvenido: {{ user.first_name }}<br/>
-Correo: {{ user.email }}<br/><br/>
 
-<a href="/api/sessions/logout">
-  Cerrar Sesion
-</a>
+<p>{{error}}</p>
+
+
+<section class="container">
+  <div class=" my-5"> 
+     <div class="formulario1">
+       <h1 class="display-5 text center" style="color:rgb(244, 234, 234)">Pagina de perfil </h1>
+       <div style="color:beige">
+         Bienvenido: {{ user.first_name }}<br/>
+         Correo: {{ user.email }}<br/><br/>
+        </div>
+         <a href="/api/sessions/logout">Cerrar Sesion</a>
+     </div>
+    </div>
+  </div>
+</section>
+  

@@ -25,7 +25,10 @@ router.get("/fail-signup", (req, res)=>{
 router.post("/login", passport.authenticate("loginStrategy", {
     failureRedirect:"/api/sessions/fail-login",
 }),(req, res)=>{
-    res.redirect("/perfil");
+    const user = req.user;
+    console.log("user", user);
+
+    res.render("profile",{user} );
 });
 
 router.get("/fail-login", (req, res)=>{

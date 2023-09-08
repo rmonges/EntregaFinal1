@@ -24,7 +24,7 @@ router.get("/", async (req, res)=>{
     try {
         const products = await productService.getProduct();
         console.log("productssss", products)
-        res.json({status:"success", data:products, });
+        res.json({status:"success", data:products});
     } catch (error) {
         console.log(error.menssage)
         res.json({status:"error", message:"hubo un error al obtener los productos"})

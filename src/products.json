@@ -8,5 +8,15 @@
 		"category": "pizza",
 		"price": "3800",
 		"code": "11"
+	},
+	{
+		"id": 2,
+		"tittle": "pizza anchos",
+		"description": "pizza masa madre",
+		"stock": "10",
+		"thumbnail": "aSs",
+		"category": "pizza",
+		"price": "2800",
+		"code": "11"
 	}
 ]

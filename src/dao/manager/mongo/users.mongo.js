@@ -27,7 +27,7 @@ export class UsersMongo{
 
      async getById(userId){
         try {
-            const user =  await this.model.findById(userId);
+            const user =  await this.model.findById(userId).lean();
             if(user){
                 return user;
             }else{ 

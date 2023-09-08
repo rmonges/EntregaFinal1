@@ -8,8 +8,8 @@ export const config = {
         //url:"mongodb+srv://rmonges:Manuel2014@cluster0.m5px3yz.mongodb.net/ecommercetp?retryWrites=true&w=majority"
     },
     github:{
-        clientId:"Iv1.bd15e9455c5bbc04",
-        clientSecret:"ee32d2de382880f5c2891855d83cddc00e5341ac",
+        clientId:" Iv1.fb70c8d2d647f25d",
+        clientSecret:"31016392cd23d6ee7c653bf71fd92882a04fc1e5",
         callbackUrl:"http://localhost:8080/api/sessions/github-callback"
     },
 }

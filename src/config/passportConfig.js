@@ -38,7 +38,6 @@ export const initializaPassport = ()=>{//creamos estrategias
     passport.use("loginStrategy", new LocalStrategy(
         {
         usernameField:"email"
-        
         },
    
         async(username, password, done)=>{
@@ -91,10 +90,10 @@ export const initializaPassport = ()=>{//creamos estrategias
     passport.serializeUser((user, done)=>{
         done(null, user._id);
     })
-    passport.deserializeUser((async(id, done)=>{
+    passport.deserializeUser((async(id, done)=>{//verifica si un usuario tiene una session activa
       try {
-        const user = await userService.getById(id);
-        done(null, user)//req.user.---->session  req.session.user..maneja informacion de todos los datos del usuario
+        const user = await userService.getById(id);//si es asi , extrae su id y lo busca en la BD , trae ese usuario 
+        done(null, user)// y lo agrega en el objeto "req.user".---->session .maneja informacion de todos los datos del usuario
 
       } catch (error) {
         done(error, null);

@@ -1,8 +1,20 @@
-<h1>Formulario de Login </h1>
 <p>{{message}}</p>
 <p style="color:red">{{error}}</p>
-<form  method="post" action="/api/sessions/login">
-    <input type="email" placeholder="correo" name="email"><br/><br/>
+<section class="container">
+  <div class="row my-5"> 
+
+ <div class="col-sm-12 col-md-12 col-log-12"></div>
+  <form  method="post" action="/api/sessions/login" class="formulario1">
+  <h1 class="display-5 text center" style="color:rgb(244, 234, 234)">Formulario de Login </h1>
+   <div class="form-group">
+      <label style="color:rgb(244, 234, 234)">Correo:</label> 
+      <input type="email" placeholder="correo" name="email"><br/><br/>
+   </div>
+   <div class="form-group">
+    <label style="color:rgb(244, 234, 234)">Contraseña:</label> 
     <input type="text" placeholder="contraseña" name="password"><br/><br/>
-    <button>Loguearse</button>
-</form>
+   </div>
+    <button class="form-group" class= "btn btn-success">Loguearse</button>
+     </section>
+    </div>
+ </div>

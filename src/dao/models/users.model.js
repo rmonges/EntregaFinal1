@@ -5,8 +5,9 @@ const usersCollection = "users";
 const userSchema = new mongoose.Schema({
     first_name:{
         type:String,
-        
+        required:true
     },
+    last_name:String,
 
     last_name:{
         type:String
@@ -17,13 +18,23 @@ const userSchema = new mongoose.Schema({
         require:true,
         unique:true
     },
-    age:{
-        type:Number,
-    },
+    age:Number,
+    
     password:{
+        type: String,
+        required:true
+    },
+    cart:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"carts"
+    },
+    role:{
         type:String,
-        require:true
+        required:true,
+       enum:["user", "admin"],
+        default:"user" 
     }
+
 });
 
 export const userModel =  mongoose.model(usersCollection, userSchema);

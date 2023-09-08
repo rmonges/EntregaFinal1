@@ -1,5 +1,5 @@
 import express from "express";
-import { __dirname } from "./utils.js";
+import { __dirname  } from "./utils.js";
 import path from "path";
 import { productsRouter } from "./routes/products.routes.js";
 import { cartsRouter } from "./routes/carts.routes.js";
@@ -41,13 +41,13 @@ app.use(session({
     }),
     secret:config.server.secretSessions, //cifra el id de a session dentro  del coockie
     resave:true,//permite saber si el usuario tiene una sesion comenzada y lo archiva en algun lado
-    saveUninitialized:true    
+    saveUninitialized:true//mantiene la info del usuario que inicio la session    
 }));
 
 //configuracion de passport 
-initializaPassport();
-app.use(passport.initialize());
-app.use(passport.session());
+initializaPassport();//inicializamos todas las estrategias
+app.use(passport.initialize());//inicializamos todas las librerias
+app.use(passport.session());//a todos los usuarios le manejamos las sessiones con passport
 
 //levantar el servidor, l aplicacion va a estar pendiente de recibir peticiones,le indicamos el puerto por donde va a recibir la info
 const productService = new ProductManager('products.json');
@@ -100,7 +100,9 @@ socketConnected.on("deleteProduct", async (id)=>{
 });
 
 
-//routes
+//routes JWTOKEN
+
+
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/messages", messagesRouter);

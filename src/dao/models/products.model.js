@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { productsCollection } from "../../constants/index.js";
 import mogoosePaginate from "mongoose-paginate-v2"
 
+
 const productsSchema = new mongoose.Schema({
        tittle:{
         type:String,
