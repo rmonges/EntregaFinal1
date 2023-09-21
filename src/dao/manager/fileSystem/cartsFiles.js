@@ -3,8 +3,10 @@ import path from "path";
 //import { CartManager } from "../dao/CartManager.js"   
 import fs from "fs";  
 import { ProductManager } from "../productManager.js";  
+import { productsDao } from "../../index.js"
 
-const productsService = new ProductManager('../src/products.json');
+
+
   
 export class CartsManager {
     constructor(fileName){
@@ -132,7 +134,7 @@ async addProductInCart(cartId, productId){
        let cartById = await this.exist(cartId);
        if(!cartById) return "carrito no encontrado";
        console.log("productId", productId)
-       let productById = await productsService.exist(productId);
+       let productById = await productsDao.exist(productId);
        console.log("cartById:", cartById)
        console.log("productById:", productById)
        if(!productById) return "producto no encontrado";

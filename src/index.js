@@ -1,5 +1,5 @@
 
-import {ProductManager} from "./productManager.js";//exporto el archivo y lo guardo dentro de llaves
+import {ProductManager} from "../src/dao/manager/productManager.js";//exporto el archivo y lo guardo dentro de llaves
 
 const filePath = "./products.json";
 

@@ -22,7 +22,8 @@ import FileStore from "session-file-store";
 import MongoStore from "connect-mongo";
 import { initializaPassport } from "./config/passportConfig.js";
 import passport from "passport";
-
+import dotenv from "dotenv";
+import { productsDao } from "./dao/index.js";
 
 //const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
 //creamos la aplicacion del servidor
@@ -50,7 +51,7 @@ app.use(passport.initialize());//inicializamos todas las librerias
 app.use(passport.session());//a todos los usuarios le manejamos las sessiones con passport
 
 //levantar el servidor, l aplicacion va a estar pendiente de recibir peticiones,le indicamos el puerto por donde va a recibir la info
-const productService = new ProductManager('products.json');
+//const productsDao = new ProductManager('products.json');
 const cartsService = new CartsManager('carts.json')
 
 //WEBSOCKET GUARDAMOS EL SERVIDOR HTTP EN UNA VARIABLE
@@ -70,7 +71,7 @@ const socketServer = new Server(httpServer);//vinculamos el serv de webs al de h
 socketServer.on("connection", async (socketConnected)=>{
     
     console.log(`nuevo cliente conectado ${socketConnected.id}`)
-     const productList = await productService.getProduct({});
+     const productList = await productsDao.getProduct({});
      const cartList = await cartsService.getAll({});
 
     //RECIBIR EVENTO/DATOS DEL CLIENTE
@@ -79,9 +80,9 @@ socketServer.on("connection", async (socketConnected)=>{
 
  socketConnected.on("addProduct", async (obj)=>{
     //console.log("addProd", obj)
- await productService.addProduct(obj)
+ await productsDao.addProduct(obj)
  //console.log("addProd", obj)
-  const productList = await productService.getProduct({})
+  const productList = await productsDao.getProduct({})
 
   socketServer.emit("productList", productList)
 
@@ -91,8 +92,8 @@ socketServer.on("connection", async (socketConnected)=>{
 
 socketConnected.on("deleteProduct", async (id)=>{
     console.log("id:", id)
-    await productService.deleteProduct(id);
-    const productList = await productService.getProduct({});
+    await productsDao.deleteProduct(id);
+    const productList = await productsDao.getProduct({});
     socketConnected.emit("productList", productList);
 
 })

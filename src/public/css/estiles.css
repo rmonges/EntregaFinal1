@@ -1,6 +1,14 @@
 * {
     box-sizing: border-box;
-    }
+ }
+ .h1__index {
+    color: black;
+    font-size: 3rem;
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+    border: 6px ridge;
+    background-color: #ffffff42;
+}
     
     .btn-ingreseId{
         margin-top: 10px;
@@ -19,7 +27,7 @@
         font-size: 2rem ;
            font-family: italic;
            padding: 10px 0;
-           color: rgb(35, 26, 26);
+           color: rgb(248, 241, 241);
            position: relative;
            word-spacing: 20px;
            letter-spacing: 5px;
@@ -88,7 +96,8 @@
         justify-content: center;
         font-size: 2.5em;
         margin: 10px 0;
-        color: #ae4c56a8;
+        margin-top: 4rem;
+        color: white;
     
     }
     h6 {
@@ -248,16 +257,24 @@
 
         
     }
+    body{
+    height: 100%;
+    width: 100%;
+    background-image: url("../image/pizzarosso1.jpg");
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    margin-top: 2rem;
+    }
     
-    body {
-        background-image:url("../image/pizzarosso.jpg");
+    /* body {
+        background-image:url("../image/vespa.png");
         background-repeat: no-repeat;
         background-size: cover;
         background-attachment: fixed;
         background-position: center;
         margin: 0;
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    }
+    } */
     
     /*img {
         display: block;

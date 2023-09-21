@@ -1,10 +1,9 @@
 import { Router } from "express";
+import { CoockiesControllers } from "../controllers/coockies.controllers.js";
 
 const router = Router();
 
-router.get("/crearCookie", (req, res)=>{
-    res.cookie("cookie1", "oreo").send("cookiecreada");
-})
+router.get("/crearCookie", CoockiesControllers.crearCookie);
 router.get("/crearCookie3", (req, res)=>{
     res.cookie("cookie3", "Mana").send("cookiecreada");
 })

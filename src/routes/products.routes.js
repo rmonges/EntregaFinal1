@@ -4,11 +4,12 @@ import { __dirname } from "../utils.js";
 import path from "path";
 import { productsModel } from "../dao/models/products.model.js";
 import { ProductsMongo } from "../dao/manager/mongo/productsMongo.js";
-
-//const productService = new ProductManager('products.json')
+import { ProductsController } from "../controllers/products.controllers.js";
+import { productsDao } from "../dao/index.js";
+//const productsDao = new ProductManager('products.json')
 const router = Router();
 
-const productService = new ProductsMongo();
+
 
 const validation = (req, res, next)=>{
     const productInfo= req.body;
@@ -20,26 +21,9 @@ const validation = (req, res, next)=>{
 };
 //MONGO
 
-router.get("/", async (req, res)=>{
-    try {
-        const products = await productService.getProduct();
-        console.log("productssss", products)
-        res.json({status:"success", data:products});
-    } catch (error) {
-        console.log(error.menssage)
-        res.json({status:"error", message:"hubo un error al obtener los productos"})
-    }
-})
+router.get("/", ProductsController.getProducts);
 
-router.get("/:pid", async (req, res)=>{
-    try {
-        const pid = (req.params.pid);
-        const product = await productService.getById(pid)
-        res.json ( {status:"success", data:product})     
-    }catch (error) {
-        res.status(404).json({status:"error", message:"El producto con el id no existe"})       
-    };
-});
+router.get("/:pid", ProductsController.getpid );
 
 
 
@@ -50,7 +34,7 @@ router.get("/:pid", async (req, res)=>{
 router.get("/", async(req, res)=>{
     try {
         const limit= req.query.limit;
-        const products = await productService.getProduct();
+        const products = await productsDao.getProduct();
       
         if(limit>0){
             const limits = products.filter(product =>product.id<=limit)
@@ -68,60 +52,15 @@ router.get("/", async(req, res)=>{
 })
 
 
-router.get("/:prodid",async (req, res)=>{
-    try {
-        const id = Number(req.params.prodid);
-
-        const products = await productService.getProduct();
-        console.log("products", products)
-        const productId = products.find((product) => product.id === id);
-        console.log("productId", productId)
-
-           productId
-
-        res.json({status:"success", data: productId})
-       
-    }catch (error) {
-        res.json({status:(404), message:error.message})
-    }
-})
+router.get("/:prodid", ProductsController.getProdid)
 
 
-router.post("/", async (req, res)=>{
-    try {
-        const productInfo = req.body;
-        console.log("producInfo",productInfo);
-        const products = await productService.addProduct(productInfo);
-        res.json({status:"success post", data:products, message:"producto creado"})
-        
-   }catch (error) {
-        res.json({status:"error", message:error.message})
-        }
-})
+router.post("/", ProductsController.postProduct);
 
 
-router.put("/:pid", async (req, res)=>{
-    try {
-        let pid = (req.params.pid);
-        let upDateProduct = req.body;
-        console.log("pid",pid," product", upDateProduct)
-        res.send ( await productService.upDateProduct(pid, upDateProduct))     
-    }catch (error) {
-        res.status(404).json({status:"error", message:"El producto con el id no existe"})       
-    };
-});
+router.put("/:pid", ProductsController.putProduct);
 
-router.delete("/:pid", async (req, res)=>{
-    try {
-        const idDel= req.params.pid;
-        await productsModel.deleteOne({_id:idDel})
-        res.json( {status:"succes", message:"producto eliminado correctamente "})
-    
-    }catch (error) {
-        res.json({status:"error", message:"error"})
-    };
-    
-});
+router.delete("/:pid", ProductsController.delProduct);
 
 
 export {router as productsRouter};

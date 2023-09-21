@@ -10,6 +10,7 @@ body{
     
    .h2 {
        margin-top: 3rem;
+       color: #fff;
         text-align: center;
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
@@ -63,6 +64,10 @@ body{
         display: block;
         padding: 10px;
     }
+
+    .form-Prod{
+        text-align: center;
+    }
     .slider__content {
         position: absolute;
         top: 50%;
@@ -101,16 +106,29 @@ body{
       
     }
     .cargarProd {
-        font-size: 2rem ;
+        
+        color: rgb(243, 237, 237);
+    font-size: 2rem;
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+    padding: 10px 0;
+    word-spacing: 20px;
+    letter-spacing: 5px;
+    /*border: 6px ridge ;
+    background-color: #ffffff42;
+        /* font-size: 2rem ;
            font-family: italic;
            padding: 10px 0;
-           color: rgb(35, 26, 26);
-           position: relative;
+           color: rgb(244, 238, 238);
            word-spacing: 20px;
            letter-spacing: 5px;
-           text-align: left;
+           text-align: center; */
     }
     
+    th{
+        color: white;
+        font-size: 1.5rem;
+    }
     
         /*.main__pad{
             padding: 50px 0;

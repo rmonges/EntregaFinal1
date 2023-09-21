@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { ProductManager } from "../dao/manager/productManager.js";
+
 import { __dirname } from "../utils.js";
 import path from "path";
 import { productsModel } from "../dao/models/products.model.js";
@@ -7,19 +7,21 @@ import { cartsModel } from "../dao/models/carts.model.js";
 import { CartsManager } from "../dao/manager/fileSystem/cartsFiles.js";
 import { ProductsMongo } from "../dao/manager/mongo/productsMongo.js";
 import { checkUserAutentificated, showLoginView } from "../middlerwares/auth.js";
+import { productsDao } from "../../src/dao/index.js";
+import { ViewsController } from "../controllers/view.controllers.js";
 
 
 const productsServiceMongo = new ProductsMongo("carts.json")
 const cartsService = new CartsManager('../src/carts.json')
-const productsService = new ProductManager ('../src/products.json')
+
 
 const router = Router();
 
   try {
-      const productList = await productsService.getProduct({});
+    const productList = await productsDao.getProduct({});
      
      res.render("realTimeProducts",productList );
-  console.log("productlistttt", productList)
+
      socketClient.emit("messageEvent", `lista de Productos:${productList}`);
   } catch (error) {
      //res.render("error");
@@ -67,69 +69,42 @@ nextLink: result.hasNextPage ?  `${baseUrl.replace(`page=${result.page}`,`page=$
     res.render("products",{ error: "no es posible visualizar los datos"});
    }
  })
- router.get("/realTimeProducts", (req, res)=>{
-   res.render("realTimeProducts");
-  })
- router.get("/messages",(req, res)=>{
-  res.render("messages")
-  })
- router.get("/carts", (req, res)=>{
-  res.render("carts")
-  })
+ router.get("/realTimeProducts", ViewsController.renderRealtimeProducts)
+ router.get("/messages",ViewsController.renderMessages);
+ router.get("/carts",ViewsController.renderCarts );
   
-router.get("/home", async (req, res)=>{
-  try {
-      const productList = await productsService.getProduct();
-  style:"home.css",
-  res.render("home",{
-     isProduct: productList ? true : false,
-     productList,
-     });
-  } catch (error) {
-     res.render("error");
-   }
-  })
-  router.get("", (req, res)=>{
-    res.redirect("/login");
-})
+router.get("/home", ViewsController.renderHome);
+  router.get("",ViewsController.renderLogings )
 
 
 //clase 16 aplicar un indice para aumentar la velocidad de busqueda, se aplica em el modelo index
 
-router.get("/consultaNormal", async(req,res)=>{
-  try {
-      const result = await productsModel.find({tittle:"ojotas"}).explain("esecutionStats");
-      console.log(result);
-      res.json({status:"success", message:"usuario encontrado"});
-  } catch (error) {
-      res.json({status:"error", message:'Hubo un error en la consulta'});
-  }
-});
-// router.get("/", (req, res)=>{
-//   res.render("formcookie");
+// router.get("/consultaNormal", async(req,res)=>{
+//   try {
+//       const result = await productsModel.find({tittle:"ojotas"}).explain("esecutionStats");
+//       console.log(result);
+//       res.json({status:"success", message:"usuario encontrado"});
+//   } catch (error) {
+//       res.json({status:"error", message:'Hubo un error en la consulta'});
+//   }
+// });
+
 
 //Rutas sessions
-router.get("/login", showLoginView,  (req, res)=>{
-  res.render("login");
-}); 
+router.get("/login", showLoginView,ViewsController.renderLogin ); 
 
-router.get("/registro", showLoginView, (req, res)=>{
-  res.render("signup");
-}); 
+router.get("/registro",showLoginView,ViewsController.renderSignup 
+); 
 
-router.get("/perfil", checkUserAutentificated,  (req, res)=>{
-  console.log(req.user)
-  res.render("profile", {user:JSON.parse(JSON.stringify(req.user))});
-}); 
+router.get("/perfil", checkUserAutentificated, ViewsController.renderPerfil 
+); 
 
 // router.get("/products", checkUserAutentificated,  (req, res)=>{
 //   console.log("req.session", req.session)
 //   res.render("products", {user:req.session.userInfo} );
 // }); 
 
-router.get("/cambio-password", (req, res)=>{
-  res.render("changePassword");
-});
+router.get("/cambio-password", ViewsController.renderChangePassword);
 
 
 export {router as viewsRouter};
