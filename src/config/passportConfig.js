@@ -4,7 +4,7 @@ import { createHash, isValidPassword } from "../utils.js";
 import {userDao} from "../dao/index.js";
 import githubStrategy from "passport-github2"
 import { config } from "./config.js";
-
+import { UsersService } from "../services/usersService.js";
 
 export const initializaPassport = ()=>{//creamos estrategias
     passport.use("signupStrategy", new LocalStrategy(
@@ -17,7 +17,7 @@ export const initializaPassport = ()=>{//creamos estrategias
        try {
           const {first_name} = req.body;
           //vericar si existe usuraio
-          const user = await userDao.getByEmail(username)
+          const user = await UsersService.getUserByEmail(username);
           console.log("userinitializado",user)
           if(user){
             return done(null, false);//existe usuario
@@ -27,7 +27,7 @@ export const initializaPassport = ()=>{//creamos estrategias
             email: username,  
             password:createHash(password)
            }
-           const userCreated = await userDao.save(newUser);
+           const userCreated = await UsersService.userCreated(newUser);
            return done (null,userCreated);//passport completa proceso de  la session del usuario satisfactoriamente
        } catch (error) {
             return done(error)
@@ -42,7 +42,7 @@ export const initializaPassport = ()=>{//creamos estrategias
    
         async(username, password, done)=>{
            try {
-                const user = await userDao.getByEmail(username)
+                const user = await UsersService.getUserByEmail(username)
                  console.log("user loginstrategy",user)
               if(!user){
                 return done(null, false);
@@ -66,7 +66,7 @@ export const initializaPassport = ()=>{//creamos estrategias
       async(accesstoken, refreshToken, profile, done)=>{
         try {
          console.log("profile", profile); 
-         const user = await userDao.getByEmail(profile.username)
+         const user = await UsersService.getUserByEmail(profile.username)
          if(!user){
            const newUser= {
              first_name: ' ',
@@ -92,7 +92,7 @@ export const initializaPassport = ()=>{//creamos estrategias
     })
     passport.deserializeUser((async(id, done)=>{//verifica si un usuario tiene una session activa
       try {
-        const user = await userDao.getById(id);//si es asi , extrae su id y lo busca en la BD , trae ese usuario 
+        const user = await UsersService.getById(id);//si es asi , extrae su id y lo busca en la BD , trae ese usuario 
         done(null, user)// y lo agrega en el objeto "req.user".---->session .maneja informacion de todos los datos del usuario
 
       } catch (error) {

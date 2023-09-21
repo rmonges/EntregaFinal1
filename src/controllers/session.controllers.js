@@ -1,4 +1,6 @@
 import passport from "passport";
+import { SessionsService } from "../../src/services/sessions.service.js";
+import { userDao } from "../dao/index.js";
 export class SessionsController {
     static redirectLogin = (req, res)=>{
         res.render("login", {message:"usuario registrado"});
@@ -28,7 +30,7 @@ export class SessionsController {
      static changePassword = async (req, res)=>{
         try {
             const form = req.body;
-            const user = await userDao.getByEmail(form.email);
+            const user = await  userDao.getByEmail(form.email);
             if(!user){
                 res.render("changePassword", {error:"no es posible cambiar contraseña"});
             }else{

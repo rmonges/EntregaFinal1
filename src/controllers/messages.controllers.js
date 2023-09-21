@@ -1,7 +1,8 @@
+import { MessagesService } from "../services/messages.service.js";
 export class MessagesController {
     static getmsgs = async (req, res)=>{
         try {
-            const messagesAll = await messagesModel.find();
+            const messagesAll = await MessagesService.getmessagesAll();
             console.log("messages", messagesAll)
             res.json({status:"success", data:messagesAll});
         } catch (error) {
@@ -11,7 +12,8 @@ export class MessagesController {
     };
     static postmsgs = async (req, res)=>{
         try {
-            const messagesCreated = await messagesModel.create(req.body);
+            const message = req.body;
+            const messagesCreated = await MessagesService.postmsgs(message);
             console.log("messagesCreated", messagesCreated)
             res.json({status:"success", data:messagesCreated});
         } catch (error) {
@@ -22,7 +24,7 @@ export class MessagesController {
     static midmsgs = async (req, res)=>{
         try {
             const msjId =(req.params.mid);
-            const mensage = await messagesModel.findById(msjId);
+            const mensage = await MessagesService.findMsgById(msjId);
             console.log("message", mensage)
             res.json({status:"success", data:mensage});
            
@@ -33,7 +35,7 @@ export class MessagesController {
     static deletemsgs =  async (req, res)=>{
         try {
             const idDel= req.params.mid;
-            await messagesModel.deleteOne({_id:idDel});
+            await MessagesService.deletemsgs({_id:idDel});
             res.json( {status:"succes", message:"mensaje eliminado correctamente "});
         
         }catch (error) {

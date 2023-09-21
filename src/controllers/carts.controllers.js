@@ -4,6 +4,7 @@ import { CartsMongo } from "../dao/manager/mongo/carts.Mongo.js";
 import { productsDao } from "../dao/index.js";
 import { ProductsService } from "../services/products.services.js"
 import { CartsService } from "../services/carts.services.js";
+import { cartsModel } from "../dao/models/carts.model.js";
 
 export const cartsService = new CartsMongo ("carts.json");
 
@@ -51,7 +52,7 @@ export class CartsController {
   static cartporCid = async (req, res)=>{
     try {
         const cartId =(req.params.cid);
-        const cart = await cartsModel.findById(cartId);
+        const cart = await CartsService.cartporCid(cartId);
         console.log("CARRRT", cart)
         res.json({status:"success", data:cart});
        
@@ -63,7 +64,7 @@ export class CartsController {
     try {
          const cartId = (req.params.cid);
           const productId =(req.params.pid);
-          const result = await cartsService.addProductInCart(cartId, productId);
+          const result = await CartsService.cidProductPid(cartId, productId);
           res.json({status:"success", data:result})
       }catch (error) {
        res.json({status:"error", message:error.message});
@@ -72,11 +73,11 @@ export class CartsController {
  static addproductCart = async(req, res)=>{
     try {
         const {productId, cartId }= req.body;//
-        const cart = await cartsModel.findById(cartId);//me devuelve un json 
+        const cart = await CartsService.addproductCart(cartId);//me devuelve un json 
         if(!cartId){
             return res.status(404).json({ error: "Eeeeeeeeste carrito no existe" });
         };
-        const product = await productsModel.findById(productId);
+        const product = await CartsService.addproductCart(productId);
         
         if(!productId){
             return res.status(404).json({ error: "Este producto no existe" });
@@ -106,7 +107,7 @@ export class CartsController {
     try {
         const cartId = req.params.cid;
         const cartInfo = req.body;
-        const cartUpdate = await cartsService.upDateCart(cartId, cartInfo);
+        const cartUpdate = await cartsService.putporcid(cartId, cartInfo);
         res.json({status:"succes", data : cartUpdate})
     } catch (error) {
         res.json({status:"error", message:"error"})
@@ -173,7 +174,7 @@ export class CartsController {
     try {
         const cartId= req.params.cid;//
 
-        const cart = await cartsModel.findById(cartId);//me devuelve un json 
+        const cart = await CartsService.deleteByCid(cartId);//me devuelve un json 
         console.log("id carrito", cartId)
         if(!cartId){
              return res.send("este carrito no existe ")
@@ -200,14 +201,11 @@ export class CartsController {
     try {
         const cartId = req.params.cid;
 
-        const cart = await cartsModel.findById(cartId);
-        console.log("id carrito", cartId);
+        const cart = await CartsService.deleteCidProducts (cartId);
         if (!cart) {
             return res.send("Este carrito no existe");
         }
-
-        cart.products = []; 
-
+        cart.products = [];
         cart.save();
         console.log("Todos los productos eliminados del carrito:", cart);
         res.send(cart);

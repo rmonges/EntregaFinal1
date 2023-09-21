@@ -1,5 +1,6 @@
 import { cartsService } from "../controllers/carts.controllers.js";
 import { cartsModel } from "../dao/models/carts.model.js";
+import { productsModel } from "../dao/models/products.model.js";
 export class CartsService {
     static cartCreated = async ()=>{
         return await cartsService.addCart(newCart);
@@ -10,7 +11,29 @@ export class CartsService {
     static getCarts = async ()=>{
        return await cartsService.getAll();
     };
-    static prodPopulateCid = async ()=>{
+    static prodPopulateCid = async (cartId)=>{
         return await cartsModel.findById(cartId).populate("products");
+    }; 
+    static cartporCid = async (cartId)=>{
+        return await cartsModel.findById(cartId);
     }
+    static cidProductPid = async (cartId, productId)=>{
+        return await cartsService.addProductInCart (cartId, productId);
+    };
+    static addproductCart = async (productId,cartId)=>{
+        return await cartsModel.findById(cartId), productsModel.findById(productId);
+    };
+    static deletecid = async ({_id:idDel})=>{
+        return await cartsModel.deleteOne({_id:idDel});
+    };
+    static putporcid = async (cartId, cartInfo)=>{
+        return await cartsService.upDateCart(cartId, cartInfo);
+    };
+    static deleteByCid = async (cartId)=>{
+        return await cartsModel.findById(cartId);
+    };
+    static deleteCidProducts = async (cartId)=>{
+        return  await cartsModel.findById(cartId);
+    };
+
 }
