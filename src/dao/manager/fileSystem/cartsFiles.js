@@ -3,7 +3,7 @@ import path from "path";
 //import { CartManager } from "../dao/CartManager.js"   
 import fs from "fs";  
 import { ProductManager } from "../productManager.js";  
-import { productsDao } from "../../index.js"
+import { productsDao } from "../../factory.js"
 
 
 

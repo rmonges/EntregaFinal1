@@ -1,5 +1,5 @@
 import { checkUserAutentificated, showLoginView } from "../middlerwares/auth.js";
-import { productsDao } from "../../src/dao/index.js";
+import { productsDao } from "../../src/dao/factory.js";
 export class ViewsController{
       static renderHome = async(req, res)=>{
         try {

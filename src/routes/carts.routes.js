@@ -5,8 +5,9 @@ import { cartsModel } from "../dao/models/carts.model.js";
 import { productsModel } from "../dao/models/products.model.js";
 import { CartsMongo } from "../dao/manager/mongo/carts.Mongo.js";
 import { cartsCollection, productsCollection } from "../constants/index.js";
-import { productsDao } from "../../src/dao/index.js"
+import { productsDao } from "../../src/dao/factory.js"
 import { CartsController } from "../controllers/carts.controllers.js";
+import { TicketController } from "../controllers/tickets.controllers.js";
 const cartsService = new CartsMongo ("carts.json");
 
 const router = Router();
@@ -30,9 +31,9 @@ router.get("/:cid", CartsController.cartporCid);
 
 
 
-router.post("/:cid/product/:pid",CartsController.cidProductPid );  
+router.post("/:cid/product/:pid",CartsController.addproductCart);  //cidProductPid
 
-router.put("/addproductCart", CartsController.addproductCart);
+router.post("/addproductCart", CartsController.addproductCart);
 
 router.delete("/:cid", CartsController.deletecid);
 router.put("/:cid", CartsController.putporcid);
@@ -45,6 +46,7 @@ router.delete("/:cid", CartsController.deleteByCid);
 
 
 router.delete("/:cid/products",CartsController.deleteCidProducts);
+router.post("/:cid/purchase", TicketController.createTicket);
 
 
 export {router as cartsRouter};

@@ -1,4 +1,4 @@
-import { userDao } from "../dao/index.js";
+import { userDao } from "../dao/factory.js";
 export class UsersService {
     static getUserByEmail = async (username)=>{
      return await userDao.getByEmail(username);

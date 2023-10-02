@@ -1,6 +1,7 @@
 import { ProductsService } from "../services/products.services.js";
-import { productsDao } from "../dao/index.js";
+import { productsDao } from "../dao/factory.js";
 import { productsModel } from "../dao/models/products.model.js";
+import { cartsService } from "./carts.controllers.js";
 
 export class ProductsController{
      static getProducts = async (req, res)=>{
@@ -69,4 +70,5 @@ export class ProductsController{
         };
         
     }
+    
 }

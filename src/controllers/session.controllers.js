@@ -1,6 +1,6 @@
 import passport from "passport";
 import { SessionsService } from "../../src/services/sessions.service.js";
-import { userDao } from "../dao/index.js";
+import { userDao } from "../dao/factory.js";
 export class SessionsController {
     static redirectLogin = (req, res)=>{
         res.render("login", {message:"usuario registrado"});
@@ -9,10 +9,10 @@ export class SessionsController {
     }
     static login =(req, res)=>{
         const user = req.user;
-        console.log("user", user);
+        console.log("userCONTROLLER", user);
         res.render("profile",{user} );
     }
-    static failLogin =  (req, res)=>{
+    static faillogin =  (req, res)=>{
         res.render("login", {error:"credenciales invalidas"})
     };
     static logout = async (req, res)=>{

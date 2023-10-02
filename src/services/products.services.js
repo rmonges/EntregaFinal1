@@ -1,13 +1,13 @@
-import { productsDao } from "../dao/index.js"
+import {productsDao} from "../dao/factory.js"
 
 export class ProductsService {
     static getProducts =  async ()=>{
         return await productsDao.getProduct()
     }; 
-    static createProduct = async (productInfo)=>{product
+    static createProduct = async (productInfo)=>{
         return await productsDao.addProduct(productInfo);
     } 
-    static getpid =  async (pid)=>{
+    static getpid =  async (pid)=>{ 
         return await productsDao.getById(pid);
     };
     static putProduct = async (pid, upDateProduct)=>{

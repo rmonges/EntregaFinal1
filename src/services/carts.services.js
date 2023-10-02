@@ -1,8 +1,11 @@
 import { cartsService } from "../controllers/carts.controllers.js";
 import { cartsModel } from "../dao/models/carts.model.js";
 import { productsModel } from "../dao/models/products.model.js";
+import { cartsDao, productsDao } from "../dao/factory.js";
+
+
 export class CartsService {
-    static cartCreated = async ()=>{
+    static cartCreated = async (newCart)=>{
         return await cartsService.addCart(newCart);
     };
     static cartCreatedFind = async ()=>{
@@ -18,10 +21,11 @@ export class CartsService {
         return await cartsModel.findById(cartId);
     }
     static cidProductPid = async (cartId, productId)=>{
-        return await cartsService.addProductInCart (cartId, productId);
+        return await cartsService.addProductInCart(cartId, productId);
     };
-    static addproductCart = async (productId,cartId)=>{
-        return await cartsModel.findById(cartId), productsModel.findById(productId);
+    static addproductCart = async (cartId, productId)=>{
+        return await cartsDao.getById(cartId), productsDao.getById(productId);
+        
     };
     static deletecid = async ({_id:idDel})=>{
         return await cartsModel.deleteOne({_id:idDel});
@@ -35,5 +39,7 @@ export class CartsService {
     static deleteCidProducts = async (cartId)=>{
         return  await cartsModel.findById(cartId);
     };
-
+    static upDateCart = async ( cartId, cart)=>{
+        return await cartsDao.upDateCart(cartId, cart);
+    }
 }

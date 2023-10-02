@@ -1,7 +1,7 @@
 import passport from "passport";
 import LocalStrategy from "passport-local"; 
 import { createHash, isValidPassword } from "../utils.js";
-import {userDao} from "../dao/index.js";
+import {userDao} from "../dao/factory.js";
 import githubStrategy from "passport-github2"
 import { config } from "./config.js";
 import { UsersService } from "../services/usersService.js";
@@ -15,17 +15,22 @@ export const initializaPassport = ()=>{//creamos estrategias
     //creo una funcion para chequear los datos recibidos
    async (req,username, password, done)=>{//done: funcion que genera el resultado final del registro si esta bien o no
        try {
-          const {first_name} = req.body;
+          const {first_name, last_name, age} = req.body;
           //vericar si existe usuraio
           const user = await UsersService.getUserByEmail(username);
-          console.log("userinitializado",user)
           if(user){
             return done(null, false);//existe usuario
           }
+       
+          let role ="user";
+          if(username.endsWith("@aerolineas.com.ar")){
+             role="admin";           
+           }          
           const newUser = {
             first_name: first_name,
             email: username,  
-            password:createHash(password)
+            password:createHash(password),
+            role:role
            }
            const userCreated = await UsersService.userCreated(newUser);
            return done (null,userCreated);//passport completa proceso de  la session del usuario satisfactoriamente

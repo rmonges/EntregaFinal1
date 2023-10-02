@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { userDao } from "../dao/index.js"
+import { userDao } from "../dao/factory.js"
 import { createHash, isValidPassword } from "../utils.js";
 import passport from "passport";
 import { SessionsController } from "../controllers/session.controllers.js";
@@ -20,10 +20,10 @@ router.post("/signup", passport.authenticate("signupStrategy", {
 router.get("/fail-signup", SessionsController.failSignup);
 
 router.post("/login", passport.authenticate("loginStrategy", {
-    failureRedirect:"/api/sessions/fail-login",
+    failureRedirect:"/api/sessions/faillogin",
 }),SessionsController.login);
 
-router.get("/fail-login", SessionsController.failLogin);
+router.get("/faillogin", SessionsController.faillogin);
 
 
 router.get("/logout", SessionsController.logout);

@@ -7,7 +7,7 @@ import { cartsModel } from "../dao/models/carts.model.js";
 import { CartsManager } from "../dao/manager/fileSystem/cartsFiles.js";
 import { ProductsMongo } from "../dao/manager/mongo/productsMongo.js";
 import { checkUserAutentificated, showLoginView } from "../middlerwares/auth.js";
-import { productsDao } from "../../src/dao/index.js";
+import { productsDao } from "../../src/dao/factory.js";
 import { ViewsController } from "../controllers/view.controllers.js";
 
 

@@ -1,10 +1,10 @@
-export class ProductsManagerMemory {
+export class TicketsManagerMemory {
     constructor(){
-        this.contacts = [];
+        this.tickets = [];
      };
     async get (){
         try {
-            return this.products;
+            return this.tickets;
         } catch (error) {
             throw error;
         }

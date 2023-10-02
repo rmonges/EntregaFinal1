@@ -18,7 +18,7 @@ const cartsSchema = new mongoose.Schema({
             default:1}
            ,      
           
-            _id:{//cada elemento es de tipo objeto, y contiene el id de un documento que pertenece a la coleccion "students"
+            productId:{//cada elemento es de tipo objeto, y contiene el id de un documento que pertenece a la coleccion "students"
                 type:mongoose.Types.ObjectId,
                 ref:productsCollection
             }     

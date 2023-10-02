@@ -1,7 +1,7 @@
 
 import { productsModel } from "../dao/models/products.model.js";
 import { CartsMongo } from "../dao/manager/mongo/carts.Mongo.js";
-import { productsDao } from "../dao/index.js";
+import { productsDao } from "../dao/factory.js";
 import { ProductsService } from "../services/products.services.js"
 import { CartsService } from "../services/carts.services.js";
 import { cartsModel } from "../dao/models/carts.model.js";
@@ -11,7 +11,7 @@ export const cartsService = new CartsMongo ("carts.json");
 export class CartsController {
     static cartCreated = async (req, res)=>{
         try {
-            const newCart = req.body;
+            const newCart = {};
             const cartCreated = await CartsService.cartCreated(newCart);
             res.json({status:"success", data:cartCreated});
         } catch (error) {
@@ -71,28 +71,43 @@ export class CartsController {
     };
  }
  static addproductCart = async(req, res)=>{
-    try {
-        const {productId, cartId }= req.body;//
-        const cart = await CartsService.addproductCart(cartId);//me devuelve un json 
-        if(!cartId){
-            return res.status(404).json({ error: "Eeeeeeeeste carrito no existe" });
-        };
-        const product = await CartsService.addproductCart(productId);
-        
-        if(!productId){
-            return res.status(404).json({ error: "Este producto no existe" });
-        };
-        cart.products.push(productId);
-        
-        console.log("producto encontado del carrito", product)
-         cart.save();console.log("Producto encontrado del carrito:", product);
-        console.log("Cart actualizado:", cart);
-        res.send(cart);
-        
-      } catch (error) {
-        res.json({status:"error", message:error.message});
+    
+        try {
+            const cartId = req.params.cid;
+            const productId = req.params.pid;
+            const cart = await CartsService.cartporCid(cartId);
+            const product = await ProductsService.getpid(productId);
+
+            const productExist = cart.products.find(product =>product.productId === productId);
+            console.log("productExist", productExist)
+            const newProduct = {
+                      productId : productId,
+                      quantity:1
+                    }
+            cart.products.push(newProduct);
+            const cartUpdate = await CartsService.upDateCart(cartId, cart);
+              
+            res.json({status:"succes", data:cartUpdate})
+        } catch (error) {
+            res.json({status:"error", message:error.message});
+          };
     };
-   }
+    //     const {cartId, productId}= req.body;//
+    //     const cart = await CartsService.addproductCart(cartId);//me devuelve un json 
+    //     if(!cartId){
+    //         return res.status(404).json({ error: "Eeeeeeeeste carrito no existe" });
+    //     };
+    //     const product = await ProductsService.getpid(productId);
+
+    //     const productExist = cart.products.find(product=>product._id === _id);
+       
+    //     
+        
+    //    
+        
+    //      
+        
+      
    static deletecid = async (req, res)=>{
     try {
         const idDel= req.params.cid;
@@ -121,7 +136,7 @@ export class CartsController {
         const cart = await cartsModel.findById(cartId);//me devuelve un json 
         console.log("id carrito", cartId)
         if(!cartId){
-             return res.send("este carrito no existe ")
+             return res.send("este carrito no existe")
         };
         console.log("id carrito", cartId)
         const product = await productsModel.findById(productId);

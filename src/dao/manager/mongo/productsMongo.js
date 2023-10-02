@@ -7,6 +7,7 @@ export class ProductsMongo{
     async saveProduct(productInfo){
         try {
             const productCreated = await this.model.create(productInfo);
+            
             return productCreated; 
         } catch (error) {
             throw error;

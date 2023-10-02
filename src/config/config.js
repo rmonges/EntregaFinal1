@@ -6,7 +6,8 @@ console.log(process.env);
 export const config = {
     server:{
         port:process.env.PORT,
-        secretSessions: process.env.SECRET_SESSIONS
+        secretSessions: process.env.SECRET_SESSIONS,
+        persistence: process.env.PERSISTENCE, 
     },
     mongo:{
         url:process.env.MONGO_URL//process.env.MONGO_URL
@@ -18,4 +19,3 @@ export const config = {
         callbackUrl:"http://localhost:8080/api/sessions/github-callback"
     },
 }
-console.log("config",config)

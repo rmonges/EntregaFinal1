@@ -23,7 +23,11 @@ import MongoStore from "connect-mongo";
 import { initializaPassport } from "./config/passportConfig.js";
 import passport from "passport";
 import dotenv from "dotenv";
-import { productsDao } from "./dao/index.js";
+import { productsDao } from "./dao/factory.js";
+import { contactsRouter } from "./routes/contacts.routes.js";
+import { transporter } from "./config/email.js";
+import { twilioClient, twilioPhone } from "./config/twilio.js"; 
+
 
 //const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
 //creamos la aplicacion del servidor
@@ -99,6 +103,80 @@ socketConnected.on("deleteProduct", async (id)=>{
 })
 
 });
+const emailTemplate = `<div>
+        <h1>Bienvenido!!</h1>
+        <img src="https://fs-prod-cdn.nintendo-europe.com/media/images/10_share_images/portals_3/2x1_SuperMarioHub.jpg" style="width:250px"/>
+        <p>Ya puedes empezar a usar nuestros servicios</p>
+        <a href="https://www.google.com/">Explorar</a>
+        <p>imagen cargada desde archivo</p>
+        <img src= "cid:vesparesto"/>
+</div>`
+const userEmail = "robertoamonges@gmail.com"
+app.post("/send-emailCoder", async(req,res)=>{
+    try {
+        const info = await transporter.sendMail({
+            from:"Eccomerce pepito",
+            to:userEmail, //correo del destinatario puede ser cualquiera.
+            subject:"Correo para restablecer contraseña",
+            html:emailTemplate
+        });
+        console.log(info);
+        res.json({status:"success", message:`Correo enviado a ${userEmail} exitosamente`});
+    } catch (error) {
+        console.log(error.message);
+        res.json({status:"error", message:"El correo no se pudo enviar"});
+    }
+});
+
+//correo con imagenes
+const emailTemplateImages = `<div>
+        <h1>Bienvenido!!</h1>
+        <img src="https://fs-prod-cdn.nintendo-europe.com/media/images/10_share_images/portals_3/2x1_SuperMarioHub.jpg" style="width:250px"/>
+        <p>Ya puedes empezar a usar nuestros servicios</p>
+        <a href="https://www.google.com/">Explorar</a>
+        <p>imagen cargada desde archivo</p>
+        <img src= "cid:vespaResto"/>
+</div>`
+
+app.post("/send-emailImages", async(req,res)=>{
+    try {
+        const info = await transporter.sendMail({
+            from:"Eccomerce pepito",
+            to:userEmail, //correo del destinatario puede ser cualquiera.
+            subject:"Correo para restablecer contraseña",
+            html:emailTemplate,
+            attachments:[
+                {
+                    filename:"vespasss.png",
+                    path:path.join(__dirname, "/public/image/vespasss.png"),
+                    cid:"vespaResto"
+                }
+            ]
+        });
+        console.log(info);
+        res.json({status:"success", message:`Correo enviado a ${userEmail} exitosamente`});
+    } catch (error) {
+        console.log(error.message);
+        res.json({status:"error", message:"El correo no se pudo enviar"});
+    }
+});
+
+//TWLIO ruta
+const clientPhone = "+543413528805";
+app.post("/sms-twilio", async (req, res)=>{
+    try {
+        //logica de finalizaiòn de la compra y  registro en l bd (soy trolo pipipi)
+       const info = await twilioClient.messages.create({
+            body:"tu registro fue exitoso", 
+            from:twilioPhone,
+            to:clientPhone
+        });
+        console.log("info del cliente", info);
+        res.json({status:"sucess", message:"registro exitoso, msm enviado"})
+    } catch (error) {
+        res.json({status:"error", message:"el msj no es pudo enviar"});
+    }
+})
 
 
 //routes JWTOKEN
@@ -110,6 +188,7 @@ app.use("/api/messages", messagesRouter);
 app.use(viewsRouter);
 app.use("/", cookiesRouter);
 app.use("/api/sessions", sessionsRouter);
+app.use("/api/contacts", contactsRouter);
 
 
 

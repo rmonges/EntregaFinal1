@@ -9,7 +9,7 @@ import { throws } from "assert";
 
 export class productsModel{
     constructor(){
-        this.modelp =productsModel;
+        this.modelp = productsModel;
     }
 }
  
@@ -23,7 +23,7 @@ export class CartsMongo {
 
 async saveCart(cart) {
      try {
-          const cartCreated = await this.model.find(cart)
+          const cartCreated = await this.model.create(cart)
     
           return cartCreated;
           }
@@ -67,15 +67,15 @@ async addCart(products){
 
   async getById(id){
     try {
-            const carts = await this.model.findById(id).populate("products");
-            if(!carts){
+            const cart = await this.model.findById(id).populate("products");
+            if(!cart){
                 throw new Error ("el carrito no esta registrado");     
             }
-             return carts;     
+             return cart;     
         }
     catch (error) {
         console.error(error.message);
-        return undefined;
+        return undefined ;
     }
 };
 
@@ -93,29 +93,34 @@ async deleteCart(id) {
 }
 
 
-  async addProductInCart (cid, obj) {
-    console.log("cid  pid", cid, obj )
-    try {
-        const filter = { _id: cid, "products._id": obj._id };
-        console.log("filter", filter)
-        const cart = await this.model.findById(cid);
-        console.log("cart", cart)
-        const findProduct = cart.products.some((product) => product._id.toString() === obj._id);
+//   async addProductInCart (cid, obj) {
+//     console.log("cid  pid", cid, obj )
+//     try {
+//         const filter = { _id: cid, "products._id": obj._id };
+//         console.log("filter", filter)
+//         const cart = await this.model.findById(cid);
+//         console.log("cart", cart)
 
-        if (findProduct) {
-            const update = { $inc: { "products.$.quantity": obj.quantity } };
-            await this.model.updateOne(filter, update);
-        } else {
-            const update = { $push: { products: { _id: obj._id, quantity: obj.quantity } } };
-            await this.model.updateOne({ _id: cid }, update);
-        }
+//         if(!cart){
+//             console.error('Carrito no encontrado');
+//             return null;
+//         }
+//         const findProduct = cart.products.some((product) => product._id.toString() === obj._id);
 
-        return await this.model.findById(cid);
-    } catch (err) {
-        console.error('Error al agregar el producto al carrito:', err.message);
-        return err;
-    }
-};
+//         if (findProduct) {
+//             const update = { $inc: { "products.$.quantity": obj.quantity } };
+//             await this.model.updateOne(filter, update);
+//         } else {
+//             const update = { $push: { products: { _id: obj._id, quantity: obj.quantity } } };
+//             await this.model.updateOne({ _id: cid }, update);
+//         }
+
+//         return await this.model.findById(cid);
+//     } catch (err) {
+//         console.error('Error al agregar el producto al carrito:', err.message);
+//         return err;
+//     }
+// };
 
    async upDateCart (cartId, cartInfo){
     try {
