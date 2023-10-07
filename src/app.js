@@ -1,5 +1,5 @@
 import express from "express";
-import { __dirname  } from "./utils.js";
+import { __dirname  } from "./utils/utils.js";
 import path from "path";
 import { productsRouter } from "./routes/products.routes.js";
 import { cartsRouter } from "./routes/carts.routes.js";
@@ -27,6 +27,7 @@ import { productsDao } from "./dao/factory.js";
 import { contactsRouter } from "./routes/contacts.routes.js";
 import { transporter } from "./config/email.js";
 import { twilioClient, twilioPhone } from "./config/twilio.js"; 
+import { mockingRouter } from "./routes/mocking.routes.js";
 
 
 //const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
@@ -189,6 +190,7 @@ app.use(viewsRouter);
 app.use("/", cookiesRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/contacts", contactsRouter);
+app.use("/api/mockingProducts", mockingRouter);
 
 
 
