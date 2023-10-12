@@ -1,6 +1,6 @@
 import { Router } from "express"
 
-import { __dirname } from "../utils/utils.js";
+import { __dirname } from "../utils.js";
 import path from "path";
 import { productsModel } from "../dao/models/products.model.js";
 import { cartsModel } from "../dao/models/carts.model.js";

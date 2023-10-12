@@ -1,7 +1,7 @@
 import { MessagesController } from "../controllers/messages.controllers.js";
 import { Router } from "express";
 import { messagesModel } from "../dao/models/messages.model.js";
-import { __dirname } from "../utils/utils.js";
+import { __dirname } from "../utils.js";
 import { checkRole, checkUserAutentificated } from "../middlerwares/auth.js"
 
 const router = Router();

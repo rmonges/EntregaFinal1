@@ -1,5 +1,5 @@
 import express from "express";
-import { __dirname  } from "./utils/utils.js";
+import { __dirname  } from "./utils.js";
 import path from "path";
 import { productsRouter } from "./routes/products.routes.js";
 import { cartsRouter } from "./routes/carts.routes.js";
@@ -27,13 +27,39 @@ import { productsDao } from "./dao/factory.js";
 import { contactsRouter } from "./routes/contacts.routes.js";
 import { transporter } from "./config/email.js";
 import { twilioClient, twilioPhone } from "./config/twilio.js"; 
-import { mockingRouter } from "./routes/mocking.routes.js";
+import { loggersRouter } from "./routes/logger.routes.js";
+import  cluster  from "cluster";
+import os from "os";
 
+//import { mockingRouter } from "./routes/mocking.routes.js";
 
+// const numsCores = os.cpus().length;
+// console.log(numsCores);
 //const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
 //creamos la aplicacion del servidor
 const app = express();
 const port = config.server.port;
+
+//console.log(cluster.isPrimary);
+
+// if(cluster.isPrimary){
+//     console.log(`soy el proceso ppl ${process.pid}`)
+//     for(let i=0;i<numsCores;i++){
+//         cluster.fork(); //genero un nuevo nodo; 
+//     }
+//     cluster.on("exit", (worker)=>{
+//         console.log(`este proceso ${worker.process.pid} fallo`)
+//         cluster.fork();
+//     })
+    
+// }else{
+//    // const httpServer = app.listen(port,()=>console.log(`El servidor esta escuchando en el puerto ${port}, process ${process.pid}`));
+
+//     console.log(`soy el proceso worked ${process.pid}`)
+//     app.get("/cluster", (req, res)=>{
+//         res.send(`resondio el proceso ${process.pid}`)
+//     })
+// }
 
 
 app.use(express.json())//middleware para recibir jsons
@@ -92,8 +118,8 @@ socketServer.on("connection", async (socketConnected)=>{
   socketServer.emit("productList", productList)
 
 })
-//ENVIAR DATOS DEL SERVIDOR AL CLIENTE  ENVIAMOS
-//SIN QUE EL CLIENTE NO LA SOLICITE
+// //ENVIAR DATOS DEL SERVIDOR AL CLIENTE  ENVIAMOS
+// //SIN QUE EL CLIENTE NO LA SOLICITE
 
 socketConnected.on("deleteProduct", async (id)=>{
     console.log("id:", id)
@@ -190,7 +216,8 @@ app.use(viewsRouter);
 app.use("/", cookiesRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/contacts", contactsRouter);
-app.use("/api/mockingProducts", mockingRouter);
+app.use("/loggersTest", loggersRouter);
+//app.use("/api/mockingProducts", mockingRouter);
 
 
 
