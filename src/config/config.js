@@ -18,4 +18,10 @@ export const config = {
         clientSecret:"31016392cd23d6ee7c653bf71fd92882a04fc1e5",
         callbackUrl:"http://localhost:8080/api/sessions/github-callback"
     },
+    gmail:{
+        account:process.env.GMAIL_SALES,
+        password:process.env.GMAIL_SALES_PASSWORD,
+        secretToken:process.env.SECRET_TOKEN_EMAIL
+
+    }
 }

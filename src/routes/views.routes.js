@@ -1,5 +1,4 @@
 import { Router } from "express"
-
 import { __dirname } from "../utils.js";
 import path from "path";
 import { productsModel } from "../dao/models/products.model.js";
@@ -77,17 +76,6 @@ router.get("/home", ViewsController.renderHome);
   router.get("",ViewsController.renderLogings )
 
 
-//clase 16 aplicar un indice para aumentar la velocidad de busqueda, se aplica em el modelo index
-
-// router.get("/consultaNormal", async(req,res)=>{
-//   try {
-//       const result = await productsModel.find({tittle:"ojotas"}).explain("esecutionStats");
-//       console.log(result);
-//       res.json({status:"success", message:"usuario encontrado"});
-//   } catch (error) {
-//       res.json({status:"error", message:'Hubo un error en la consulta'});
-//   }
-// });
 
 
 //Rutas sessions
@@ -106,6 +94,8 @@ router.get("/perfil", checkUserAutentificated, ViewsController.renderPerfil
 
 router.get("/cambio-password", ViewsController.renderChangePassword);
 
+router.get("/forgot-password", ViewsController.renderForgot);
+router.get("/reset-password", ViewsController.renderResetPass);
 
 export {router as viewsRouter};
 

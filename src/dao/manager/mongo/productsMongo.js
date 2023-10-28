@@ -84,7 +84,7 @@ async upDateProduct  (id, updatedProd) {
    async deleteProduct(id) {
     try {
         const product = await this.model.find(id);
-        if(pet){
+        if(product){
            await this.model.findOneAndDelete({id});
         }
          return "mascota eliminada"; 

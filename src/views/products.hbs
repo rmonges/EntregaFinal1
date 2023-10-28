@@ -11,17 +11,15 @@ Correo: {{ username.email }}<br/><br/>
 <div class="main__contenedor">
 
 {{#if payload}}
-
-
-   
-   <ul class="card-body">{{#each payload }}
+{{#each payload }}
+   <ul class="card-body">
      Tittle:{{this.tittle}}<br>
      Price:{{this.price}}<br>
      Description:{{this.description}}<br>
      Code:{{this.code}}<br>
-     Thumbnails:{{this.thumbnails}}<br>
+     Thumbnails:{{this.thumbnail}}<br>
      Category:{{this.category}}<br>
-     <button class = "button_addCart" onclick="addCart('{{this.id}}, {{this.stock}}, {{this.description}}, {{this.code}}, {{this.category}}, {{this.thumbnails}}')">addCart</button> </ul>
+     <button class = "button_addCart" onclick="addCart('{{this.id}}', '{{this.stock}}', '{{this.description}}','{{this.code}}', '{{this.category}}', '{{this.thumbnails}}')">addCart</button> </ul>
    {{/each}}
   
    </div>
@@ -43,7 +41,7 @@ Correo: {{ username.email }}<br/><br/>
 
 <script>
 const addCart = (productId, stock,description, code, thumbnails, category  )=>{
-    
+    console.log("addcart", addCart)
 
     const baseUrl = 'http://localhost:8080/api/carts';
    
@@ -55,7 +53,9 @@ const addCart = (productId, stock,description, code, thumbnails, category  )=>{
       category, 
       thumbnails,  
     };
-     fetch(`${baseUrl}`, {
+
+    console.log("datosProducto", datosProducto)
+     fetch(baseUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

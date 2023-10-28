@@ -2,10 +2,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/home.js"></script>
+<script src=""></script>
 
-{{#if isProduct}}
-     {{#each productList}}
-       <p>tittle:{{this.tittle}},<br>
+<div class="main__contenedor">{{#if isProduct}}
+     <div>{{#each productList}}
+       <p class="card-body">tittle:{{this.tittle}},<br>
        description :{{this.description}},<br>
        code: {{this.code}},<br>
        price: {{this.price}},<br>
@@ -15,6 +16,8 @@
        thumbnail: {{this.thumbnail}},<br>
        id: {{this.id}} </p>
      {{/each}}
+     </div>
+</div>
        {{else}}
           <p>Producto no existe</p>
      {{/if}}

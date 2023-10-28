@@ -5,10 +5,6 @@ import { cartsCollection, productsCollection } from "../../constants/index.js";
 
 const cartsSchema = new mongoose.Schema({
 
-    name:{
-         type:String,
-         require:true
-       },
        
     products:{
         

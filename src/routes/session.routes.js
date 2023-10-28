@@ -33,5 +33,8 @@ router.get("/visitas", SessionsController.visitas)
 
 router.post("/changePass", SessionsController.changePassword)
 
+router.post("/forgot-password", SessionsController.forgotPassword)
+router.post("/reset-password", SessionsController.resetPassword)
+
 export {router as sessionsRouter};
 

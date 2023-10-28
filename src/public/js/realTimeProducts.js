@@ -14,29 +14,29 @@ socketClient.on("productList", (obj)=>{
       
       products.forEach((product) => {
           productos +=   `
-          <ul class="card-body">Tittle:${product.tittle}<br>
-          Description :${product.description}<br>
-          Code: ${product.code}<br>
-          Price: ${product.price}<br>
-          Status: ${product.status}<br>
-          Stock: ${product.stock}<br>
-          Category: ${product.category}<br>
-          Thumbnail: ${product.thumbnail}<br>
-          Id: ${product.id} <button  type="submit" id=".btncomp">
-          Agregar al Carrito</button></ul> 
-          
-        `
-      
-          
-      }) 
-       console.log(productos)
+          <div class="card-body">
+          <ul>
+            <li>tittle: ${product.tittle}</li>
+            <li>description:${product.description}</li>
+            <li>code:${product.code}</li>
+            <li>price: ${product.price}</li>
+            <li>status:${product.status}</li>  
+            <li>stock:${product.stock}</li>
+            <li>category:${product.category}</li>
+            <li>thumbnail:${product.thumbnail}</li>
+            <li>id: ${product._id}</li>
+          </ul>
+          <button type="submit" id="btncomp" class="btncomp">Agregar al Carrito</button>
+        </div>
+          `
+         })  
        contenedor.innerHTML =productos;
     }
 
 //ingreso al Dom, capto id del formulario
 document.addEventListener("DOMContentLoaded", () => {
   let form = document.getElementById("form-Product");
- 
+
 //leo valores de lod datos cargados
 console.log(form)
 form.addEventListener("submit", (e)=>{
@@ -79,30 +79,78 @@ socketClient.on("productosupdated", (obj) => {
 });
 
 })
+document.addEventListener("DOMContentLoaded", () => {
+  // Inicializa el carrito como un arreglo vacío
+  let carrito = [];
 
+  // Obtén una referencia al contenedor del carrito en el DOM
+  const carritoContainer = document.getElementById("lista-carrito");
 
-const sumarBotonCompra = document.querySelectorAll('.btncomp');
+  // Agrega un evento click a los botones "Agregar al Carrito" (quita el punto de la clase)
+  document.addEventListener("click", (event) => {
+    if (event.target && event.target.className === "btncomp") {
+      const productElement = event.target.closest(".card-body");
+      //how select property of card-body?
+      agregarAlCarrito(productElement);
+    }
+  });
 
-console.log("sumarbtn", sumarBotonCompra)
-const tarjetaContenedor = $('.conteinerProducto');
-sumarBotonCompra.forEach(sumarboton => {
-  sumarboton.addEventListener('click', sumarClick);
-console.log(sumarBotonCompra)
+  // Función para agregar un producto al carrito
+  function agregarAlCarrito(productElement) {
+
+    console.log("productElement", productElement)
+    //Obtiene los datos del producto desde el elemento HTML
+   
+      const product = {
+        title: productElement.querySelector(".card-body li:nth-child(1)").textContent,
+        description: productElement.querySelector(".card-body li:nth-child(2)").textContent,
+        code: productElement.querySelector(".card-body li:nth-child(3)").textContent,
+        price: productElement.querySelector(".card-body li:nth-child(4)").textContent,
+        status: productElement.querySelector(".card-body li:nth-child(5)").textContent,
+        stock: productElement.querySelector(".card-body li:nth-child(6)").textContent,
+        category: productElement.querySelector(".card-body li:nth-child(7)").textContent,
+        thumbnail: productElement.querySelector(".card-body li:nth-child(8)").textContent,
+        id: productElement.querySelector(".card-body li:nth-child(9)").textContent,
+      };
+    console.log("product", product)
+    // Agrega el producto al carrito
+    carrito.push(product);
+
+    // Actualiza la visualización del carrito en el DOM
+    actualizarCarritoEnDOM();
+  }
+
+  // Función para actualizar la visualización del carrito en el DOM
+  function actualizarCarritoEnDOM() {
+    // Limpia el contenido previo del carrito
+    carritoContainer.innerHTML = "";
+
+    // Recorre los productos en el carrito y agrega cada uno al carrito en el DOM
+    carrito.forEach((product) => {
+      const productItem = document.createElement("tr");
+      productItem.innerHTML = `
+        <td><img src="${product.thumbnail}"></td>
+        <td >${product.title}</td>
+        <td>${product.price}</td>
+        <td>${product.stock}</td> 
+        <td><button class="remove-from-cart" data-id="${product.id}">Quitar</button></td>
+      `;
+
+      carritoContainer.appendChild(productItem);
+
+      // Agrega un evento para quitar el producto del carrito cuando se hace clic en el botón "Quitar"
+      productItem.querySelector(".remove-from-cart").addEventListener("click", (event) => {
+        const productId = event.target.getAttribute("data-id");
+        console.log("dataId", productId)
+        quitarDelCarrito(productId);
+      });
+    });
+  }
+
+  // Función para quitar un producto del carrito
+  function quitarDelCarrito(productId) {
+    carrito = carrito.filter((product) => product.id !== productId);
+    actualizarCarritoEnDOM();
+  }
 });
 
-function sumarClick (event) {
-
-  const button = event.target;
-  const item = button.closest('.item-shop');
-  
-  const itemTitle = item.querySelector('.item-card-title').textContent;
-
-  const itemPrecio = item.querySelector('.item-card-text').textContent;
- 
-  const itemImagen = item.querySelector('.item-card-img-top').src;
-
-
-
-  sumarItem(itemTitle, itemPrecio, itemImagen);
- 
-} 
