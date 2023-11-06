@@ -39,7 +39,7 @@ export class ProductsController{
             res.json({status:(404), message:error.message})
         }
     }
-    static postProduct = async (req, res)=>{
+    static createProduct = async (req, res)=>{
         try {
             const productInfo = req.body;
             

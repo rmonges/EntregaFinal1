@@ -50,7 +50,7 @@ router.get("/", async(req, res)=>{
 router.get("/:prodid", ProductsController.getProdid)
 
 
-router.post("/", checkUserAutentificated, checkRole(["admin"]),  ProductsController.postProduct);
+router.post("/", checkUserAutentificated, checkRole(["admin", "superadmin", "premium"]),  ProductsController.createProduct);
 
 
 router.put("/:pid", checkUserAutentificated,  checkRole(["admin"]), ProductsController.putProduct);

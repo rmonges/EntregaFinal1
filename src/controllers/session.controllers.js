@@ -77,7 +77,7 @@ export class SessionsController {
             const token = req.query.token;
             const{newPassword}= req.body;
             const validEmail = validateToken(token);
-            console.log("validaEmail", validEmail);
+            console.log("validaEmail",validEmail);
             console.log("newPassword", {newPassword});
         if(validEmail){
             console.log("hola validEmail");
@@ -87,9 +87,7 @@ export class SessionsController {
             console.log("hay useeerrrr");
             user.password = createHash(newPassword);
             console.log("newuser", user.password)
-             await UsersService.updateUser(user._id, user);
-           
-
+            await UsersService.updateUser(user._id, user);
             return res.send("Contraseña actualizada <a href='/login'>volver al Login</a>")
         }
        }else{

@@ -79,9 +79,7 @@ async upDateProduct  (id, updatedProd) {
         return undefined
     }
   }  
-
-
-   async deleteProduct(id) {
+async deleteProduct(id) {
     try {
         const product = await this.model.find(id);
         if(product){

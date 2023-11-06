@@ -39,6 +39,10 @@ const productsSchema = new mongoose.Schema({
         type:["img"],
       required:true
       },
+      owner:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users"
+      }
       
 });
 productsSchema.plugin(mogoosePaginate)

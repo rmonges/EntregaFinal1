@@ -30,6 +30,7 @@ import { twilioClient, twilioPhone } from "./config/twilio.js";
 import { loggersRouter } from "./routes/logger.routes.js";
 import  cluster  from "cluster";
 import os from "os";
+import { usersRouter } from "./routes/users.routes.js";
 
 //import { mockingRouter } from "./routes/mocking.routes.js";
 
@@ -217,6 +218,7 @@ app.use("/", cookiesRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/contacts", contactsRouter);
 app.use("/loggersTest", loggersRouter);
+app.use("/api/users", usersRouter);
 //app.use("/api/mockingProducts", mockingRouter);
 
 
