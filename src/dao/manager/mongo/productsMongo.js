@@ -81,9 +81,15 @@ async upDateProduct  (id, updatedProd) {
   }  
 async deleteProduct(id) {
     try {
-        const product = await this.model.find(id);
+        console.log("id", id)
+        if (!id) {
+            throw new Error("ID no definido para eliminar el producto");
+        }
+        const product = await this.model.findById(id);
+        console.log("productoeliminadodelproductmongo", product)
         if(product){
-           await this.model.findOneAndDelete({id});
+           await this.model.findByIdAndDelete(id);
+           console.log("producto Eliminado")
         }
          return "mascota eliminada"; 
    } catch (err) {

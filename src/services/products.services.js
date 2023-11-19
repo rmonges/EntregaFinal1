@@ -1,4 +1,6 @@
 import {productsDao} from "../dao/factory.js"
+import { ProductsMongo } from "../dao/manager/mongo/productsMongo.js";
+import { productsModel } from "../dao/models/products.model.js";
 
 export class ProductsService {
     static getProducts =  async ()=>{
@@ -13,8 +15,8 @@ export class ProductsService {
     static putProduct = async (pid, upDateProduct)=>{
         return await productsDao.upDateProduct(pid, upDateProduct);
     };
-    static delProduct = async ({_id:idDel})=>{
-        return await productsModel.deleteOne({_id:idDel});
+    static delProduct = async (productId)=>{
+        return await productsDao.deleteProduct(productId);
     }
     
 }

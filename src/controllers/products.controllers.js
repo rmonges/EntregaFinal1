@@ -42,7 +42,8 @@ export class ProductsController{
     static createProduct = async (req, res)=>{
         try {
             const productInfo = req.body;
-            
+            productInfo.owner = req.user._id;
+            productInfo.thumbnail = req.file.filename;
             const products = await ProductsService.createProduct(productInfo);
             res.json({status:"success post", data:products, message:"producto creado"})
             
@@ -61,12 +62,18 @@ export class ProductsController{
     }
     static delProduct = async (req, res)=>{
         try {
-            const idDel= req.params.pid;
-            await ProductsService.delProduct({_id:idDel})
-            res.json( {status:"succes", message:"producto eliminado correctamente "})
-        
+            const productId= req.params.pid;
+            const product = await ProductsService.getpid(productId);
+            console.log("productdelProduct", product)
+            //validamos el usuario usuario premium y es el creador del producto puede borrar y si es admin tambien
+            if((req.user.role === "premium" && product.owner.toString() === req.user._id.toString()) || (req.user.role ==="admin")){
+               await ProductsService.delProduct(productId);
+               res.json( {status:"succes", message:"producto eliminado correctamente"});
+            }else{
+                 return res.json( {status:"error", message:"no tienes permisos"}) 
+            };
         }catch (error) {
-            res.json({status:"error", message:"error"})
+            res.json({status:"errordelProduct", message:error.message})
         };
         
     }

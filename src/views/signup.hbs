@@ -4,7 +4,7 @@
 <section class="container">
   <div class="row my-5"> 
     <div class="col-sm-12 col-md-12 col-lg-12">
-     <form  method="post" action="/api/sessions/signup" class="formulario1">
+     <form  method="post" action="/api/sessions/signup" class="formulario1" enctype="multipart/form-data">
      <h1 class="display-5 text center" style="color:rgb(244, 234, 234)">Formulario de registro</h1>
      <div class="form-group">
         <label style="color:rgb(244, 234, 234)">Nombre:</label> 
@@ -21,6 +21,10 @@
     <div class="form-group">
         <label style="color:rgb(244, 234, 234)">Password:</label> 
        <input type="password" placeholder="Intro su contraseña" maxlength="20" id="password" name="password" class="form-control">
+    </div class="form-group">
+    <div class="form-group">
+       
+       <input type="file" maxlength="20"  name="avatar" class="form-control">
     </div class="form-group">
        <button class="form-control">Registrarse</button>
 <hr>

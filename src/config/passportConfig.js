@@ -30,7 +30,8 @@ export const initializaPassport = ()=>{//creamos estrategias
             first_name: first_name,
             email: username,  
             password:createHash(password),
-            role:role
+            role:role,
+            avatar:req.file.filename,
            }
            const userCreated = await UsersService.userCreated(newUser);
            return done (null,userCreated);//passport completa proceso de  la session del usuario satisfactoriamente
@@ -52,7 +53,9 @@ export const initializaPassport = ()=>{//creamos estrategias
               if(!user){
                 return done(null, false);
               }
-              if(isValidPassword(user, password)){
+              if(isValidPassword(user,password)){
+                user.last_connection = new Date();
+                await UsersService.updateUser(user._id, user);
                return done(null,user);
               }else{
                 return done(null, false)

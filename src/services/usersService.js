@@ -12,5 +12,8 @@ export class UsersService {
     static updateUser = async(userId, userInfo)=>{
         return await userDao.upDate(userId, userInfo);
     }
+    static getUser = async()=>{
+        return  await userDao.get();
+   }
 
 }

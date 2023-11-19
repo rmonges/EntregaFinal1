@@ -1,6 +1,6 @@
 import { cartsService } from "../controllers/carts.controllers.js";
 import { cartsModel } from "../dao/models/carts.model.js";
-import { productsModel } from "../dao/models/products.model.js";
+
 import { cartsDao, productsDao } from "../dao/factory.js";
 
 

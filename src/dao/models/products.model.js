@@ -36,8 +36,8 @@ const productsSchema = new mongoose.Schema({
       
       },
       thumbnail:{
-        type:["img"],
-      required:true
+        type:String,
+        required:true
       },
       owner:{
         type:mongoose.Schema.Types.ObjectId,

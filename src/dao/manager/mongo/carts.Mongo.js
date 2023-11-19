@@ -82,6 +82,7 @@ async addCart(products){
 
 async deleteCart(id) {
     try {
+        console.log("id", id)
         const cart = await this.model.find(id);
         if(cart){
            await this.model.findOneAndDelete({id});

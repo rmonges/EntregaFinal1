@@ -17,16 +17,21 @@ export class SessionsController {
         res.render("login", {error:"credenciales invalidas"})
     };
     static logout = async (req, res)=>{
-        req.logOut(error=>{
-            if(error){
-                return res.render("profile", {user:req.user, error:"No se pudo cerrar la sesion"});
-            } else{
-                req.session.destroy(error=>{//elimina la sesion de la base de datos
-                    if( error ) return res.render("profile", {user:req.user, error:"No se pudo cerrar la sesion"})
-                    res.redirect("/registro");
-                })
-            }
-        })
+        try{
+            const user = req.user;
+            user.last_connection = new Date();
+            await UsersService.updateUser(user._id, user);
+            await req.session.destroy()//elimina la sesion de la base de datos
+            res.redirect("/registro");
+        }catch(error){
+            return res.render("profile", {user:req.user, error:"No se pudo cerrar la sesion"});
+           
+        }
+        // req.logOut(error=>{
+        //     if(error){
+        //      res.render("profile", {user:req.user, error:"No se pudo cerrar la sesion"});
+        //      }
+        // })
      }
      static changePassword = async (req, res)=>{
         try {

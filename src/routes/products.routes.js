@@ -7,6 +7,7 @@ import { ProductsMongo } from "../dao/manager/mongo/productsMongo.js";
 import { ProductsController } from "../controllers/products.controllers.js";
 import { productsDao } from "../dao/factory.js";
 import { checkRole, checkUserAutentificated } from "../middlerwares/auth.js";
+import { uploaderProduct } from "../utils.js";
 //const productsDao = new ProductManager('products.json')
 const router = Router();
 
@@ -50,12 +51,12 @@ router.get("/", async(req, res)=>{
 router.get("/:prodid", ProductsController.getProdid)
 
 
-router.post("/", checkUserAutentificated, checkRole(["admin", "superadmin", "premium"]),  ProductsController.createProduct);
+router.post("/", checkUserAutentificated, checkRole(["admin", "superadmin", "premium"]),uploaderProduct.single("thumbnail"),ProductsController.createProduct);
 
 
 router.put("/:pid", checkUserAutentificated,  checkRole(["admin"]), ProductsController.putProduct);
 
-router.delete("/:pid",checkUserAutentificated, checkRole(["admin"]), ProductsController.delProduct);
+router.delete("/:pid",checkUserAutentificated, checkRole(["admin", "premium"]), ProductsController.delProduct);
 
 router.get("/", async(req, res)=>{
     try {
