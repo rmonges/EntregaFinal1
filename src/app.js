@@ -39,7 +39,7 @@ import { usersRouter } from "./routes/users.routes.js";
 //const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
 //creamos la aplicacion del servidor
 const app = express();
-const port = config.server.port;
+const port = config.server.port || 8080;
 
 //console.log(cluster.isPrimary);
 
@@ -72,7 +72,7 @@ app.use(session({
     store: MongoStore.create ({//defimos en la conf de la sesiones donde el sitio donde vamos a manejar el almacenamiento de las sesiones 
         mongoUrl:config.mongo.url,
     }),
-    secret:'tu_secreto_aqui**', //cifra el id de a session dentro  del coockie
+    secret:'tu_secreto_aqui***', //cifra el id de a session dentro  del coockie
     resave:true,//permite saber si el usuario tiene una sesion comenzada y lo archiva en algun lado
     saveUninitialized:true//mantiene la info del usuario que inicio la session    
 }));
@@ -109,14 +109,10 @@ io.on("connection", async (socket)=>{
     messages.push(data);
     io.emit("message", messages);
     })
-    // socket.on("message", (data)=>{
-    //
-    // 
-    // //console.log("messagesdata", message)
-    // 
+    
 
     
-    console.log(`nuevo cliente conectado ${socket.id}`)
+
      const productList = await productsDao.getProduct({});
      const cartList = await cartsService.getAll({});
 
@@ -127,14 +123,14 @@ io.on("connection", async (socket)=>{
  socket.on("addProduct", async (obj)=>{
     //console.log("addProd", obj)
  await productsDao.addProduct(obj)
- //console.log("addProd", obj)
+ console.log("addProd", obj)
   const productList = await productsDao.getProduct({})
 
   io.emit("productList", productList)
 
 })
-// //ENVIAR DATOS DEL SERVIDOR AL CLIENTE  ENVIAMOS
-// //SIN QUE EL CLIENTE NO LA SOLICITE
+//ENVIAR DATOS DEL SERVIDOR AL CLIENTE  ENVIAMOS
+//SIN QUE EL CLIENTE NO LA SOLICITE
 
 socket.on("deleteProduct", async (id)=>{
     console.log("id:", id)
@@ -142,7 +138,7 @@ socket.on("deleteProduct", async (id)=>{
     const productList = await productsDao.getProduct({});
     socket.emit("productList", productList);
 
-})
+ })
 })
 
 
