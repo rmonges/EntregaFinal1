@@ -22,20 +22,29 @@ Swal.fire({
      //console.log("user", user);
 });
 chatbox.addEventListener("keyup", (e)=>{
-    // console.log(e.key);
+     console.log(e.key);
     if(e.key === "Enter"){
         if(chatbox.value.trim().length>0){//corrobamos que el usuario no envie datos vacios
             socketClient.emit("message",{user:user,message:chatbox.value});
+            console.log("chatboxvalue", chatbox.value)
             chatbox.value="";//borramos el campo
         }
     }
  });
-socketClient.on("messageHistory",(dataServer)=>{
+ 
+socketClient.on("message",(dataServer)=>{
     let messageElmts = "";
-    // console.log("dataServer", dataServer);
-    dataServer.forEach(item=>{
-        messageElmts = messageElmts + `${item.user}: ${item.message} <br/>`
-    });
+    if (Array.isArray(dataServer)) {
+        dataServer.forEach(item => {
+            messageElmts = messageElmts + `${item.user}: ${item.message}  <br/>`;
+        });
+    } else {
+        // Si no es un array, asumimos que es un solo mensaje
+        messageElmts = `${dataServer.user}: ${dataServer.message}  <br/>`;
+        console.log("messageElmnts", messageElmts)
+    }
+
+    console.log("messageElmts", messageElmts);
     chat.innerHTML = messageElmts;
 });
 

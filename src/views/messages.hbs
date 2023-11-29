@@ -1,12 +1,17 @@
 <script src="../routes/views.routes.js"></script>
-<h1>Mensagges</h1>
-<form action="api/messages" method="post">
-{{!-- <input id="chatbox" type="text" placeholder="Ingrese el mensaje" />
-<div id="messageLogs"></div> --}}
-<input type="text", placeholder="ingrese el usuario" name="user" >
-<input type="text", placeholder="ingrese el mensage" name="message">
-<button type="submit">Enviar</button>
-</form>
+<h1 class="h2msj">Mensagges</h1>
+{{!-- <form action="api/messages" method="post"> --}}
+<div class="formulario1">
+ <input id="chatbox" type="text" placeholder="Ingrese el mensaje" name="message" />
+<div id="messageLogs" style="color:aliceblue">
+    
+</div>
+</div> 
+ {{!-- <input type="text", placeholder="ingrese el usuario" name="user" > --}}
+{{!-- <input type="text", placeholder="ingrese el mensage" name="message"> --}} 
+{{!-- <button type="submit">Enviar</button> --}}
+{{!-- </form> --}}
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="socket.io/socket.io.js"></script>
+<script src="/js/messages.js"></script>

@@ -1,6 +1,13 @@
 * {
     box-sizing: border-box;
  }
+ .h2msj{
+    color: #e1e1eb;
+    font-size: 3rem;
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+
+ }
  .h1__index {
     color: black;
     font-size: 3rem;

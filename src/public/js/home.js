@@ -1,5 +1,8 @@
 const socketClient = io();//instancio socket del lado del cliente
 
+const chatbox = document.getElementById("chatbox");
+const chat = document.getElementById("chat"); 
+let user;
 
 //EVENTE DEL CUAL ENVIO LA INFORMACION
 

@@ -5,6 +5,8 @@ import { productsDao } from "../dao/factory.js";
 import { ProductsService } from "../services/products.services.js"
 import { CartsService } from "../services/carts.services.js";
 import { cartsModel } from "../dao/models/carts.model.js";
+import { CommandContextImpl } from "twilio/lib/rest/preview/wireless/command.js";
+//import { error } from "winston";
 
 export const cartsService = new CartsMongo ("carts.json");
 
@@ -38,8 +40,15 @@ export class CartsController {
  static prodPopulateCid = async (req, res)=>{
     try {
         const cartId =(req.params.cid);
-        const cart = await cartsModel.findById(cartId).populate("products");
-        if(!cart){
+        const cart = await cartsModel.findById(cartId).populate({
+            path: 'products',
+            populate: {
+                path: 'productId',
+                model: productsModel,
+                select: 'tittle description code price status stock category thumbnail owner '
+            }
+        });
+    if(!cart){
             return res.send("este curso no existe")
         }
         console.log("CARRRT", cart);
@@ -71,43 +80,31 @@ export class CartsController {
     };
  }
  static addproductCart = async(req, res)=>{
-    
-        try {
+       try {
             const cartId = req.params.cid;
             const productId = req.params.pid;
-            const cart = await CartsService.cartporCid(cartId);
+            const cart = await CartsService.prodPopulateCid(cartId);
             const product = await ProductsService.getpid(productId);
-
-            const productExist = cart.products.find(product =>product.productId === productId);
-            console.log("productExist", productExist)
-            const newProduct = {
-                      productId : productId,
-                      quantity:1
-                    }
+            const productExistIndex= cart.products.findIndex(product => product.productId._id.toString() === productId.toString());
+             console.log('productexist', productExistIndex);
+            if (productExistIndex!==-1) {
+                cart.products[productExistIndex].quantity += 1;
+                 const cartUpdate = await CartsService.upDateCart(cartId, cart);
+                 return res.json({ status: "success", data: cartUpdate });
+               }else{  
+                    const newProduct = {
+                        productId : product,
+                        quantity:1
+                      }
             cart.products.push(newProduct);
             const cartUpdate = await CartsService.upDateCart(cartId, cart);
-              
             res.json({status:"succes", data:cartUpdate})
+         }
         } catch (error) {
             res.json({status:"error", message:error.message});
           };
     };
-    //     const {cartId, productId}= req.body;//
-    //     const cart = await CartsService.addproductCart(cartId);//me devuelve un json 
-    //     if(!cartId){
-    //         return res.status(404).json({ error: "Eeeeeeeeste carrito no existe" });
-    //     };
-    //     const product = await ProductsService.getpid(productId);
-
-    //     const productExist = cart.products.find(product=>product._id === _id);
-       
-    //     
-        
-    //    
-        
-    //      
-        
-      
+    
    static deletecid = async (req, res)=>{
     try {
         const idDel= req.params.cid;
@@ -138,17 +135,12 @@ export class CartsController {
         if(!cartId){
              return res.send("este carrito no existe")
         };
-        console.log("id carrito", cartId)
-        const product = await productsModel.findById(productId);
-        console.log("id productoId", product)
-        if(!productId){
-            return res.send("este producto no existe");
-            
-        };
-        cart.products.pull({_id:productId});
-        
-         cart.save();console.log("Producto eliminado del carrito:", cart);
-        console.log("Cart eliminado:", cart);
+        const productIndex = cart.products.findIndex(product => product.productId.toString() === productId);
+        if (productIndex === -1) {
+            return res.send("Este producto no existe en el carrito");
+        }
+        cart.products = cart.products.filter(product => product.productId.toString() !== productId);
+        cart.save();
         res.send(cart);
 
     }catch (error) {
@@ -171,13 +163,11 @@ export class CartsController {
         console.log("id productoId", product)
         if(!productId){
             return res.send("este producto no existe");
-            
         };
         cart.products.pull({_id:productId});
-        
+
         console.log("producto encontado del carrito", product)
-         cart.save();console.log("Producto eliminado del carrito:", cart);
-        console.log("Cart eliminado:", cart);
+        cart.save();
         res.send(cart);
 
     }catch (error) {
@@ -229,4 +219,17 @@ export class CartsController {
         res.json({ status: "error", message: "error" });
     }
  };
-}
+
+//  static putProducts  = async (req, res)=>{
+//     const { productId } =req.pramas;
+//     const { query } =req.query;
+//     const body = req.body;
+
+//     const productSeach = await cartsModel.findById(productId);
+    
+// if(!query){
+//     res.status(404).json({mensaje:"debes enviar un query"});
+//  }else if(productSeach && query === "add"){
+//     body.quantity = body.quantity + 1;
+//  }   
+ }

@@ -1,6 +1,6 @@
 import { cartsService } from "../controllers/carts.controllers.js";
 import { cartsModel } from "../dao/models/carts.model.js";
-
+import { productsModel } from "../dao/models/products.model.js"; 
 import { cartsDao, productsDao } from "../dao/factory.js";
 
 
@@ -15,7 +15,11 @@ export class CartsService {
        return await cartsService.getAll();
     };
     static prodPopulateCid = async (cartId)=>{
-        return await cartsModel.findById(cartId).populate("products");
+        return await cartsModel.findById(cartId).populate({
+            path:'products.productId',
+            model:productsModel,
+            select: 'title  description'
+        });
     }; 
     static cartporCid = async (cartId)=>{
         return await cartsModel.findById(cartId);

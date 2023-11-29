@@ -97,40 +97,55 @@ app.set('views', path.join(__dirname, './views'));
 
 
 //CREAMOS SERVIDO R DE WEB SOCKET
-const socketServer = new Server(httpServer);//vinculamos el serv de webs al de http
+const io = new Server(httpServer);//vinculamos el serv de webs al de http
 
 //creamos canal de comunicacion entre el servidor y el cliente
-socketServer.on("connection", async (socketConnected)=>{
+let messages = [];
+io.on("connection", async (socket)=>{
     
-    console.log(`nuevo cliente conectado ${socketConnected.id}`)
+    socket.emit("message", messages);
+    socket.on("message", (data)=>{
+    console.log("data", data);
+    messages.push(data);
+    io.emit("message", messages);
+    })
+    // socket.on("message", (data)=>{
+    //
+    // 
+    // //console.log("messagesdata", message)
+    // 
+
+    
+    console.log(`nuevo cliente conectado ${socket.id}`)
      const productList = await productsDao.getProduct({});
      const cartList = await cartsService.getAll({});
 
     //RECIBIR EVENTO/DATOS DEL CLIENTE
-    socketServer.emit("cartList", cartList);
-    socketServer.emit("productList", productList);
+    io.emit("cartList", cartList);
+    io.emit("productList", productList);
 
- socketConnected.on("addProduct", async (obj)=>{
+ socket.on("addProduct", async (obj)=>{
     //console.log("addProd", obj)
  await productsDao.addProduct(obj)
  //console.log("addProd", obj)
   const productList = await productsDao.getProduct({})
 
-  socketServer.emit("productList", productList)
+  io.emit("productList", productList)
 
 })
 // //ENVIAR DATOS DEL SERVIDOR AL CLIENTE  ENVIAMOS
 // //SIN QUE EL CLIENTE NO LA SOLICITE
 
-socketConnected.on("deleteProduct", async (id)=>{
+socket.on("deleteProduct", async (id)=>{
     console.log("id:", id)
     await productsDao.deleteProduct(id);
     const productList = await productsDao.getProduct({});
-    socketConnected.emit("productList", productList);
+    socket.emit("productList", productList);
 
 })
+})
 
-});
+
 const emailTemplate = `<div>
         <h1>Bienvenido!!</h1>
         <img src="https://fs-prod-cdn.nintendo-europe.com/media/images/10_share_images/portals_3/2x1_SuperMarioHub.jpg" style="width:250px"/>

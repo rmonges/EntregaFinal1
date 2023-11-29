@@ -10,9 +10,7 @@ const cartsSchema = new mongoose.Schema({
         
         type:[//tipo array
         
-           {quantity:{type:Number,
-            default:1}
-           ,      
+           {quantity:{type:Number, default:1},      
           
             productId:{//cada elemento es de tipo objeto, y contiene el id de un documento que pertenece a la coleccion "students"
                 type:mongoose.Types.ObjectId,

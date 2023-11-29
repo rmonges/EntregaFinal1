@@ -5,7 +5,7 @@ dotenv.config();
 
 export const config = {
     server:{
-        port:process.env.PORT,
+        port:process.env.PORT || 'tu_secreto_aqui',
         secretSessions: process.env.SECRET_SESSIONS,
         persistence: process.env.PERSISTENCE, 
     },

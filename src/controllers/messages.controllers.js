@@ -18,7 +18,7 @@ export class MessagesController {
             res.json({status:"success", data:messagesCreated});
         } catch (error) {
             console.log(error.menssage)
-            res.json({status:"error", message:"hubo un error al obtener los messages"})
+            res.json({status:"error", message:error.message})
         }
     }
     static midmsgs = async (req, res)=>{
