@@ -72,7 +72,7 @@ app.use(session({
     store: MongoStore.create ({//defimos en la conf de la sesiones donde el sitio donde vamos a manejar el almacenamiento de las sesiones 
         mongoUrl:config.mongo.url,
     }),
-    secret:config.server.secretSessions, //cifra el id de a session dentro  del coockie
+    secret:'tu_secreto_aqui**', //cifra el id de a session dentro  del coockie
     resave:true,//permite saber si el usuario tiene una sesion comenzada y lo archiva en algun lado
     saveUninitialized:true//mantiene la info del usuario que inicio la session    
 }));
