@@ -5,7 +5,7 @@ import { productsModel } from "../dao/models/products.model.js";
 import { cartsModel } from "../dao/models/carts.model.js";
 import { CartsManager } from "../dao/manager/fileSystem/cartsFiles.js";
 import { ProductsMongo } from "../dao/manager/mongo/productsMongo.js";
-import { checkUserAutentificated, showLoginView } from "../middlerwares/auth.js";
+import { checkRole, checkUserAutentificated, showLoginView } from "../middlerwares/auth.js";
 import { productsDao } from "../../src/dao/factory.js";
 import { ViewsController } from "../controllers/view.controllers.js";
 
@@ -18,15 +18,11 @@ const router = Router();
 
   try {
     const productList = await productsDao.getProduct({});
-     
      res.render("realTimeProducts",productList );
-
      socketClient.emit("messageEvent", `lista de Productos:${productList}`);
   } catch (error) {
      //res.render("error");
   }
-
-//})
 
 router.get("/products", async(req, res)=>{
   try {
@@ -71,16 +67,12 @@ nextLink: result.hasNextPage ?  `${baseUrl.replace(`page=${result.page}`,`page=$
  router.get("/realTimeProducts", ViewsController.renderRealtimeProducts)
  router.get("/messages",ViewsController.renderMessages);
  router.get("/carts",ViewsController.renderCarts );
-  
-router.get("/home", ViewsController.renderHome);
-  router.get("",ViewsController.renderLogings )
+ router.get("/home", ViewsController.renderHome);
+ router.get("",ViewsController.renderLogings )
 
 
-
-
-//Rutas sessions
+ //Rutas sessions
 router.get("/login", showLoginView,ViewsController.renderLogin ); 
-
 router.get("/registro",showLoginView,ViewsController.renderSignup 
 ); 
 
@@ -93,9 +85,10 @@ router.get("/perfil", checkUserAutentificated, ViewsController.renderPerfil
 // }); 
 
 router.get("/cambio-password", ViewsController.renderChangePassword);
-
 router.get("/forgot-password", ViewsController.renderForgot);
 router.get("/reset-password", ViewsController.renderResetPass);
+router.get("/Users", checkRole(["admin"]), ViewsController.renderUser)
+
 
 export {router as viewsRouter};
 

@@ -1,8 +1,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <p><strong>{{error}}</strong></p>
 <p>{{error}}</p>
-Bienvenido:  {{ username.first_name }}<br/>
-Correo: {{ username.email }}<br/><br/>
 
 <a href="/api/sessions/logout">
   Cerrar Sesion
@@ -13,13 +12,16 @@ Correo: {{ username.email }}<br/><br/>
 {{#if payload}}
 {{#each payload }}
    <ul class="card-body">
-     Tittle:{{this.tittle}}<br>
-     Price:{{this.price}}<br>
-     Description:{{this.description}}<br>
-     Code:{{this.code}}<br>
-     Thumbnails:{{this.thumbnail}}<br>
-     Category:{{this.category}}<br>
-     <button class = "button_addCart" onclick="addCart('{{this.id}}', '{{this.stock}}', '{{this.description}}','{{this.code}}', '{{this.category}}', '{{this.thumbnails}}')">addCart</button> </ul>
+     tittle:{{this.tittle}}<br>
+     description:{{this.description}}<br>
+     code:{{this.code}}<br>
+     price:{{this.price}}<br>
+     status:{{this.status}}<br>
+     stock:{{this.stock}}<br>
+     category:{{this.category}}<br>
+     thumbnails:{{this.thumbnail}}<br>
+    
+     <button class = "button_addCart" onclick="addCart('{{this.id}}','{{this.tittle}}','{{this.description}}','{{this.code}}','{{this.price}}','{{this.status}}', '{{this.stock}}', '{{this.category}}', '{{this.thumbnails}}')">addCart</button> </ul>
    {{/each}}
   
    </div>
@@ -33,47 +35,110 @@ Correo: {{ username.email }}<br/><br/>
       <a href={{nextLink}}>Siguiente</a>
    {{/if}}
 
-  
 {{else}} 
 
-<h2>no hay productos</h2>  
+<h2>No hay productos</h2>  
 {{/if}}
 
 <script>
-const addCart = (productId, stock,description, code, thumbnails, category  )=>{
-    console.log("addcart", addCart)
 
-    const baseUrl = 'http://localhost:8080/api/carts';
-   
+  let carritoProductos = [];  
+  const addCart = (productId,tittle,description,code,price, status , stock, category, thumbnails)=>{
+
+    console.log("addcart", addCart)
+  
     const datosProducto = {
+     
       id:productId,
-      stock, 
+      tittle,
       description, 
       code, 
+      price,
+      status,
+      stock, 
       category, 
       thumbnails,  
     };
+     carritoProductos.push(datosProducto)
+     console.log("carritoProductos",carritoProductos)
+     mostrarCarritoEnInterfaz();
+    
+}; 
 
-    console.log("datosProducto", datosProducto)
-     fetch(baseUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(datosProducto),
- 
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("data", data)
-      const rutaLlamada = data.baseUrl;
-
-      console.log('Ruta para agregar al carrito:', rutaLlamada);
-      
-    })
-    .catch(error => {
-      console.error('Error al obtener la ruta:', error);
-    });
+const mostrarCarritoEnInterfaz = ()=>{
+  const contenedorProducto = document.querySelector(".conteinerProducto");
+  contenedorProducto.innerHTML = '';
+  carritoProductos.forEach(producto=>{
+    const productoHTML = `
+            <div >
+                <p> ${producto.thumbnails} - ${producto.tittle} - ${producto.price}  </p>
+            </div>
+        `;
+        contenedorProducto.innerHTML +=productoHTML;
+  });
 };
+// Asociar la función mostrarCarritoEnInterfaz al cargar la página
+document.addEventListener('DOMContentLoaded', mostrarCarritoEnInterfaz);
+document.addEventListener('DOMContentLoaded', ()=>{
+const botonFinCompra = document.querySelector(".botonFinCompra");
+botonFinCompra.addEventListener('click', ()=>{
+  console.log("click")
+  
+    const baseUrl = '/api/carts';
+    fetch(baseUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(carritoProductos),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Productos enviados al carrito:', data);
+            // Puedes realizar cualquier acción adicional después de la compra
+            // Redirigir o mostrar un mensaje de éxito, etc.
+           window.location.assign('/api/carts');
+        })
+        .catch(error => {
+            console.error('Error al enviar productos al carrito:', error);
+        });
+});
 
-</script>
+});
+
+    
+</script>    
+
+ <div>  
+      <h3 class ="carrito">Carrito de compras</h3>  
+      <table class="tableHeadCard">
+        <thead>
+          <tr>
+             <th>Imagen</th>
+             <th>Nombre</th>
+             <th>Precio</th>
+             <th>Cantidad</th>
+          </tr>
+        </thead>
+     </table>
+        
+     </div>
+</div>
+
+
+<div class="conteinerProducto"></div>
+
+    <article class="row py-lg-4 py-3 tarj_tot">
+      <div class="div_tot">
+          <p class= "item-total mb-0 "  >TOTAL</p>
+          <div class="tarjTotal"></div>
+          <button class="item btn btn-light botonFinCompra"  type="button">COMPRAR</button>
+      </div>
+    </article>
+    <article class="conteinershow"></article>
+     <br> 
+ {{!-- let total=0;
+  for (let i = 0; i < carritoProductos.length; i++) {
+    total+=carritoProductos[i].stock*1500;
+    } 
+    alert(`Total a pagar es de $${total}`); --}}

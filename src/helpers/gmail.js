@@ -30,3 +30,25 @@ export const recoveryEmail = async (req, userEmail, emailToken)=>{
    }
 }
 
+export const notifEmail = async (req, userEmail)=>{
+    try {
+     const domain =`${req.protocol}://${req.get('host')}`;
+     const link = `${domain}/api/sessions/signup`;
+     //enviar correo en el enlace
+     await gmailTransporter.sendMail({
+         from:"VespaResto&Bar",
+         to:userEmail,
+         subject:"Session expirada",
+         html: `
+         <p>Restablece tu session</p>
+         <p>Da click en este enlace:<a href=${link}>Logearte<a/></p>` 
+     });
+ 
+ 
+     
+    } catch (error) {
+     console.log(`Hubo un error  ${error.message}`)
+    }
+ }
+ 
+

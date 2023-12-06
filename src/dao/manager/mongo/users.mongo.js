@@ -4,9 +4,9 @@ export class UsersMongo{
     constructor(){
         this.model = userModel;
     }
-    async get(user){
+    async get(){
         try {
-            const userGet =  await this.model.find(user);
+            const userGet =  await this.model.find();
             console.log("userCreated", userGet)
             return userGet;
             
@@ -61,7 +61,24 @@ async upDate (userId,newUserInfo){
          return userUpDate;
        } catch (error) {
         return error;
-     }
-    
-  } 
+     };
+}; 
+
+async upDateUsers(condition, updatedFields) {
+    try {
+        const usersUpdated = await this.model.updateMany(condition, updatedFields, { new: true });
+        return usersUpdated;
+    } catch (error) {
+        return error;
+    }
+}
+
+  async delete (userId){
+    try {
+        const userDelete = await this.model.findByIdAndDelete(userId);
+        return userDelete;
+    } catch (error) {
+        return error;
+    }
+  }
 };

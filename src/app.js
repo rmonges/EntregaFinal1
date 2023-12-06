@@ -32,6 +32,11 @@ import  cluster  from "cluster";
 import os from "os";
 import { usersRouter } from "./routes/users.routes.js";
 
+
+import handlebarsHelpers from 'handlebars-helpers';
+
+
+
 //import { mockingRouter } from "./routes/mocking.routes.js";
 
 // const numsCores = os.cpus().length;
@@ -41,26 +46,6 @@ import { usersRouter } from "./routes/users.routes.js";
 const app = express();
 const port = config.server.port || 8080;
 
-//console.log(cluster.isPrimary);
-
-// if(cluster.isPrimary){
-//     console.log(`soy el proceso ppl ${process.pid}`)
-//     for(let i=0;i<numsCores;i++){
-//         cluster.fork(); //genero un nuevo nodo; 
-//     }
-//     cluster.on("exit", (worker)=>{
-//         console.log(`este proceso ${worker.process.pid} fallo`)
-//         cluster.fork();
-//     })
-    
-// }else{
-//    // const httpServer = app.listen(port,()=>console.log(`El servidor esta escuchando en el puerto ${port}, process ${process.pid}`));
-
-//     console.log(`soy el proceso worked ${process.pid}`)
-//     app.get("/cluster", (req, res)=>{
-//         res.send(`resondio el proceso ${process.pid}`)
-//     })
-// }
 
 
 app.use(express.json())//middleware para recibir jsons
@@ -91,7 +76,13 @@ const httpServer = app.listen(port,()=>console.log(`El servidor esta escuchando 
 
 //connectDB();
 //RUTAS DE HANDLERBARS
-app.engine('.hbs', handlebars.engine({extname: '.hbs'}));//inicia motor plantilla handlerbars
+
+
+const hbs = handlebars.create({
+    extname: '.hbs',
+    helpers: handlebarsHelpers(),
+  });
+app.engine('.hbs',hbs.engine);//inicia motor plantilla handlerbars
 app.set('view engine', '.hbs');//motor a utilizar
 app.set('views', path.join(__dirname, './views'));
 

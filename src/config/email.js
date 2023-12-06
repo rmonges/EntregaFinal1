@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 const adminEmail ="robertoamonges@gmail.com";
-const adminPass= "uvzppaoqdlbmttxc";
+const adminPass= "ayyswnfqobefneso"//"uvzppaoqdlbmttxc";
 
 const transporter = nodemailer.createTransport({
     host:"smtp.gmail.com",
@@ -16,4 +16,4 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-export {transporter }
+export {transporter, adminEmail, adminPass }

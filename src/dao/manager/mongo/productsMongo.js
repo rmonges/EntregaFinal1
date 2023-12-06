@@ -79,24 +79,33 @@ async upDateProduct  (id, updatedProd) {
         return undefined
     }
   }  
-async deleteProduct(id) {
+  async deleteProduct(id) {
     try {
-        console.log("id", id)
+        console.log("id", id);
         if (!id) {
             throw new Error("ID no definido para eliminar el producto");
         }
-        const product = await this.model.findById(id);
-        console.log("productoeliminadodelproductmongo", product)
-        if(product){
-           await this.model.findByIdAndDelete(id);
-           console.log("producto Eliminado")
+      const product = await this.model.findById(id);
+
+        if (product) {
+            const deletedProduct = await this.model.findByIdAndDelete(id);
+
+            if (deletedProduct) {
+                console.log("Producto eliminado:", deletedProduct);
+                return "Producto eliminado";
+            } else {
+                console.log("El producto no existe");
+                return "El producto no existe";
+            }
+        } else {
+            console.log("Producto no encontrado");
+            return "Producto no encontrado";
         }
-         return "mascota eliminada"; 
-   } catch (err) {
+    } catch (err) {
         console.error("Error al eliminar el producto:", err);
+        throw err; // Re-lanzar el error para que sea manejado por el llamador
     }
 }
-
         
     
 };  

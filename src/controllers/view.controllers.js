@@ -1,6 +1,7 @@
 import { checkUserAutentificated, showLoginView } from "../middlerwares/auth.js";
 import { productsDao } from "../../src/dao/factory.js";
 import  { cartsDao } from "../../src/dao/factory.js";
+import { UsersService } from "../services/usersService.js";
 export class ViewsController{
       static renderHome = async(req, res)=>{
         try {
@@ -46,5 +47,29 @@ export class ViewsController{
           const token = req.query.token;
           res.render("reset-password", {token});
         };
-       
+        static renderUser = async (req, res)=>{
+          try {
+            const users = await UsersService.getUser();
+ 
+            const simplifiedUsers = users.map(user => ({
+                first_name: user.first_name,
+                email: user.email,
+                rol: user.role,   
+                id: user._id.toString()
+                
+            }));
+            
+            const data = {
+                title: 'Usuarios Autorizados',
+                users: simplifiedUsers,
+            };
+            console.log(data)
+          // Renderizar la plantilla 'Users' y pasar los datos
+            res.render("Users", data);
+          } catch (error) {
+            res.status(500).send('Error al renderizar la plantilla de usuarios.');
+          }
+         
+            
+          };     
       }

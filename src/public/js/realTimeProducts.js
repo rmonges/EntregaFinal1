@@ -8,8 +8,7 @@ socketClient.on("productList", (obj)=>{
 
   function updateProducts(products){
       const contenedor= document.getElementById("list-products");
-      console.log("conteiner", contenedor);
-      console.log("conteinerrrrrr", products);
+      
       let productos ="";
       
       products.forEach((product) => {
@@ -24,7 +23,7 @@ socketClient.on("productList", (obj)=>{
             <li>stock:${product.stock}</li>
             <li>category:${product.category}</li>
             <li>thumbnail:${product.thumbnail}</li>
-            <li>id: ${product._id}</li>
+            <li>_id: ${product._id}</li>
           </ul>
           <button type="submit" id="btncomp" class="btncomp">Agregar al Carrito</button>
         </div>
@@ -69,7 +68,7 @@ form.addEventListener("submit", (e)=>{
 
 document.getElementById("delete-btn").addEventListener("click", function () {
     const deleteidinput = document.getElementById("id-prod");
-    const deleteid = parseInt(deleteidinput.value);
+    const deleteid = deleteidinput.value.trim();
     console.log("delete", deleteid)
     socketClient.emit("deleteProduct", deleteid);
     deleteidinput.value = "";
