@@ -1,4 +1,62 @@
- <h1>Usuarios Autorizados</h1>
+
+ 
+ 
+ <h1 class="h2User">Usuarios Autorizados</h1>
+
+{{#if users.length}}
+  <table class="formulario1">
+    <tr class="tableUser">
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Acciones</th>
+    </tr>
+    {{#each users}}
+      <tr>
+        <td>{{this.first_name}}</td>
+        <td>{{this.email}}</td>
+        <td>{{this.rol}}</td>
+        <td>
+          <form action="/api/users/delete/{{this.id}}?_method=DELETE" method="POST">
+          <input type="hidden" name="_method" value="DELETE">
+          <button type="submit">delete</button>
+          </form>
+         {{#if (not (eq this.rol 'admin'))}}
+            <form action="/api/users/premium/{{this.id}}" method="post">
+              <input type="hidden" name="_method" value="PUT">
+              <input type="submit" value="Cambiar Rol">
+            </form>
+          {{/if}}
+        </td>
+      </tr>
+    {{/each}}
+  </table>
+{{else}}
+  <h2>No hay usuarios</h2>
+{{/if}}
+
+<script>
+  async function eliminarUsuario(userId) {
+    try {
+      const response = await fetch(`/api/users/delete/${userId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        await 
+        console.log('Usuario eliminado correctamente');
+      } else {
+        console.error('Error al eliminar usuario:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error al eliminar usuario:', error);
+    }
+  }
+
+ 
+</script>
+ 
+ {{!-- <h1>Usuarios Autorizados</h1>
 
 {{#if users.length}}
   <table class="tabla-usuarios">
@@ -18,12 +76,7 @@
             <input type="hidden" name="_method" value="DELETE">
             <input type="submit" value="Eliminar">
           </form>
-          {{#if (not (eq this.rol 'admin'))}}
-            <form action="/api/users/premium/{{this.id}}" method="post">
-              <input type="hidden" name="_method" value="PUT">
-              <input type="submit" value="Cambiar Rol">
-            </form>
-          {{/if}}
+          
         </td>
       </tr>
     {{/each}}
@@ -31,7 +84,7 @@
 {{else}}
   <h2>No hay usuarios</h2>
 {{/if}}
- 
+  --}}
  
  {{!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" /> --}}

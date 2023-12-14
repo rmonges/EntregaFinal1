@@ -220,16 +220,5 @@ export class CartsController {
     }
  };
 
-//  static putProducts  = async (req, res)=>{
-//     const { productId } =req.pramas;
-//     const { query } =req.query;
-//     const body = req.body;
-
-//     const productSeach = await cartsModel.findById(productId);
-    
-// if(!query){
-//     res.status(404).json({mensaje:"debes enviar un query"});
-//  }else if(productSeach && query === "add"){
-//     body.quantity = body.quantity + 1;
-//  }   
+ 
  }

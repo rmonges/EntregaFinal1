@@ -253,6 +253,17 @@
         display: flex;
         flex-direction: row;
     }
+    .tableUser{
+       border: rgb(253, 248, 248);
+       font-weight: bold;
+       border-radius: 0.5em;
+       box-shadow: inset 1px 1px 22px 4px;
+
+    }
+    .cartcard{
+     margin-right: 3rem;
+        word-spacing: 2rem;
+    }
     .formulario1{
         max-width: 25em;
         padding: 1.3em;
@@ -263,6 +274,14 @@
         box-shadow: inset 1px 1px 22px 4px;
 
         
+    }
+    .h2User{
+        color: #e1e1eb;
+        font-size: 3rem;
+        font-family: 'Playfair Display', serif;
+        text-align: center;
+        margin: 3rem;
+
     }
     body{
     height: 100%;

@@ -71,7 +71,7 @@ const mostrarCarritoEnInterfaz = ()=>{
   carritoProductos.forEach(producto=>{
     const productoHTML = `
             <div >
-                <p> ${producto.thumbnails} - ${producto.tittle} - ${producto.price}  </p>
+                <p class="cartcard"> ${producto.thumbnails} - ${producto.tittle} - ${producto.price}  </p>
             </div>
         `;
         contenedorProducto.innerHTML +=productoHTML;

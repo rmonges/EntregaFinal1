@@ -12,7 +12,7 @@ export class CartsService {
         return await cartsService.addCart();
     };
     static getCarts = async ()=>{
-       return await cartsService.getAll();
+       return await cartsDao.getAll();
     };
     static prodPopulateCid = async (cartId)=>{
         return await cartsModel.findById(cartId).populate({

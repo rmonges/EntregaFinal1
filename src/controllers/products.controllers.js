@@ -2,6 +2,7 @@ import { ProductsService } from "../services/products.services.js";
 import { productsDao } from "../dao/factory.js";
 import { productsModel } from "../dao/models/products.model.js";
 import { cartsService } from "./carts.controllers.js";
+import { transporter, adminEmail } from '../config/email.js';
 
 export class ProductsController{
      static getProducts = async (req, res)=>{
@@ -65,9 +66,21 @@ export class ProductsController{
             const productId= req.params.pid;
             const product = await ProductsService.getpid(productId);
             console.log("productdelProduct", product)
+            console.log("roleuserdel", req.user.email)
             //validamos el usuario usuario premium y es el creador del producto puede borrar y si es admin tambien
             if((req.user.role === "premium" && product.owner.toString() === req.user._id.toString()) || (req.user.role ==="admin")){
+               
                await ProductsService.delProduct(productId);
+               if (req.user.role === 'premium') {
+                const mailOptions = {
+                  from: adminEmail,
+                  to: req.user.email,
+                  subject: 'Producto eliminado',
+                  text: `El producto ${product.name} ha sido eliminado.`,
+                };
+      
+                await transporter.sendMail(mailOptions);
+              }
                res.json( {status:"succes", message:"producto eliminado correctamente"});
             }else{
                  return res.json( {status:"error", message:"no tienes permisos"}) 

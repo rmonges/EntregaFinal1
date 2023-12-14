@@ -6,6 +6,7 @@ import githubStrategy from "passport-github2"
 import { config } from "./config.js";
 import { UsersService } from "../services/usersService.js";
 
+
 export const initializaPassport = ()=>{//creamos estrategias
     passport.use("signupStrategy", new LocalStrategy(
     {

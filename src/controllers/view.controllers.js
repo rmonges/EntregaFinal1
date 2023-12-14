@@ -2,6 +2,7 @@ import { checkUserAutentificated, showLoginView } from "../middlerwares/auth.js"
 import { productsDao } from "../../src/dao/factory.js";
 import  { cartsDao } from "../../src/dao/factory.js";
 import { UsersService } from "../services/usersService.js";
+import { cartsService } from "./carts.controllers.js";
 export class ViewsController{
       static renderHome = async(req, res)=>{
         try {
@@ -30,8 +31,8 @@ export class ViewsController{
         static renderMessages = (req, res)=>{
           res.render("messages")
          };
-        static renderCarts = (req, res)=>{
-          res.render("carts");
+        static renderCarts = async (req, res)=>{
+          res.render("carts");     
           }; 
         static renderLogings = (req, res)=>{
           res.redirect("/login");
@@ -71,5 +72,15 @@ export class ViewsController{
           }
          
             
-          };     
+          };    
+          static renderCartsView = async (req, res) => {
+            try {
+              // const carritoData = await cartsService.getCarts();
+              // console.log("carritoData", carritoData); 
+              res.render("carts");
+            } catch (error) {
+              res.status(500).send('Error al renderizar la vista del carrito.');
+            }
+          };
+        
       }

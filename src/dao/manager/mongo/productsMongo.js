@@ -67,13 +67,13 @@ async getById(id){
 };
 
 
-async upDateProduct  (id, updatedProd) {
+async upDateProduct (id, updatedProd) {
     try {
-        const productById = await this.model.findByIdAndUpdate(id, updatedProd,{new: true});
+        const productById = await this.model.findByIdAndUpdate(id, updatedProd,{new: true});//me lo devuelve a la bd actualizado solo cuando se usa find by id andupdate
         if(!productById){
             throw new Error ("el producto no existe") 
         }
-            return "producto actualizado"
+            return productById;
        } catch (error) {
         console.error(error.message);
         return undefined

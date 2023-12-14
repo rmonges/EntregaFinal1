@@ -31,9 +31,10 @@ import { loggersRouter } from "./routes/logger.routes.js";
 import  cluster  from "cluster";
 import os from "os";
 import { usersRouter } from "./routes/users.routes.js";
-
+import methodOverride from 'method-override';
 
 import handlebarsHelpers from 'handlebars-helpers';
+import { ProductsService } from "./services/products.services.js";
 
 
 
@@ -51,6 +52,7 @@ const port = config.server.port || 8080;
 app.use(express.json())//middleware para recibir jsons
 app.use(express.static(path.join(__dirname,"/public")));//path es una libreria que me permite unir rutas, entro la ruta dirname "src"=>public
 app.use(express.urlencoded({extended:true}));
+app.use(methodOverride('_method'));
 app.use(cookieParser("securitykey"));
 // const fileStorage = FileStore(session);
 app.use(session({ 
@@ -101,10 +103,7 @@ io.on("connection", async (socket)=>{
     io.emit("message", messages);
     })
     
-
-    
-
-     const productList = await productsDao.getProduct({});
+     const productList = await ProductsService.getProducts({});
      const cartList = await cartsService.getAll({});
 
     //RECIBIR EVENTO/DATOS DEL CLIENTE
@@ -126,7 +125,7 @@ io.on("connection", async (socket)=>{
 socket.on("deleteProduct", async (id)=>{
     console.log("id:", id)
     await productsDao.deleteProduct(id);
-    const productList = await productsDao.getProduct({});
+    const productList = await ProductsService.getProducts({});
     socket.emit("productList", productList);
 
  })

@@ -82,9 +82,8 @@ export class UsersController {
         try {
             const users = await UsersService.getUser();
             const timeNow = new Date();
-            const limiteTiempo = 2 * 24 * 60 * 60 * 1000; // 2 días en milisegundos
+            const limiteTiempo = 2 * 24 * 60 * 60 * 1000; 
     
-            // Filtra los usuarios que no se han conectado en los últimos 2 días
             const usuariosDesconectados = users.filter(user => {
                 if (user.last_connection) {
                     const lastConnectionTime = new Date(user.last_connection);

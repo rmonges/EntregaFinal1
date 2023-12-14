@@ -66,9 +66,10 @@ nextLink: result.hasNextPage ?  `${baseUrl.replace(`page=${result.page}`,`page=$
  })
  router.get("/realTimeProducts", ViewsController.renderRealtimeProducts)
  router.get("/messages",ViewsController.renderMessages);
- router.get("/carts",ViewsController.renderCarts );
+ //router.get("/carts",ViewsController.renderCarts );
  router.get("/home", ViewsController.renderHome);
  router.get("",ViewsController.renderLogings )
+ router.get("/carts",ViewsController.renderCartsView  );
 
 
  //Rutas sessions

@@ -27,17 +27,13 @@ export class UsersMongo{
 
      async getById(userId){
         try {
-            const user =  await this.model.findById(userId).lean();
-            if(user){
-                return user;
-            }else{ 
-                throw new Error ("el usuario no existe");
-            }
-            
+           const user = await this.model.findById(userId).lean();
+           return user;  // Devuelve el usuario o null si no se encuentra
         } catch (error) {
-            throw error;
+           console.error(`Error en getById: ${error.message}`);
+           throw error;
         }
-     };
+     }
      async getByEmail(userEmail){
         try {
             const user =  await this.model.findOne({email:userEmail}).lean();

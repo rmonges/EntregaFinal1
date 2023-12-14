@@ -2,26 +2,15 @@
 <link rel="stylesheet" href="css/estiles.css">
 <script src="/js/realTimeProducts.js"></script>
 
-<form action="/api/carts/cartCreated" method="post">
+
   <h1>Carrito de Compras</h1>
-  <input type="text" placeholder="Ingrese el nombre" name="name"/>
-  <br/></br/>
+
+
+{{#each carritoProductos}}
+  <div class="producto">
+    <p>{{this.tittle}} - {{this.price}}</p>
+  </div>
+{{/each}}
+  
   <button type="submit">Comprar</button>
 </form>
-{{!-- <article class="main__contenedor"  id="list-carts">
-
-</article>
-  
-      <h3 class ="carrito">Carrito de compras</h3>
-      <table id= "lista-carrito" class="table">
-        <thead>
-          <tr>
-            {{#each carts}}
-             <th>Products:</th>
-             
-             {{/each}}
-          </tr>
-        </thead>
-     </table>
-  </div>; --}}
-
