@@ -46,7 +46,7 @@ import { ProductsService } from "./services/products.services.js";
 //creamos la aplicacion del servidor
 const app = express();
 const port = config.server.port || 8080;
-
+connectDB();
 
 
 app.use(express.json())//middleware para recibir jsons
