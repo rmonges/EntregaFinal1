@@ -17,6 +17,8 @@ let cartsDao;
 let userDao;
 let ticketsDao;
 
+console.log('Persistence:', persistence);
+
 switch (persistence) {
     case "mongo":
         const {connectDB} = await import ("../config/dbConnection.js");

@@ -1,7 +1,9 @@
 import { userDao } from "../dao/factory.js";
 export class UsersService {
     static getUserByEmail = async (username)=>{
-     return await userDao.getByEmail(username);
+     const userEmail = await userDao.getByEmail(username);
+     console.log("userEmailUserService", userEmail);
+     return userEmail;
     };
     static userCreated = async (newUser)=>{
         return await userDao.save(newUser);
