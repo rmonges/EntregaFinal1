@@ -104,8 +104,8 @@ io.on("connection", async (socket)=>{
     io.emit("message", messages);
     })
     
-     const productList = await ProductsService.getProducts({});
-     const cartList = await cartsService.getAll({});
+     const productList = await ProductsService.getProducts();
+     const cartList = await cartsService.getAll();
 
     //RECIBIR EVENTO/DATOS DEL CLIENTE
     io.emit("cartList", cartList);
@@ -115,7 +115,7 @@ io.on("connection", async (socket)=>{
     //console.log("addProd", obj)
  await productsDao.addProduct(obj)
  console.log("addProd", obj)
-  const productList = await productsDao.getProduct({})
+  const productList = await productsDao.getProduct()
 
   io.emit("productList", productList)
 
@@ -126,7 +126,7 @@ io.on("connection", async (socket)=>{
 socket.on("deleteProduct", async (id)=>{
     console.log("id:", id)
     await productsDao.deleteProduct(id);
-    const productList = await ProductsService.getProducts({});
+    const productList = await ProductsService.getProducts();
     socket.emit("productList", productList);
 
  })

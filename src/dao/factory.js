@@ -34,7 +34,11 @@ switch (persistence) {
         userDao = new UsersMongo();
         const {TicketsMongo} = await import("./manager/mongo/tickets.mongo.js")
         ticketsDao = new TicketsMongo();
-        
+        console.log('contactsDao:', contactsDao); // Agrega estas líneas
+        console.log('productsDao:', productsDao);
+        console.log('cartsDao:', cartsDao);
+        console.log('userDao:', userDao);
+        console.log('ticketsDao:', ticketsDao);
         break;
     case "memory":
         const {ContactsManagerMemory} = await import("./memory/contacts.memory.js");
@@ -43,6 +47,7 @@ switch (persistence) {
         contactsDao = new ContactsManagerMemory();
         productsDao = new ProductsManagerMemory();  
         ticketsDao = new TicketsManagerMemory();
+        
         break;
     
 
