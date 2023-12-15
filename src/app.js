@@ -120,7 +120,7 @@ io.on("connection", (socket) => {
     socket.on("deleteProduct", async (id) => {
       console.log("id:", id);
       await productsDao.deleteProduct(id);
-      const updatedProductList = await productsDao.getProduct();
+      const updatedProductList = await ProductsService.getProducts();
       socket.emit("productList", updatedProductList);
     });
   })();
