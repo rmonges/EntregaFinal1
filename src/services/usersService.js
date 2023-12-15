@@ -1,7 +1,8 @@
 import { userDao } from "../dao/factory.js";
+import { UsersMongo } from "../dao/manager/mongo/users.mongo.js";
 export class UsersService {
     static getUserByEmail = async (username)=>{
-     const userEmail = await userDao.getByEmail(username);
+     const userEmail = await UsersMongo.getByEmail(username);
      console.log("userEmailUserService", userEmail);
      return userEmail;
     };
