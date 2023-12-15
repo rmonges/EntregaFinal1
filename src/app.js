@@ -104,7 +104,7 @@ io.on("connection", (socket) => {
         io.emit("message", messages);
       });
   
-      const productList = await productsDao.getProduct();
+      const productList = await ProductsService.getProducts();
       const cartList = await cartsService.getAll();
 
     //RECIBIR EVENTO/DATOS DEL CLIENTE
@@ -113,7 +113,7 @@ io.on("connection", (socket) => {
 
  socket.on("addProduct", async (obj) => {
       await productsDao.addProduct(obj);
-      const updatedProductList = await productsDao.getProduct();
+      const updatedProductList = await ProductsService.getProducts();
       io.emit("productList", updatedProductList);
     });
 
