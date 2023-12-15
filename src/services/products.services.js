@@ -4,7 +4,7 @@ import { productsModel } from "../dao/models/products.model.js";
 
 export class ProductsService {
     static getProducts =  async ()=>{
-        return await ProductsMongo.getProduct()
+        return await productsDao.getProduct()
     }; 
     static createProduct = async (productInfo)=>{
         return await productsDao.addProduct(productInfo);
