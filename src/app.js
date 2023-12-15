@@ -104,7 +104,7 @@ io.on("connection", async (socket)=>{
     io.emit("message", messages);
     })
     
-     const productList = await ProductsService.getProducts();
+     const productList = await productsDao.getProduct();
      const cartList = await cartsService.getAll();
 
     //RECIBIR EVENTO/DATOS DEL CLIENTE
