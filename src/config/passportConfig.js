@@ -51,7 +51,7 @@ export const initializaPassport = ()=>{//creamos estrategias
         async(username, password, done)=>{
            try {
                console.log("username52", username);
-                const user = await UsersService.getUserByEmail(username)
+                const user = await UsersMongo.getByEmail(username)
                  console.log("user loginstrategy",user)
               if(!user){
                 return done(null, false);
@@ -77,7 +77,7 @@ export const initializaPassport = ()=>{//creamos estrategias
       async(accesstoken, refreshToken, profile, done)=>{
         try {
          console.log("profile", profile); 
-         const user = await UsersService.getUserByEmail(profile.username)
+         const user = await UsersMongo.getByEmail(profile.username)
          if(!user){
            const newUser= {
              first_name: ' ',
