@@ -3,14 +3,15 @@
 <script src="/js/realTimeProducts.js"></script>
 
 
-  <h1>Carrito de Compras</h1>
+ <!-- En tu vista carts.handlebars -->
+<h1>Carrito de Compras</h1>
 
-
-{{#each carritoProductos}}
-  <div class="producto">
-    <p>{{this.tittle}} - {{this.price}}</p>
-  </div>
-{{/each}}
-  
-  <button type="submit">Comprar</button>
-</form>
+<div class="productos-en-carrito">  
+  {{#each productos}}
+    <div class="producto">
+      <p>{{this.tittle}}</p>
+      <p>Precio: {{this.price}}</p>
+      <!-- Agrega más campos según sea necesario -->
+    </div>
+  {{/each}}
+</div>

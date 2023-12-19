@@ -47,6 +47,6 @@ router.delete("/:cid", CartsController.deleteByCid);
 
 router.delete("/:cid/products",CartsController.deleteCidProducts);
 router.post("/:cid/purchase", TicketController.createTicket);
-
+router.get("/", CartsController.showCart);
 
 export {router as cartsRouter};

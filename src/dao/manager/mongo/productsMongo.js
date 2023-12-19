@@ -103,11 +103,17 @@ async upDateProduct (id, updatedProd) {
         }
     } catch (err) {
         console.error("Error al eliminar el producto:", err);
-        throw err; // Re-lanzar el error para que sea manejado por el llamador
+        throw error; // Re-lanzar el error para que sea manejado por el llamador
     }
 }
-        
-    
-};  
+    async getProductosByIds(ids) {
+    try {
+        const productos = await this.model.findById(ids);
+        return productos;
+    } catch (error) {
+        console.error(error.message);
+        return undefined
+       }
+    };
 
-
+}

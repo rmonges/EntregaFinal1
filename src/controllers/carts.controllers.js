@@ -219,6 +219,17 @@ export class CartsController {
         res.json({ status: "error", message: "error" });
     }
  };
+    static showCart = async (req, res)=>{
+        try {
+            const listaProductos = obtenerProductosDelCarrito(req.query.ids);
+            console.log("listaProductos", listaProductos)
+            res.render("carts", {productos:listaProductos})
+        } catch (error) {
+            res.json({ status: "error", message: "error" });
+        }
+        
+
+    }
 
  
  }

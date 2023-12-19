@@ -26,5 +26,15 @@ export class ProductsService {
     static delProduct = async (productId)=>{
         return await productsDao.deleteProduct(productId);
     }
+    static  obtenerProductosDelCarrito = async (ids) => {
+        try {
+          const arrayIds = Array.isArray(ids) ? ids : [ids];
+          const productos = await productsDao.getProductosByIds({ _id: { $in: arrayIds } });
+          return productos;
+        } catch (error) {
+          console.error('Error al obtener productos del carrito:', error);
+          throw error;
+        }
+    };
     
 }
