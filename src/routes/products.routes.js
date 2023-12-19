@@ -30,7 +30,7 @@ router.get("/:pid", ProductsController.getpid );
 router.get("/", async(req, res)=>{
     try {
         const limit= req.query.limit;
-        const products = await productsDao.getProduct();
+        const products = await ProductsController.getProducts();
       
         if(limit>0){
             const limits = products.filter(product =>product.id<=limit)

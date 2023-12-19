@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha test/dto.test.js",
+    "test": "mocha test/passport.test.js",
     "start": "node src/app.js",
     "update-products": "node src/scripts/mongo.scripts.js"
   },

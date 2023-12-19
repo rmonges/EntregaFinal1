@@ -5,7 +5,7 @@ import {userDao} from "../dao/factory.js";
 import githubStrategy from "passport-github2"
 import { config } from "./config.js";
 import { UsersService } from "../services/usersService.js";
-
+import { UsersMongo } from "../dao/manager/mongo/users.mongo.js";
 
 export const initializaPassport = ()=>{//creamos estrategias
     passport.use("signupStrategy", new LocalStrategy(
@@ -18,7 +18,8 @@ export const initializaPassport = ()=>{//creamos estrategias
        try {
           const {first_name, last_name, age} = req.body;
           //vericar si existe usuraio
-          const user = await UsersService.getUserByEmail(username);
+          console.log("username", username);
+          const user = await UsersMongo.getByEmail(username);
           if(user){
             return done(null, false);//existe usuario
           }
@@ -49,6 +50,7 @@ export const initializaPassport = ()=>{//creamos estrategias
    
         async(username, password, done)=>{
            try {
+               console.log("username52", username);
                 const user = await UsersService.getUserByEmail(username)
                  console.log("user loginstrategy",user)
               if(!user){
@@ -111,3 +113,4 @@ export const initializaPassport = ()=>{//creamos estrategias
     }))
 }
 
+  

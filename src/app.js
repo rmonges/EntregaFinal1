@@ -1,130 +1,124 @@
-import express from "express";
-import { __dirname  } from "./utils.js";
-import path from "path";
-import { productsRouter } from "./routes/products.routes.js";
-import { cartsRouter } from "./routes/carts.routes.js";
-import handlebars, { engine } from "express-handlebars";
-import { viewsRouter } from "./routes/views.routes.js";
-import { Server } from "socket.io";
-import { setTimeout } from "timers";
-import { ProductManager } from "./dao/manager/productManager.js";
-import mongoose from "mongoose";
-import { messagesRouter } from "./routes/messages.routes.js";
-import { CartsManager } from "./dao/manager/fileSystem/cartsFiles.js";
-import { config }  from "./config/config.js"
-import { connectDB } from "./config/dbConnection.js";
-import { messagesModel } from "./dao/models/messages.model.js";
-import { cookiesRouter } from "./routes/cookie.routes.js";
-import cookieParser from "cookie-parser";
-import session from "express-session";
-import { sessionsRouter } from "./routes/session.routes.js";
-import FileStore from "session-file-store";
-import MongoStore from "connect-mongo";
-import { initializaPassport } from "./config/passportConfig.js";
-import passport from "passport";
-import dotenv from "dotenv";
-import { productsDao } from "./dao/factory.js";
-import { contactsRouter } from "./routes/contacts.routes.js";
-import { transporter } from "./config/email.js";
-import { twilioClient, twilioPhone } from "./config/twilio.js"; 
-import { loggersRouter } from "./routes/logger.routes.js";
-import  cluster  from "cluster";
-import os from "os";
-import { usersRouter } from "./routes/users.routes.js";
-import methodOverride from 'method-override';
-
-import handlebarsHelpers from 'handlebars-helpers';
-import { ProductsService } from "./services/products.services.js";
-
+    import express from "express";
+    import { __dirname  } from "./utils.js";
+    import path from "path";
+    import { productsRouter } from "./routes/products.routes.js";
+    import { cartsRouter } from "./routes/carts.routes.js";
+    import handlebars, { engine } from "express-handlebars";
+    import { viewsRouter } from "./routes/views.routes.js";
+    import { Server } from "socket.io";
+    import { setTimeout } from "timers";
+    import { ProductManager } from "./dao/manager/productManager.js";
+    import mongoose from "mongoose";
+    import { messagesRouter } from "./routes/messages.routes.js";
+    import { CartsManager } from "./dao/manager/fileSystem/cartsFiles.js";
+    import { config }  from "./config/config.js"
+    import { connectDB } from "./config/dbConnection.js";
+    import { messagesModel } from "./dao/models/messages.model.js";
+    import { cookiesRouter } from "./routes/cookie.routes.js";
+    import cookieParser from "cookie-parser";
+    import session from "express-session";
+    import { sessionsRouter } from "./routes/session.routes.js";
+    import FileStore from "session-file-store";
+    import MongoStore from "connect-mongo";
+    import { initializaPassport } from "./config/passportConfig.js";
+    import passport from "passport";
+    import dotenv from "dotenv";
+    import { productsDao } from "./dao/factory.js";
+    import { contactsRouter } from "./routes/contacts.routes.js";
+    import { transporter } from "./config/email.js";
+    import { twilioClient, twilioPhone } from "./config/twilio.js"; 
+    import { loggersRouter } from "./routes/logger.routes.js";
+    import  cluster  from "cluster";
+    import os from "os";
+    import { usersRouter } from "./routes/users.routes.js";
+    import methodOverride from 'method-override';
+    import handlebarsHelpers from 'handlebars-helpers';
+    import { ProductsService } from "./services/products.services.js";
 
 
-//import { mockingRouter } from "./routes/mocking.routes.js";
-
-// const numsCores = os.cpus().length;
-// console.log(numsCores);
-//const port = 8080;//puerto de conexion, atravez del puerto recibo o envio informacion en mi computadora
-//creamos la aplicacion del servidor
-const app = express();
-const port = config.server.port || 8080;
-
-connectDB();
 
 
-app.use(express.json())//middleware para recibir jsons
-app.use(express.static(path.join(__dirname,"/public")));//path es una libreria que me permite unir rutas, entro la ruta dirname "src"=>public
-app.use(express.urlencoded({extended:true}));
-app.use(methodOverride('_method'));
-app.use(cookieParser("securitykey"));
-// const fileStorage = FileStore(session);
-app.use(session({ 
-    store: MongoStore.create ({//defimos en la conf de la sesiones donde el sitio donde vamos a manejar el almacenamiento de las sesiones 
-        mongoUrl:config.mongo.url,
-    }),
-    secret:'tu_secreto_aqui***', //cifra el id de a session dentro  del coockie
-    resave:true,//permite saber si el usuario tiene una sesion comenzada y lo archiva en algun lado
-    saveUninitialized:true//mantiene la info del usuario que inicio la session    
-}));
+    const app = express();
+    const port = config.server.port || 8080;
 
-//configuracion de passport 
-initializaPassport();//inicializamos todas las estrategias
-app.use(passport.initialize());//inicializamos todas las librerias
-app.use(passport.session());//a todos los usuarios le manejamos las sessiones con passport
-
-//levantar el servidor, l aplicacion va a estar pendiente de recibir peticiones,le indicamos el puerto por donde va a recibir la info
-//const productsDao = new ProductManager('products.json');
-const cartsService = new CartsManager('carts.json')
-
-//WEBSOCKET GUARDAMOS EL SERVIDOR HTTP EN UNA VARIABLE
-const httpServer = app.listen(port,()=>console.log(`El servidor esta escuchando en el puerto ${port}`));
-
-//connectDB();
-//RUTAS DE HANDLERBARS
+    connectDB();
 
 
-const hbs = handlebars.create({
-    extname: '.hbs',
-    helpers: handlebarsHelpers(),
-  });
-app.engine('.hbs',hbs.engine);//inicia motor plantilla handlerbars
-app.set('view engine', '.hbs');//motor a utilizar
-app.set('views', path.join(__dirname, './views'));
+    app.use(express.json())//middleware para recibir jsons
+    app.use(express.static(path.join(__dirname,"/public")));//path es una libreria que me permite unir rutas, entro la ruta dirname "src"=>public
+    app.use(express.urlencoded({extended:true}));
+    app.use(methodOverride('_method'));
+    app.use(cookieParser("securitykey"));
+    // const fileStorage = FileStore(session);
+    app.use(session({ 
+        store: MongoStore.create ({//defimos en la conf de la sesiones donde el sitio donde vamos a manejar el almacenamiento de las sesiones 
+            mongoUrl:config.mongo.url,
+        }),
+        secret:'tu_secreto_aqui***', //cifra el id de a session dentro  del coockie
+        resave:true,//permite saber si el usuario tiene una sesion comenzada y lo archiva en algun lado
+        saveUninitialized:true//mantiene la info del usuario que inicio la session    
+    }));
+
+    //configuracion de passport 
+    initializaPassport();//inicializamos todas las estrategias
+    app.use(passport.initialize());//inicializamos todas las librerias
+    app.use(passport.session());//a todos los usuarios le manejamos las sessiones con passport
+
+    //levantar el servidor, l aplicacion va a estar pendiente de recibir peticiones,le indicamos el puerto por donde va a recibir la info
+    //const productsDao = new ProductManager('products.json');
+    const cartsService = new CartsManager('carts.json')
+
+    //WEBSOCKET GUARDAMOS EL SERVIDOR HTTP EN UNA VARIABLE
+    const httpServer = app.listen(port,()=>console.log(`El servidor esta escuchando en el puerto ${port}`));
+
+    //connectDB();
+    //RUTAS DE HANDLERBARS
 
 
-//CREAMOS SERVIDO R DE WEB SOCKET
-const io = new Server(httpServer);//vinculamos el serv de webs al de http
-
-//creamos canal de comunicacion entre el servidor y el cliente
-let messages = [];
-io.on("connection", (socket) => {
-    (async () => {
-      socket.emit("message", messages);
-      socket.on("message", (data) => {
-        console.log("data", data);
-        messages.push(data);
-        io.emit("message", messages);
-      });
-  
-      const productList = await ProductsService.getProducts();
-      const cartList = await cartsService.getAll();
-
-    //RECIBIR EVENTO/DATOS DEL CLIENTE
-    io.emit("cartList", cartList);
-    io.emit("productList", productList);
-
- socket.on("addProduct", async (obj) => {
-      await productsDao.addProduct(obj);
-      const updatedProductList = await ProductsService.getProducts();
-      io.emit("productList", updatedProductList);
+    const hbs = handlebars.create({
+        extname: '.hbs',
+        helpers: handlebarsHelpers(),
     });
+    app.engine('.hbs',hbs.engine);//inicia motor plantilla handlerbars
+    app.set('view engine', '.hbs');//motor a utilizar
+    app.set('views', path.join(__dirname, './views'));
 
-    socket.on("deleteProduct", async (id) => {
-      console.log("id:", id);
-      await productsDao.deleteProduct(id);
-      const updatedProductList = await ProductsService.getProducts();
-      socket.emit("productList", updatedProductList);
+
+    //CREAMOS SERVIDO R DE WEB SOCKET
+    const io = new Server(httpServer);//vinculamos el serv de webs al de http
+
+    //creamos canal de comunicacion entre el servidor y el cliente
+    let messages = [];
+    io.on("connection", (socket) => {
+        (async () => {
+        socket.emit("message", messages);
+        socket.on("message", (data) => {
+            console.log("data", data);
+            messages.push(data);
+            io.emit("message", messages);
+        });
+    
+        const productList = await ProductsService.getProducts();
+        const cartList = await cartsService.getAll();
+
+        //RECIBIR EVENTO/DATOS DEL CLIENTE
+        io.emit("cartList", cartList);
+        io.emit("productList", productList);
+
+    socket.on("addProduct", async (obj) => {
+        await productsDao.addProduct(obj);
+        const updatedProductList = await ProductsService.getProducts();
+        io.emit("productList", updatedProductList);
+        });
+
+        socket.on("deleteProduct", async (id) => {
+        console.log("id:", id);
+        await productsDao.deleteProduct(id);
+        const updatedProductList = await ProductsService.getProducts();
+        socket.emit("productList", updatedProductList);
+        });
+    })();
     });
-  })();
-});
 
 
 const emailTemplate = `<div>
