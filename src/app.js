@@ -78,6 +78,8 @@
     const hbs = handlebars.create({
         extname: '.hbs',
         helpers: handlebarsHelpers(),
+        allowProtoMethodsByDefault: true,
+        allowProtoPropertiesByDefault: true,
     });
     app.engine('.hbs',hbs.engine);//inicia motor plantilla handlerbars
     app.set('view engine', '.hbs');//motor a utilizar

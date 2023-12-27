@@ -1,110 +1,127 @@
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <p><strong>{{error}}</strong></p>
-  <p>{{error}}</p>
+<p><strong>{{error}}</strong></p>
+<p>{{error}}</p>
 
-  <a href="/api/sessions/logout">
-    Cerrar Sesion
-  </a>
-  <h1 class = "h2del">Lista de Productos</h1>
-  <div class="main__contenedor">
+<a href="/api/sessions/logout">
+  Cerrar Sesion
+</a>
+<h1 class="h2del">Lista de Productos</h1>
+<div class="main__contenedor">
 
   {{#if payload}}
   {{#each payload }}
-    <ul class="card-body">
-      {{this.tittle}}<br>
-      {{this.description}}<br>
-      price:{{this.price}}<br>
-      stock:{{this.stock}}<br>
-      {{this.thumbnail}}<br>
-      <button class = "button_addCart" onclick="addCart('{{this.id}}','{{this.tittle}}','{{this.description}}','{{this.code}}','{{this.price}}','{{this.status}}', '{{this.stock}}', '{{this.category}}', '{{this.thumbnails}}')">addCart</button> </ul>
-        
-    {{/each}}
-    
-    </div>
-    {{#if hasPrevPage}}
-        <a href={{prevLink}}>Anterior</a> 
-    {{/if}}  
+  <ul class="card-body">
+    {{this.tittle}}<br>
+    {{this.description}}<br>
+    {{this.price}}<br>
+    {{this.stock}}<br>
+    {{this.thumbnail}}<br>
+    <button class="button_addCart" onclick="addCart('{{this.id}}','{{this.tittle}}','{{this.description}}','{{this.code}}','{{this.price}}','{{this.status}}', '{{this.stock}}', '{{this.category}}', '{{this.thumbnails}}')">addCart</button> </ul>
 
-    {{page}}
+  {{/each}}
 
-    {{#if hasNextPage}}
-        <a href={{nextLink}}>Siguiente</a>
-    {{/if}}
+</div>
+{{#if hasPrevPage}}
+<a href={{prevLink}}>Anterior</a>
+{{/if}}
 
-  {{else}} 
+{{page}}
 
-  <h2>No hay productos</h2>  
-  {{/if}}
+{{#if hasNextPage}}
+<a href={{nextLink}}>Siguiente</a>
+{{/if}}
 
-  <script>
+{{else}}
 
-    let carritoProductos = [];  
-    const addCart = (productId,tittle,description,code,price, status , stock, category, thumbnails)=>{
+<h2>No hay productos</h2>
+{{/if}}
 
-      console.log("addcart", addCart)
-    
-      const datosProducto = {
-      
-        id:productId,
-        tittle,
-        description, 
-        code, 
-        price,
-        status,
-        stock, 
-        category, 
-        thumbnails,  
-      };
-      carritoProductos.push(datosProducto)
-      console.log("carritoProductos",carritoProductos)
-      mostrarCarritoEnInterfaz();
-      
-  }; 
+</div>
+
+<script>
+  let carritoProductos = [];
+
+  const addCart = (productId, tittle, description, code, price, status, stock, category, thumbnails) => {
+    console.log("addcart", addCart);
+    const datosProducto = {
+      id: productId,
+      tittle,
+      description,
+      code,
+      price,
+      status,
+      stock,
+      category,
+      thumbnails,
+    };
+    carritoProductos.push(datosProducto);
+    mostrarCarritoEnInterfaz();
+    console.log("carritoProducts", carritoProductos)
+  };
 
   const mostrarCarritoEnInterfaz = () => {
     const contenedorProducto = document.querySelector(".conteinerProducto");
+    if (!contenedorProducto) {
+
+        return;
+    }
+
     contenedorProducto.innerHTML = '';
     carritoProductos.forEach(producto => {
-      const productoHTML = `
-        <table class="tableHeadCard">
-          <tr>  
-            <td class="tdcard">${producto.thumbnails}</td>
-            <td class="tdcard">${producto.tittle}</td>
-            <td class="tdcard">${producto.price}</td>
-            <td><button class="remove-from-cart" data-id="${producto.id}" onclick="quitarDelCarrito('${producto.id}')">Quitar</button></td>
-          </tr>
-        </table>
-      `;
-      contenedorProducto.innerHTML += productoHTML;
+        const productoHTML = `
+            <table class="tableHeadCard">
+                <tr>  
+                    <td class="tdcard">${producto.thumbnails}</td>  
+                    <td class="tdcard">${producto.tittle}</td>
+                    <td class="tdcard">${producto.price}</td>
+                    <td class="tdcard">${producto.stock}</td>
+                    <td class="tdcard">${producto.description}</td>
+                    <td><button class="remove-from-cart" data-id="${producto.id}" onclick="quitarDelCarrito('${producto.id}')">Quitar</button></td>
+                </tr>
+            </table>
+        `;
+        contenedorProducto.innerHTML += productoHTML;
     });
-  };
+};
 
   function quitarDelCarrito(productId) {
     carritoProductos = carritoProductos.filter((product) => product.id !== productId);
-    mostrarCarritoEnInterfaz(); // Llamamos a la función para actualizar la interfaz después de quitar el producto
+    console.log("carritoProducts", carritoProductos)
+    mostrarCarritoEnInterfaz();
   }
 
-  document.addEventListener('DOMContentLoaded', mostrarCarritoEnInterfaz);
   document.addEventListener('DOMContentLoaded', () => {
     const botonFinCompra = document.querySelector(".botonFinCompra");
-    botonFinCompra.addEventListener('click', () => {
-      console.log("click");
-      const baseUrl = '/api/carts';
-      const queryParams = carritoProductos.map(producto => `id=${producto.id}`).join('&');
-      console.log("queryParams", queryParams)
-       window.location.assign(`/carts?${queryParams}`);
-      })
-      .catch(error => {
+    botonFinCompra.addEventListener('click', async () => {
+        try {
+            await fetch('/api/carts/addproductCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    cartId: 'YOUR_CART_ID', // Reemplaza con el ID de tu carrito
+                    products: carritoProductos,
+                }),
+            });
+        // Limpiar el carrito después de la compra
+        carritoProductos = [];
+        mostrarCarritoEnInterfaz();
+      } catch (error) {
         console.error('Error al enviar productos al carrito:', error);
-      });
+        // Manejar el error según tus necesidades
+        // Por ejemplo, mostrar un mensaje de error al usuario
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al comprar',
+          text: 'Hubo un problema al procesar la compra. Inténtalo de nuevo.',
+        });
+      }
     });
-  
-
-      
-  </script>     
-
-  <div>  
+  });
+</script>
+<div>  
         <h3 class ="carrito">Carrito de compras</h3>  
         <table class="tableHeadCard">
           <thead>
@@ -132,8 +149,3 @@
       </article>
       <article class="conteinershow"></article>
       <br> 
-  {{!-- let total=0;
-    for (let i = 0; i < carritoProductos.length; i++) {
-      total+=carritoProductos[i].stock*1500;
-      } 
-      alert(`Total a pagar es de $${total}`); --}}

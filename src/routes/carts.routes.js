@@ -13,9 +13,9 @@ const cartsService = new CartsMongo ("carts.json");
 const router = Router();
 
 
-router.post("/cartCreated", CartsController.cartCreated);
-
-
+router.post("/cartCreated", CartsController.cartCreated);       
+router.post("/renderCarts", CartsController.renderCarts);
+    
 router.post("/", CartsController.cartCreatedFind);
 
 
@@ -27,7 +27,8 @@ router.get("/prodpopulate/:cid", CartsController.prodPopulateCid);
 
 
 
-router.get("/:cid", CartsController.cartporCid);
+
+router.get("/:cid", CartsController.cartporCid);    
 
 
 
@@ -43,10 +44,8 @@ router.delete("/:cid/product/:pid", CartsController.delteCidProductPid);
  router.put("/:cid/product/:pid", CartsController.putCidProductPid);  
 
 router.delete("/:cid", CartsController.deleteByCid);
-
-
 router.delete("/:cid/products",CartsController.deleteCidProducts);
 router.post("/:cid/purchase", TicketController.createTicket);
-router.get("/", CartsController.showCart);
+//router.get("/", CartsController.showCart);
 
 export {router as cartsRouter};

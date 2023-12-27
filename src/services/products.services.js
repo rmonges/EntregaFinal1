@@ -1,6 +1,9 @@
+import { ObjectId } from 'mongoose';
+import { productsModel } from "../dao/models/products.model.js";
 import { productsDao } from "../dao/factory.js"
 import { ProductsMongo } from "../dao/manager/mongo/productsMongo.js";
-import { productsModel } from "../dao/models/products.model.js";
+
+import mongoose from 'mongoose';
 
 export class ProductsService {
     static getProducts =  async ()=>{
@@ -26,15 +29,21 @@ export class ProductsService {
     static delProduct = async (productId)=>{
         return await productsDao.deleteProduct(productId);
     }
-    static  obtenerProductosDelCarrito = async (ids) => {
+    static obtenerProductosDelCarrito = async (ids) => {
         try {
-          const arrayIds = Array.isArray(ids) ? ids : [ids];
-          const productos = await productsDao.getProductosByIds({ _id: { $in: arrayIds } });
-          return productos;
+            const arrayIds = Array.isArray(ids) ? ids : [ids];
+            console.log('arrayIds:', arrayIds);
+    
+            const objectIdArray = arrayIds.map(id => new mongoose.Types.ObjectId(id));
+            console.log('objectIdArray:', objectIdArray);
+    
+            const productos = await productsModel.find({ _id: { $in: objectIdArray } });
+            console.log('productos:', productos);
+    
+            return productos;
         } catch (error) {
-          console.error('Error al obtener productos del carrito:', error);
-          throw error;
+            console.error('Error al obtener productos del carrito:', error);
+            throw error;
         }
     };
-    
 }

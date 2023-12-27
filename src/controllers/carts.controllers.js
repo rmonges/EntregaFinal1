@@ -79,31 +79,98 @@ export class CartsController {
        res.json({status:"error", message:error.message});
     };
  }
- static addproductCart = async(req, res)=>{
-       try {
-            const cartId = req.params.cid;
-            const productId = req.params.pid;
-            const cart = await CartsService.prodPopulateCid(cartId);
+//  static addproductCart = async (req, res) => {
+//     try {
+//         const cartId = req.body.cartId;
+//         const productData = req.body.product;
+
+//         // Fetch the cart from the database
+//         const cart = await CartsService.cartporCid(cartId);
+
+//         // Check if the product already exists in the cart
+//         const existingProductIndex = cart.products.findIndex(product => product.productId.toString() === productData.id);
+
+//         if (existingProductIndex !== -1) {
+//             // If the product already exists, update its quantity
+//             cart.products[existingProductIndex].quantity += 1;
+//         } else {
+//             // If the product is not in the cart, add it
+//             cart.products.push({
+//                 productId: productData.id,
+//                 quantity: 1,
+//             });
+//         }
+
+//         // Save the updated cart back to the database
+//         const updatedCart = await CartsService.upDateCar(cartId, cart);
+
+//         res.json({ status: 'success', data: updatedCart });
+//     } catch (error) {
+//         console.error('Error al agregar producto al carrito:', error);
+//         res.json({ status: 'error', message: 'Hubo un problema al agregar el producto al carrito.' });
+//     }
+// };
+static addproductCart = async (req, res) => {
+    try {
+        //const cartId = req.params.cid;
+        const products = req.body.products;
+        console.log("products", products);
+
+        const cart = await CartsService.prodPopulateCid(cartId);
+
+        for (const productData of products) {
+            const productId = productData.id;
             const product = await ProductsService.getpid(productId);
-            const productExistIndex= cart.products.findIndex(product => product.productId._id.toString() === productId.toString());
-             console.log('productexist', productExistIndex);
-            if (productExistIndex!==-1) {
+            console.log("product", product);
+
+            const productExistIndex = cart.products.findIndex(product => product.productId._id.toString() === productId.toString());
+            console.log('productexist', productExistIndex);
+
+            if (productExistIndex !== -1) {
                 cart.products[productExistIndex].quantity += 1;
-                 const cartUpdate = await CartsService.upDateCart(cartId, cart);
-                 return res.json({ status: "success", data: cartUpdate });
-               }else{  
-                    const newProduct = {
-                        productId : product,
-                        quantity:1
-                      }
-            cart.products.push(newProduct);
-            const cartUpdate = await CartsService.upDateCart(cartId, cart);
-            res.json({status:"succes", data:cartUpdate})
-         }
-        } catch (error) {
-            res.json({status:"error", message:error.message});
-          };
-    };
+            } else {
+                const newProduct = {
+                    productId: product,
+                    quantity: 1
+                };
+
+                cart.products.push(newProduct);
+            }
+        }
+
+        const cartUpdate = await CartsService.upDateCart(cartId, cart);
+        res.json({ status: "success", data: cartUpdate });
+    } catch (error) {
+        res.json({ status: "error", message: error.message });
+    }
+};
+//  static addproductCart = async(req, res)=>{
+//        try {
+//             const cartId = req.params.cid;
+//             const productId = req.body.products;
+//             console.log("productId", productId)
+//             const cart = await CartsService.prodPopulateCid(cartId);
+//             const product = await ProductsService.getpid(productId);
+//             console.log("product", product)
+//             const productExistIndex= cart.products.findIndex(product => product.productId._id.toString() === productId.toString());
+//              console.log('productexist', productExistIndex);
+//             if (productExistIndex!==-1) {
+//                 cart.products[productExistIndex].quantity += 1;
+//                  const cartUpdate = await CartsService.upDateCart(cartId, cart);
+//                  return res.json({ status: "success", data: cartUpdate });
+//                }else{  
+//                     const newProduct = {
+//                         productId : product,
+//                         quantity:1
+//                       }
+//             cart.products.push(newProduct);
+//             const cartUpdate = await CartsService.upDateCart(cartId, cart);
+//             res.json({status:"succes", data:cartUpdate})
+//          }
+//         } catch (error) {
+//             res.json({status:"error", message:error.message});
+//           };
+//     };
     
    static deletecid = async (req, res)=>{
     try {
@@ -219,17 +286,27 @@ export class CartsController {
         res.json({ status: "error", message: "error" });
     }
  };
-    static showCart = async (req, res)=>{
+    static renderCarts = async (req, res) => {
         try {
-            const listaProductos = obtenerProductosDelCarrito(req.query.ids);
-            console.log("listaProductos", listaProductos)
-            res.render("carts", {productos:listaProductos})
-        } catch (error) {
-            res.json({ status: "error", message: "error" });
-        }
-        
+            const productosDelCarrito = req.body.productos;
+            console.log("listaProductosrenderCarts", productosDelCarrito);
+            if (!productosDelCarrito || productosDelCarrito.length === 0) {
+                throw new Error('No hay ningún producto en el carrito para mostrarlo');
+            }
 
-    }
+            // Procesa los productos como desees    
+            console.log("listaaaaasrenderCarts", productosDelCarrito);
+
+            // Renderiza la vista con los productos
+            res.render("carts", { productos: productosDelCarrito || [] });
+        } catch (error) {
+            console.error('Error al procesar la solicitud:', error);
+            res.status(500).send('Error interno del servidor');
+        }
+    };
+            // const listaProductos = obtenerProductosDelCarrito(req.query.ids);
+            // console.log("listaProductosshowcarts", listaProductos)
+       
 
  
  }

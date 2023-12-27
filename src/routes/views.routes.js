@@ -68,8 +68,18 @@ nextLink: result.hasNextPage ?  `${baseUrl.replace(`page=${result.page}`,`page=$
  router.get("/messages",ViewsController.renderMessages);
  //router.get("/carts",ViewsController.renderCarts );
  router.get("/home", ViewsController.renderHome);
- router.get("",ViewsController.renderLogings )
- router.get("/carts",ViewsController.renderCartsView);
+ router.get("",ViewsController.renderLogings )    
+ //router.get("/renderCarts",ViewsController.renderCartsView);
+     router.get("/carts", async (req, res) => {
+      try {
+        const data = await ViewsController.get
+      } catch (error) {
+        
+      }
+       res.render("carts")
+     });
+
+
 
 
  //Rutas sessions

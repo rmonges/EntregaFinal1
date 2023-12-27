@@ -14,6 +14,7 @@ router.put("/:uid/documents", uploaderDocument.fields([
     ]), UsersController.uploadaDocuments);
 router.delete("/outOffTime", checkRole(["admin"]), UsersController.deleteUsers);   
 router.delete("/delete/:uid", checkRole(["admin"]) , UsersController.delete); 
+
 export {router as usersRouter};
 
 

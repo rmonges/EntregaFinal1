@@ -1,17 +1,24 @@
-<script src="../routes/views.routes.js"></script>
+
 <link rel="stylesheet" href="css/estiles.css">
-<script src="/js/realTimeProducts.js"></script>
+
 
 
  <!-- En tu vista carts.handlebars -->
-<h1>Carrito de Compras</h1>
+<h1>Carrito de Compras</h1> 
 
-<div class="productos-en-carrito">  
-  {{#each productos}}
-    <div class="producto">
-      <p>{{this.tittle}}</p>
-      <p>Precio: {{this.price}}</p>
-      <!-- Agrega más campos según sea necesario -->
-    </div>
-  {{/each}}
-</div>
+ {{#if productos}}
+        <ul>
+            {{#each productos}}
+                <li>
+                    <strong>{{this.tittle}}</strong><br>
+                    Descripción: {{this.description}}<br>
+                    Precio: {{this.price}}<br>
+                    Stock: {{this.stock}}<br>
+                    Categoría: {{this.category}}<br>
+                    <!-- Agrega más campos según sea necesario -->
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>No hay productos en el carrito.</p>
+    {{/if}}

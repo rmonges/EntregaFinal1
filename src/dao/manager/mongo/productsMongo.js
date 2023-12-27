@@ -56,7 +56,7 @@ async getById(id){
     try{
         const product = await this.model.findById(id);
         if(!product){
-            throw new Error ("el producto no existe")
+            throw new Error ("el producto no existe getbyid")
         }
         return product;
     }catch(error){
@@ -94,7 +94,7 @@ async upDateProduct (id, updatedProd) {
                 console.log("Producto eliminado:", deletedProduct);
                 return "Producto eliminado";
             } else {
-                console.log("El producto no existe");
+                console.log("El producto no existe delete");
                 return "El producto no existe";
             }
         } else {

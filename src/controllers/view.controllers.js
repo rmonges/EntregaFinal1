@@ -4,6 +4,7 @@ import  { cartsDao } from "../../src/dao/factory.js";
 import { UsersService } from "../services/usersService.js";
 import { cartsService } from "./carts.controllers.js";
 import { ProductsService } from "../services/products.services.js";
+import { CartsService } from "../services/carts.services.js";
 export class ViewsController{
       static renderHome = async(req, res)=>{
         try {
@@ -32,9 +33,9 @@ export class ViewsController{
         static renderMessages = (req, res)=>{
           res.render("messages")
          };
-        static renderCarts = async (req, res)=>{
-          res.render("carts");     
-          }; 
+        // static renderCarts = async (req, res)=>{
+        //   res.render("carts");     
+        //   }; 
         static renderLogings = (req, res)=>{
           res.redirect("/login");
         };
@@ -75,17 +76,26 @@ export class ViewsController{
             
           };    
           static renderCartsView = async (req, res) => {
-            try { 
-              const listaProductos = await ProductsService.obtenerProductosDelCarrito(req.query.ids);
-              console.log("listaProductos", listaProductos)
-              res.render("carts", {productos:listaProductos})
-              
-             } catch (error) {
-                  console.error('Error al procesar la solicitud:', error);
-                  res.status(500).send('Error interno del servidor');
-                }
-              ;
+            try {
+              console.log("req.body", req.body.productos)
+              const productosDelCarrito = req.body.productos;
+              console.log("listaProductos", productosDelCarrito);
+              if (!productosDelCarrito) throw new Error ('No hay ningun producto en el carrito para mostrarlo');
+              if(!cart){
+                cart
+              }
+       
+                
+            
+
+                 console.log("listaProductos", productosDelCarrito);
+        
+                res.render("carts", {productos:productosDelCarrito} );
+            } catch (error) {
+                console.error('Error al procesar la solicitud:', error);
+                res.status(500).send('Error interno del servidor');
             }
+        };
           
         
       }
